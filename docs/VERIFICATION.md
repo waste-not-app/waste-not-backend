@@ -27,4 +27,6 @@ Pada satu foto, respons publik melaporkan `candidate-0ebbc80d4a76`, `REVIEW_REQU
 
 Sepuluh pemeriksaan API inti auth/CRUD/statistik/logout diulang setelah AI aktif dan lulus. Setelah inferensi, memori worker YOLO sekitar 329 MiB dan keputusan 44 MiB, tanpa restart gagal; kedua port tetap loopback. Hash konfigurasi, master PID Nginx serta UID/restart tiga pod sistem tetap sama. Tidak ada restart layanan lain.
 
-Gemini nyata, mutu rekomendasi, panduan PUBLISHED, checkpoint fine-tuning empat kelas, holdout dan penerimaan Android belum diverifikasi. Capability rekomendasi tetap false. Bukti transport ini tidak memenuhi gate peluncuran AI untuk pengguna umum.
+Transport Gemini nyata telah diuji secara privat dengan draf yang tetap berlabel prototype_only: model gemini-3.5-flash-lite menghasilkan READY/RECYCLE sekitar 19.2 detik setelah percobaan 15 detik mengalami timeout. Ini tidak membuktikan rekomendasi publik atau mutu konten. Panduan PUBLISHED, checkpoint fine-tuning empat kelas, holdout dan penerimaan Android belum diverifikasi. Capability rekomendasi tetap false. Bukti transport ini tidak memenuhi gate peluncuran AI untuk pengguna umum.
+
+Deploy ulang saat kedua worker aktif juga lulus pada [run 41857739280](https://github.com/waste-not-app/waste-not-backend/actions/runs/41857739280), commit 655f116. Readiness privat Go/worker serta HTTPS publik diperiksa helper/pipeline, lalu sepuluh smoke AI nyata dan sepuluh smoke core diulang dan lulus.

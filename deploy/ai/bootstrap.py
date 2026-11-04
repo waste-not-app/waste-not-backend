@@ -71,7 +71,7 @@ def main(stage):
     for name in ('ai-detection.env','ai-recommendation.env'):
         if (CONFIG/name).exists():raise ValueError('Existing AI environment file must be inspected')
     private_write(CONFIG/'ai-detection.env','AI_SERVICE_TOKEN='+detection_token+'\nAI_MODEL_PATH='+str(target)+'\nAI_MODEL_SHA256='+model['sha256']+'\nAI_DEVICE=cpu\n')
-    private_write(CONFIG/'ai-recommendation.env','AI_RECOMMENDATION_TOKEN='+recommendation_token+'\nGEMINI_API_KEY=\nGEMINI_MODEL=\nGEMINI_TIMEOUT_SECONDS=15\nAI_GUIDES_PATH=\n')
+    private_write(CONFIG/'ai-recommendation.env','AI_RECOMMENDATION_TOKEN='+recommendation_token+'\nGEMINI_API_KEY=\nGEMINI_MODEL=\nGEMINI_TIMEOUT_SECONDS=21\nAI_GUIDES_PATH=\n')
     before=(CONFIG/'api.env').read_bytes()
     backup=Path('/var/backups/wastenot')/('api.env.before-ai.'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'))
     backup.write_bytes(before);backup.chmod(0o600)
