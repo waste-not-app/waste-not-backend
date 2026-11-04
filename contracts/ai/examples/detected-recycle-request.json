@@ -1,0 +1,17 @@
+{
+  "client_request_id": "00000000-0000-0000-0000-000000000032",
+  "condition": {
+    "cleanliness": "CLEAN",
+    "integrity": "INTACT",
+    "reusable": "UNKNOWN"
+  },
+  "confirmed_category": "GLASS",
+  "confirmed_object": true,
+  "confirmed_object_key": "glass_bottle",
+  "context_revision": 1,
+  "detection_id": "00000000-0000-0000-0000-000000000001",
+  "input_source": "DETECTION",
+  "object_id": "object-1",
+  "recycling_access": "YES",
+  "reuse_intention": false
+}

@@ -1,0 +1,15 @@
+{
+  "data": {
+    "access_token": "fixture-access-old",
+    "access_expires_at": "2026-10-15T00:15:00Z",
+    "refresh_token": "fixture-refresh-old",
+    "refresh_expires_at": "2026-10-22T00:00:00Z",
+    "session_id": "00000000-0000-4000-8000-000000000099",
+    "user": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Pengguna Fixture A",
+      "email": "fixture-a@example.com",
+      "timezone": "Asia/Jakarta"
+    }
+  }
+}

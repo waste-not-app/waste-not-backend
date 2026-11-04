@@ -1,0 +1,51 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "category": "GLASS",
+    "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+    "conditions_to_verify": [],
+    "confirmed_object_key": "glass_bottle",
+    "context_revision": 1,
+    "detection_id": null,
+    "evidence_ids": [
+      "glass_bottle-prevent-waste-v2"
+    ],
+    "expires_at": "2026-10-21T08:00:00Z",
+    "guide_refs": [
+      {
+        "guide_id": "pilot-glass-bottle",
+        "version": 5
+      }
+    ],
+    "missing_context": [],
+    "object_id": null,
+    "prototype_only": true,
+    "provider": "fixture",
+    "reason": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+    "reason_code": null,
+    "recommendation_basis": "CONFIRMED",
+    "recommendation_id": "00000000-0000-0000-0000-000000000004",
+    "recommendation_scope": "PREVENTION",
+    "recommendation_version": "pilot-policy-06",
+    "recommended_method": "REDUCE",
+    "source_details": [
+      {
+        "checked_at": "2026-10-20",
+        "publisher": "US EPA",
+        "region": "Amerika Serikat",
+        "scope_note": "Pencegahan pembelian/penggunaan berikutnya. Tidak membuktikan jumlah Reduce yang telah dilakukan.",
+        "title": "Waste prevention, reuse and recycling",
+        "url": "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+      }
+    ],
+    "source_urls": [
+      "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+    ],
+    "special_handling": false,
+    "status": "READY",
+    "steps": [
+      "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+    ]
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

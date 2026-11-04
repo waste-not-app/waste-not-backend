@@ -1,0 +1,2866 @@
+{
+  "components": {
+    "schemas": {
+      "Body_detect_v1_ai_detections_post": {
+        "properties": {
+          "client_request_id": {
+            "format": "uuid",
+            "title": "Client Request Id",
+            "type": "string"
+          },
+          "image": {
+            "format": "binary",
+            "title": "Image",
+            "type": "string"
+          }
+        },
+        "required": [
+          "image",
+          "client_request_id"
+        ],
+        "title": "Body_detect_v1_ai_detections_post",
+        "type": "object"
+      },
+      "CatalogItem": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "guide_status": {
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "UNAVAILABLE"
+            ],
+            "title": "Guide Status",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "object_key": {
+            "title": "Object Key",
+            "type": "string"
+          },
+          "special_handling": {
+            "title": "Special Handling",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "object_key",
+          "label",
+          "category",
+          "special_handling",
+          "guide_status"
+        ],
+        "title": "CatalogItem",
+        "type": "object"
+      },
+      "Category": {
+        "enum": [
+          "ORGANIC",
+          "PLASTIC",
+          "PAPER",
+          "GLASS",
+          "METAL",
+          "ELECTRONIC",
+          "OTHER"
+        ],
+        "title": "Category",
+        "type": "string"
+      },
+      "Condition": {
+        "additionalProperties": false,
+        "properties": {
+          "cleanable": {
+            "default": "UNKNOWN",
+            "enum": [
+              "YES",
+              "NO",
+              "UNKNOWN"
+            ],
+            "title": "Cleanable",
+            "type": "string"
+          },
+          "cleanliness": {
+            "default": "UNKNOWN",
+            "enum": [
+              "CLEAN",
+              "DIRTY",
+              "UNKNOWN"
+            ],
+            "title": "Cleanliness",
+            "type": "string"
+          },
+          "former_contents": {
+            "default": "UNKNOWN",
+            "enum": [
+              "FOOD_DRINK",
+              "CHEMICAL",
+              "OTHER",
+              "UNKNOWN"
+            ],
+            "title": "Former Contents",
+            "type": "string"
+          },
+          "integrity": {
+            "default": "UNKNOWN",
+            "enum": [
+              "INTACT",
+              "DAMAGED",
+              "UNKNOWN"
+            ],
+            "title": "Integrity",
+            "type": "string"
+          },
+          "reusable": {
+            "default": "UNKNOWN",
+            "enum": [
+              "YES",
+              "NO",
+              "UNKNOWN"
+            ],
+            "title": "Reusable",
+            "type": "string"
+          },
+          "soiling": {
+            "default": "UNKNOWN",
+            "enum": [
+              "FOOD_DRINK",
+              "DUST",
+              "HAZARDOUS",
+              "UNKNOWN"
+            ],
+            "title": "Soiling",
+            "type": "string"
+          }
+        },
+        "title": "Condition",
+        "type": "object"
+      },
+      "DetectionObject": {
+        "additionalProperties": false,
+        "properties": {
+          "ambiguous_with": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 49,
+            "title": "Ambiguous With",
+            "type": "array"
+          },
+          "bbox": {
+            "maxItems": 4,
+            "minItems": 4,
+            "prefixItems": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              }
+            ],
+            "title": "Bbox",
+            "type": "array"
+          },
+          "category": {
+            "title": "Category",
+            "type": "null"
+          },
+          "class_id": {
+            "minimum": 0.0,
+            "title": "Class Id",
+            "type": "integer"
+          },
+          "confidence": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence",
+            "type": "number"
+          },
+          "confidence_band": {
+            "enum": [
+              "OFFERED",
+              "UNCERTAIN",
+              "MANUAL_REQUIRED"
+            ],
+            "title": "Confidence Band",
+            "type": "string"
+          },
+          "object_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Object Id",
+            "type": "string"
+          },
+          "object_key": {
+            "title": "Object Key",
+            "type": "null"
+          },
+          "raw_class": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Raw Class",
+            "type": "string"
+          },
+          "requires_material_confirmation": {
+            "title": "Requires Material Confirmation",
+            "type": "boolean"
+          },
+          "review_reasons": {
+            "items": {
+              "enum": [
+                "CLASS_REVIEW_ONLY",
+                "OVERLAPPING_CLASSES"
+              ],
+              "type": "string"
+            },
+            "maxItems": 2,
+            "title": "Review Reasons",
+            "type": "array"
+          },
+          "review_thresholds": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Thresholds"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "suggested_object_keys": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Suggested Object Keys",
+            "type": "array"
+          },
+          "supported_for_review": {
+            "title": "Supported For Review",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "class_id",
+          "raw_class",
+          "confidence",
+          "bbox",
+          "object_id",
+          "confidence_band",
+          "requires_material_confirmation",
+          "supported_for_review",
+          "suggested_object_keys"
+        ],
+        "title": "DetectionObject",
+        "type": "object"
+      },
+      "DetectionSession": {
+        "additionalProperties": false,
+        "properties": {
+          "detection_id": {
+            "format": "uuid",
+            "title": "Detection Id",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "image": {
+            "$ref": "#/components/schemas/ImageDimensions"
+          },
+          "mapping_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Mapping Version",
+            "type": "string"
+          },
+          "model_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Model Version",
+            "type": "string"
+          },
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/DetectionObject"
+            },
+            "maxItems": 50,
+            "title": "Objects",
+            "type": "array"
+          },
+          "review_profile": {
+            "default": "catalog-default-01",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Review Profile",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "REVIEW_REQUIRED",
+              "MANUAL_REQUIRED"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "thresholds": {
+            "$ref": "#/components/schemas/Thresholds"
+          }
+        },
+        "required": [
+          "status",
+          "model_version",
+          "mapping_version",
+          "thresholds",
+          "image",
+          "objects",
+          "detection_id",
+          "expires_at"
+        ],
+        "title": "DetectionSession",
+        "type": "object"
+      },
+      "Envelope_DetectionSession_": {
+        "additionalProperties": false,
+        "properties": {
+          "api_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Api Version",
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DetectionSession"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "data"
+        ],
+        "title": "Envelope[DetectionSession]",
+        "type": "object"
+      },
+      "Envelope_ObjectCatalog_": {
+        "additionalProperties": false,
+        "properties": {
+          "api_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Api Version",
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ObjectCatalog"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "data"
+        ],
+        "title": "Envelope[ObjectCatalog]",
+        "type": "object"
+      },
+      "Envelope_RecommendationSession_": {
+        "additionalProperties": false,
+        "properties": {
+          "api_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Api Version",
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RecommendationSession"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "data"
+        ],
+        "title": "Envelope[RecommendationSession]",
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "enum": [
+              "AI_BUSY",
+              "AI_DISABLED",
+              "AI_SESSION_EXPIRED",
+              "AI_TIMEOUT",
+              "AI_UNAVAILABLE",
+              "DETECTION_NOT_FOUND",
+              "FILE_TOO_LARGE",
+              "IDEMPOTENCY_CONFLICT",
+              "IMAGE_DIMENSIONS_EXCEEDED",
+              "INVALID_AI_REFERENCE",
+              "INVALID_AI_RESPONSE",
+              "INVALID_CONTEXT",
+              "INVALID_IMAGE",
+              "METHOD_NOT_ALLOWED",
+              "NOT_FOUND",
+              "OBJECT_REQUIRES_MANUAL",
+              "RATE_LIMITED",
+              "REQUEST_TOO_LARGE",
+              "UNAUTHENTICATED",
+              "UNSUPPORTED_MEDIA_TYPE",
+              "VALIDATION_ERROR"
+            ],
+            "title": "Code",
+            "type": "string"
+          },
+          "fields": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Fields",
+            "type": "object"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "retryable": {
+            "default": false,
+            "title": "Retryable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorDetail",
+        "type": "object"
+      },
+      "ErrorEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "api_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Api Version",
+            "type": "string"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "error"
+        ],
+        "title": "ErrorEnvelope",
+        "type": "object"
+      },
+      "GuideReference": {
+        "additionalProperties": false,
+        "properties": {
+          "guide_id": {
+            "minLength": 1,
+            "title": "Guide Id",
+            "type": "string"
+          },
+          "version": {
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "guide_id",
+          "version"
+        ],
+        "title": "GuideReference",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "ImageDimensions": {
+        "additionalProperties": false,
+        "properties": {
+          "height": {
+            "maximum": 4096.0,
+            "minimum": 1.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "width": {
+            "maximum": 4096.0,
+            "minimum": 1.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ],
+        "title": "ImageDimensions",
+        "type": "object"
+      },
+      "ObjectCatalog": {
+        "additionalProperties": false,
+        "properties": {
+          "catalog_version": {
+            "title": "Catalog Version",
+            "type": "string"
+          },
+          "class_thresholds": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Thresholds"
+            },
+            "title": "Class Thresholds",
+            "type": "object"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "mapping_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mapping Version"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version"
+          },
+          "review_only_classes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Review Only Classes",
+            "type": "array"
+          },
+          "review_profile": {
+            "default": "catalog-default-01",
+            "title": "Review Profile",
+            "type": "string"
+          },
+          "supported_object_labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Supported Object Labels",
+            "type": "object"
+          },
+          "supported_visual_classes": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supported Visual Classes"
+          }
+        },
+        "required": [
+          "catalog_version",
+          "items"
+        ],
+        "title": "ObjectCatalog",
+        "type": "object"
+      },
+      "RecommendationInput": {
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "else": {
+              "properties": {
+                "detection_id": {
+                  "type": "null"
+                },
+                "object_id": {
+                  "type": "null"
+                }
+              }
+            },
+            "if": {
+              "properties": {
+                "input_source": {
+                  "const": "DETECTION"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "detection_id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "object_id": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "detection_id",
+                "object_id"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "allow_conditional": {
+            "default": true,
+            "title": "Allow Conditional",
+            "type": "boolean"
+          },
+          "client_request_id": {
+            "format": "uuid",
+            "title": "Client Request Id",
+            "type": "string"
+          },
+          "condition": {
+            "$ref": "#/components/schemas/Condition",
+            "default": {
+              "cleanable": "UNKNOWN",
+              "cleanliness": "UNKNOWN",
+              "former_contents": "UNKNOWN",
+              "integrity": "UNKNOWN",
+              "reusable": "UNKNOWN",
+              "soiling": "UNKNOWN"
+            }
+          },
+          "confirmed_category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "confirmed_object": {
+            "const": true,
+            "title": "Confirmed Object",
+            "type": "boolean"
+          },
+          "confirmed_object_key": {
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Confirmed Object Key",
+            "type": "string"
+          },
+          "context_revision": {
+            "default": 1,
+            "minimum": 1.0,
+            "title": "Context Revision",
+            "type": "integer"
+          },
+          "detection_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detection Id"
+          },
+          "input_source": {
+            "default": "DETECTION",
+            "enum": [
+              "DETECTION",
+              "MANUAL"
+            ],
+            "title": "Input Source",
+            "type": "string"
+          },
+          "object_id": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Object Id"
+          },
+          "recommendation_goal": {
+            "default": "AUTO",
+            "enum": [
+              "AUTO",
+              "PREVENTION",
+              "HANDLING"
+            ],
+            "title": "Recommendation Goal",
+            "type": "string"
+          },
+          "recycling_access": {
+            "default": "UNKNOWN",
+            "enum": [
+              "YES",
+              "NO",
+              "UNKNOWN"
+            ],
+            "title": "Recycling Access",
+            "type": "string"
+          },
+          "reuse_intention": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reuse Intention"
+          },
+          "risk_flag": {
+            "default": false,
+            "title": "Risk Flag",
+            "type": "boolean"
+          },
+          "risk_type": {
+            "default": "UNKNOWN",
+            "enum": [
+              "UNKNOWN",
+              "SHARP",
+              "CHEMICAL",
+              "BIOLOGICAL",
+              "ELECTRICAL",
+              "OTHER"
+            ],
+            "title": "Risk Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_request_id",
+          "confirmed_object",
+          "confirmed_object_key",
+          "confirmed_category"
+        ],
+        "title": "RecommendationInput",
+        "type": "object"
+      },
+      "RecommendationSession": {
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "else": {
+              "properties": {
+                "conditions_to_verify": {
+                  "maxItems": 0
+                },
+                "recommendation_basis": {
+                  "type": "null"
+                },
+                "recommendation_scope": {
+                  "type": "null"
+                },
+                "recommended_method": {
+                  "type": "null"
+                }
+              }
+            },
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "READY"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "evidence_ids": {
+                  "minItems": 1
+                },
+                "recommendation_basis": {
+                  "enum": [
+                    "CONFIRMED",
+                    "CONDITIONAL"
+                  ]
+                },
+                "recommendation_scope": {
+                  "enum": [
+                    "PREVENTION",
+                    "HANDLING"
+                  ]
+                },
+                "recommended_method": {
+                  "enum": [
+                    "REDUCE",
+                    "REUSE",
+                    "RECYCLE",
+                    "TRASH"
+                  ]
+                },
+                "source_urls": {
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "recommended_method",
+                "recommendation_scope",
+                "evidence_ids",
+                "source_urls",
+                "recommendation_basis"
+              ]
+            }
+          },
+          {
+            "else": {
+              "properties": {
+                "missing_context": {
+                  "maxItems": 0
+                }
+              }
+            },
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "NEEDS_CONTEXT"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "missing_context": {
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "missing_context"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "recommended_method": {
+                  "const": "REDUCE"
+                },
+                "status": {
+                  "const": "READY"
+                }
+              },
+              "required": [
+                "status",
+                "recommended_method"
+              ]
+            },
+            "then": {
+              "properties": {
+                "recommendation_scope": {
+                  "const": "PREVENTION"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "recommended_method": {
+                  "enum": [
+                    "REUSE",
+                    "RECYCLE",
+                    "TRASH"
+                  ]
+                },
+                "status": {
+                  "const": "READY"
+                }
+              },
+              "required": [
+                "status",
+                "recommended_method"
+              ]
+            },
+            "then": {
+              "properties": {
+                "recommendation_scope": {
+                  "const": "HANDLING"
+                }
+              }
+            }
+          },
+          {
+            "else": {
+              "properties": {
+                "conditions_to_verify": {
+                  "maxItems": 0
+                }
+              }
+            },
+            "if": {
+              "properties": {
+                "recommendation_basis": {
+                  "const": "CONDITIONAL"
+                }
+              },
+              "required": [
+                "recommendation_basis"
+              ]
+            },
+            "then": {
+              "properties": {
+                "conditions_to_verify": {
+                  "minItems": 1
+                },
+                "status": {
+                  "const": "READY"
+                }
+              },
+              "required": [
+                "conditions_to_verify"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "caution": {
+            "default": "",
+            "title": "Caution",
+            "type": "string"
+          },
+          "conditions_to_verify": {
+            "items": {
+              "enum": [
+                "condition.cleanliness",
+                "condition.integrity",
+                "condition.reusable",
+                "condition.cleanable",
+                "condition.soiling",
+                "condition.former_contents",
+                "reuse_intention",
+                "recycling_access",
+                "risk_type"
+              ],
+              "type": "string"
+            },
+            "title": "Conditions To Verify",
+            "type": "array"
+          },
+          "confirmed_object_key": {
+            "title": "Confirmed Object Key",
+            "type": "string"
+          },
+          "context_revision": {
+            "minimum": 1.0,
+            "title": "Context Revision",
+            "type": "integer"
+          },
+          "detection_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detection Id"
+          },
+          "evidence_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Evidence Ids",
+            "type": "array"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "guide_refs": {
+            "items": {
+              "$ref": "#/components/schemas/GuideReference"
+            },
+            "title": "Guide Refs",
+            "type": "array"
+          },
+          "missing_context": {
+            "items": {
+              "enum": [
+                "condition.cleanliness",
+                "condition.integrity",
+                "condition.reusable",
+                "condition.cleanable",
+                "condition.soiling",
+                "condition.former_contents",
+                "reuse_intention",
+                "recycling_access",
+                "risk_type"
+              ],
+              "type": "string"
+            },
+            "title": "Missing Context",
+            "type": "array"
+          },
+          "object_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Object Id"
+          },
+          "prototype_only": {
+            "title": "Prototype Only",
+            "type": "boolean"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "reason_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason Code"
+          },
+          "recommendation_basis": {
+            "anyOf": [
+              {
+                "enum": [
+                  "CONFIRMED",
+                  "CONDITIONAL"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation Basis"
+          },
+          "recommendation_id": {
+            "format": "uuid",
+            "title": "Recommendation Id",
+            "type": "string"
+          },
+          "recommendation_scope": {
+            "anyOf": [
+              {
+                "enum": [
+                  "PREVENTION",
+                  "HANDLING"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation Scope"
+          },
+          "recommendation_version": {
+            "default": "pilot-policy-06",
+            "title": "Recommendation Version",
+            "type": "string"
+          },
+          "recommended_method": {
+            "anyOf": [
+              {
+                "enum": [
+                  "REDUCE",
+                  "REUSE",
+                  "RECYCLE",
+                  "TRASH"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Method"
+          },
+          "source_details": {
+            "items": {
+              "$ref": "#/components/schemas/SourceReference"
+            },
+            "title": "Source Details",
+            "type": "array"
+          },
+          "source_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Source Urls",
+            "type": "array"
+          },
+          "special_handling": {
+            "default": false,
+            "title": "Special Handling",
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEEDS_CONTEXT",
+              "UNAVAILABLE"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "steps": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Steps",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "reason",
+          "provider",
+          "prototype_only",
+          "recommendation_id",
+          "detection_id",
+          "object_id",
+          "context_revision",
+          "confirmed_object_key",
+          "category",
+          "expires_at"
+        ],
+        "title": "RecommendationSession",
+        "type": "object"
+      },
+      "SourceReference": {
+        "additionalProperties": false,
+        "properties": {
+          "checked_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checked At"
+          },
+          "publisher": {
+            "title": "Publisher",
+            "type": "string"
+          },
+          "region": {
+            "title": "Region",
+            "type": "string"
+          },
+          "scope_note": {
+            "title": "Scope Note",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "title",
+          "publisher",
+          "region",
+          "checked_at",
+          "scope_note"
+        ],
+        "title": "SourceReference",
+        "type": "object"
+      },
+      "Thresholds": {
+        "additionalProperties": false,
+        "properties": {
+          "lower": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Lower",
+            "type": "number"
+          },
+          "offered": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Offered",
+            "type": "number"
+          }
+        },
+        "required": [
+          "lower",
+          "offered"
+        ],
+        "title": "Thresholds",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "description": "MOCK ONLY: mock-user-a or mock-user-b",
+        "scheme": "bearer",
+        "type": "http"
+      },
+      "HTTPBearer": {
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "WasteNot PUBLIC CONTRACT MOCK — not production Go",
+    "version": "1.0.0",
+    "x-api-version": "1.0.0",
+    "x-implementation-status": "public contract mock; Go not implemented here"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/v1/ai/detections": {
+      "post": {
+        "operationId": "detect_v1_ai_detections_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_v1_ai_detections_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_DetectionSession_"
+                }
+              }
+            },
+            "description": "Idempotent replay"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "api_version": "1.0.0",
+                  "data": {
+                    "detection_id": "00000000-0000-0000-0000-000000000001",
+                    "expires_at": "2026-10-21T08:00:00Z",
+                    "image": {
+                      "height": 128,
+                      "width": 128
+                    },
+                    "mapping_version": "drinking-waste-reviewed-02",
+                    "model_version": "mock-four-class-v1",
+                    "objects": [
+                      {
+                        "ambiguous_with": [],
+                        "bbox": [
+                          0.1,
+                          0.1,
+                          0.8,
+                          0.9
+                        ],
+                        "category": null,
+                        "class_id": 1,
+                        "confidence": 0.9,
+                        "confidence_band": "OFFERED",
+                        "object_id": "object-1",
+                        "object_key": null,
+                        "raw_class": "glass_bottle",
+                        "requires_material_confirmation": true,
+                        "review_reasons": [],
+                        "review_thresholds": {
+                          "lower": 0.5,
+                          "offered": 0.7
+                        },
+                        "suggested_object_keys": [
+                          "glass_bottle"
+                        ],
+                        "supported_for_review": true
+                      }
+                    ],
+                    "review_profile": "catalog-default-01",
+                    "status": "REVIEW_REQUIRED",
+                    "thresholds": {
+                      "lower": 0.5,
+                      "offered": 0.7
+                    }
+                  },
+                  "request_id": "00000000-0000-0000-0000-000000000063"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_DetectionSession_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Detect"
+      }
+    },
+    "/v1/ai/detections/{detection_id}": {
+      "delete": {
+        "operationId": "delete_v1_ai_detections__detection_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "detection_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Detection Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Delete"
+      }
+    },
+    "/v1/ai/objects": {
+      "get": {
+        "operationId": "objects_v1_ai_objects_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ObjectCatalog_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Objects"
+      }
+    },
+    "/v1/ai/recommendations": {
+      "post": {
+        "operationId": "recommendation_v1_ai_recommendations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "conditional-cup": {
+                  "summary": "conditional-cup",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-00000000001c",
+                    "condition": {},
+                    "confirmed_category": "OTHER",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "ceramic_cup",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "UNKNOWN",
+                    "reuse_intention": null
+                  }
+                },
+                "detected-recycle": {
+                  "summary": "detected-recycle",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-000000000032",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "integrity": "INTACT",
+                      "reusable": "UNKNOWN"
+                    },
+                    "confirmed_category": "GLASS",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "glass_bottle",
+                    "context_revision": 1,
+                    "detection_id": "00000000-0000-0000-0000-000000000001",
+                    "input_source": "DETECTION",
+                    "object_id": "object-1",
+                    "recycling_access": "YES",
+                    "reuse_intention": false
+                  }
+                },
+                "hdpe-needs-context": {
+                  "summary": "hdpe-needs-context",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-00000000001a",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "integrity": "INTACT",
+                      "reusable": "UNKNOWN"
+                    },
+                    "confirmed_category": "PLASTIC",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "hdpe_bottle",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "YES",
+                    "reuse_intention": false
+                  }
+                },
+                "hdpe-recycle": {
+                  "summary": "hdpe-recycle",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-000000000019",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "former_contents": "FOOD_DRINK",
+                      "integrity": "INTACT"
+                    },
+                    "confirmed_category": "PLASTIC",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "hdpe_bottle",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "YES",
+                    "reuse_intention": false
+                  }
+                },
+                "needs-context": {
+                  "summary": "needs-context",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-000000000018",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "integrity": "INTACT",
+                      "reusable": "UNKNOWN"
+                    },
+                    "confirmed_category": "OTHER",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "ceramic_cup",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "YES",
+                    "reuse_intention": false,
+                    "risk_flag": true
+                  }
+                },
+                "receiver-needs-context": {
+                  "summary": "receiver-needs-context",
+                  "value": {
+                    "allow_conditional": false,
+                    "client_request_id": "00000000-0000-0000-0000-00000000001b",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "integrity": "INTACT",
+                      "reusable": "UNKNOWN"
+                    },
+                    "confirmed_category": "GLASS",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "glass_bottle",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "UNKNOWN",
+                    "reuse_intention": false
+                  }
+                },
+                "recycle": {
+                  "summary": "recycle",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-000000000014",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "integrity": "INTACT",
+                      "reusable": "UNKNOWN"
+                    },
+                    "confirmed_category": "GLASS",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "glass_bottle",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "YES",
+                    "reuse_intention": false
+                  }
+                },
+                "reduce": {
+                  "summary": "reduce",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-000000000016",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "integrity": "INTACT",
+                      "reusable": "UNKNOWN"
+                    },
+                    "confirmed_category": "GLASS",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "glass_bottle",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recommendation_goal": "PREVENTION",
+                    "recycling_access": "YES",
+                    "reuse_intention": false
+                  }
+                },
+                "reuse": {
+                  "summary": "reuse",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-000000000015",
+                    "condition": {
+                      "cleanliness": "CLEAN",
+                      "integrity": "INTACT",
+                      "reusable": "YES"
+                    },
+                    "confirmed_category": "PAPER",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "book",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "YES",
+                    "reuse_intention": true
+                  }
+                },
+                "trash": {
+                  "summary": "trash",
+                  "value": {
+                    "client_request_id": "00000000-0000-0000-0000-000000000017",
+                    "condition": {
+                      "cleanliness": "DIRTY",
+                      "integrity": "DAMAGED",
+                      "reusable": "NO"
+                    },
+                    "confirmed_category": "OTHER",
+                    "confirmed_object": true,
+                    "confirmed_object_key": "toothbrush",
+                    "context_revision": 1,
+                    "input_source": "MANUAL",
+                    "recycling_access": "NO",
+                    "reuse_intention": false
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/RecommendationInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "hdpe-needs-context": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "PLASTIC",
+                        "caution": "Kode 2 dan bentuk botol bukan bukti aman untuk dipakai ulang atau kontak pangan. Isi sebelumnya yang tidak diketahui atau bahan kimia tidak memakai aturan botol pangan ini.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "hdpe_bottle",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "pilot-hdpe-bottle",
+                            "version": 5
+                          }
+                        ],
+                        "missing_context": [
+                          "condition.former_contents"
+                        ],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Belum cukup informasi untuk memilih penanganan benda saat ini. Lengkapi kondisi yang diketahui; sistem tidak menggantinya dengan saran Reduce.",
+                        "reason_code": "CONTEXT_REQUIRED",
+                        "recommendation_basis": null,
+                        "recommendation_id": "00000000-0000-0000-0000-000000000008",
+                        "recommendation_scope": null,
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": null,
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "title": "How Do I Recycle Common Recyclables",
+                            "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                          },
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Edukasi PET resin 1 dan HDPE resin 2; bukan daftar penerima lokal atau identifikasi material dari foto.",
+                            "title": "Recycle City: Materials Recovery Center",
+                            "url": "https://www3.epa.gov/recyclecity/recovery.htm"
+                          },
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "Balai POM di Tasikmalaya",
+                            "region": "Indonesia",
+                            "scope_note": "Kode resin mengenali bahan; tidak membuktikan keamanan kontak pangan, kelayakan penggunaan ulang atau penerimaan daur ulang.",
+                            "title": "Cerdas Memilih Kemasan: pengenalan kode plastik",
+                            "url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+                          "https://www3.epa.gov/recyclecity/recovery.htm",
+                          "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
+                        ],
+                        "special_handling": false,
+                        "status": "NEEDS_CONTEXT",
+                        "steps": []
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "needs-context": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "OTHER",
+                        "caution": "Ada risiko khusus. Ikuti petunjuk pengemasan dan pengelola yang sesuai; jangan membuang benda berbahaya sembarangan. Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "ceramic_cup",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "demo-ceramic_cup",
+                            "version": 4
+                          }
+                        ],
+                        "missing_context": [
+                          "risk_type"
+                        ],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Risiko khusus dicentang, tetapi jenisnya belum dijelaskan. Pilih jenis risiko agar kotor biasa tidak disamakan dengan kontaminasi berbahaya.",
+                        "reason_code": "RISK_DETAILS_REQUIRED",
+                        "recommendation_basis": null,
+                        "recommendation_id": "00000000-0000-0000-0000-000000000006",
+                        "recommendation_scope": null,
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": null,
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Prinsip penggunaan ulang peralatan makan/minum yang dirancang untuk digunakan berulang. Bukan sertifikasi keamanan objek dari foto.",
+                            "title": "Reusable food service ware: collection, washing and return",
+                            "url": "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware"
+                          },
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "Pemerintah Kabupaten Banjarnegara",
+                            "region": "Banjarnegara, Indonesia",
+                            "scope_note": "Contoh kebijakan lokal yang mendorong peralatan guna ulang. Tidak menjadi aturan penerimaan fasilitas seluruh Indonesia.",
+                            "title": "Guna ulang peralatan makan-minum dan pemilahan dari sumber",
+                            "url": "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
+                          "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+                        ],
+                        "special_handling": true,
+                        "status": "NEEDS_CONTEXT",
+                        "steps": []
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "provider-unavailable": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "GLASS",
+                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "glass_bottle",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "pilot-glass-bottle",
+                            "version": 5
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Rekomendasi otomatis belum tersedia; periksa panduan dan coba lagi setelah konteks atau layanan siap.",
+                        "reason_code": "LLM_UNAVAILABLE",
+                        "recommendation_basis": null,
+                        "recommendation_id": "00000000-0000-0000-0000-000000000001",
+                        "recommendation_scope": null,
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": null,
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "title": "How Do I Recycle Common Recyclables",
+                            "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                        ],
+                        "special_handling": false,
+                        "status": "UNAVAILABLE",
+                        "steps": []
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "receiver-needs-context": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "GLASS",
+                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "glass_bottle",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "pilot-glass-bottle",
+                            "version": 5
+                          }
+                        ],
+                        "missing_context": [
+                          "recycling_access"
+                        ],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Belum cukup informasi untuk memilih penanganan benda saat ini. Lengkapi kondisi yang diketahui; sistem tidak menggantinya dengan saran Reduce.",
+                        "reason_code": "CONTEXT_REQUIRED",
+                        "recommendation_basis": null,
+                        "recommendation_id": "00000000-0000-0000-0000-000000000009",
+                        "recommendation_scope": null,
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": null,
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "title": "How Do I Recycle Common Recyclables",
+                            "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                        ],
+                        "special_handling": false,
+                        "status": "NEEDS_CONTEXT",
+                        "steps": []
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_RecommendationSession_"
+                }
+              }
+            },
+            "description": "Replay or non-READY decision"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "conditional-cup": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "OTHER",
+                        "caution": "Saran bersyarat; informasi yang kosong tidak dianggap sudah terkonfirmasi. Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+                        "conditions_to_verify": [
+                          "condition.cleanliness",
+                          "condition.integrity",
+                          "condition.reusable",
+                          "reuse_intention"
+                        ],
+                        "confirmed_object_key": "ceramic_cup",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [
+                          "ceramic_cup-tableware-reuse-v1"
+                        ],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "demo-ceramic_cup",
+                            "version": 4
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Saran sementara: Reuse untuk Cangkir keramik. Informasi yang diperlukan belum lengkap. Gunakan kembali hanya setelah kebersihan, keutuhan, kelayakan dan niat pakai ulang dipastikan.",
+                        "reason_code": null,
+                        "recommendation_basis": "CONDITIONAL",
+                        "recommendation_id": "00000000-0000-0000-0000-00000000000a",
+                        "recommendation_scope": "HANDLING",
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": "REUSE",
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Prinsip penggunaan ulang peralatan makan/minum yang dirancang untuk digunakan berulang. Bukan sertifikasi keamanan objek dari foto.",
+                            "title": "Reusable food service ware: collection, washing and return",
+                            "url": "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware"
+                          },
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "Pemerintah Kabupaten Banjarnegara",
+                            "region": "Banjarnegara, Indonesia",
+                            "scope_note": "Contoh kebijakan lokal yang mendorong peralatan guna ulang. Tidak menjadi aturan penerimaan fasilitas seluruh Indonesia.",
+                            "title": "Guna ulang peralatan makan-minum dan pemilahan dari sumber",
+                            "url": "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
+                          "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+                        ],
+                        "special_handling": false,
+                        "status": "READY",
+                        "steps": [
+                          "Periksa kebersihan; jalur ini memerlukan benda yang bersih.",
+                          "Periksa retak dan kerusakan; gunakan jalur ini hanya bila benda utuh.",
+                          "Pastikan benda masih layak digunakan sesuai fungsinya.",
+                          "Lanjutkan penggunaan ulang hanya jika kamu ingin memakainya lagi.",
+                          "Ikuti langkah berikut hanya setelah syarat di atas terpenuhi.",
+                          "Periksa kembali kebersihan serta tidak adanya retak atau tepi tajam.",
+                          "Gunakan kembali sesuai fungsi dan petunjuk bahan/produk; jangan menambah sampah dengan mengganti peralatan yang masih layak."
+                        ]
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "detected-recycle": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "GLASS",
+                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "glass_bottle",
+                        "context_revision": 1,
+                        "detection_id": "00000000-0000-0000-0000-000000000001",
+                        "evidence_ids": [
+                          "glass-intact-recycle-v1"
+                        ],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "pilot-glass-bottle",
+                            "version": 5
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": "object-1",
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+                        "reason_code": null,
+                        "recommendation_basis": "CONFIRMED",
+                        "recommendation_id": "00000000-0000-0000-0000-00000000000b",
+                        "recommendation_scope": "HANDLING",
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": "RECYCLE",
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "title": "How Do I Recycle Common Recyclables",
+                            "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                        ],
+                        "special_handling": false,
+                        "status": "READY",
+                        "steps": [
+                          "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
+                          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+                          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+                        ]
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "hdpe-recycle": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "PLASTIC",
+                        "caution": "Kode 2 dan bentuk botol bukan bukti aman untuk dipakai ulang atau kontak pangan. Isi sebelumnya yang tidak diketahui atau bahan kimia tidak memakai aturan botol pangan ini.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "hdpe_bottle",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [
+                          "hdpe-food-recycle-v5"
+                        ],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "pilot-hdpe-bottle",
+                            "version": 5
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Botol HDPE bekas pangan/minuman yang bersih dapat diarahkan ke Recycle karena isi sebelumnya dan penerimaan pengelola telah kamu konfirmasi. Kode resin 2 tidak menjamin aman dipakai ulang atau diterima semua fasilitas.",
+                        "reason_code": null,
+                        "recommendation_basis": "CONFIRMED",
+                        "recommendation_id": "00000000-0000-0000-0000-000000000007",
+                        "recommendation_scope": "HANDLING",
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": "RECYCLE",
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "title": "How Do I Recycle Common Recyclables",
+                            "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                          },
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Edukasi PET resin 1 dan HDPE resin 2; bukan daftar penerima lokal atau identifikasi material dari foto.",
+                            "title": "Recycle City: Materials Recovery Center",
+                            "url": "https://www3.epa.gov/recyclecity/recovery.htm"
+                          },
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "Balai POM di Tasikmalaya",
+                            "region": "Indonesia",
+                            "scope_note": "Kode resin mengenali bahan; tidak membuktikan keamanan kontak pangan, kelayakan penggunaan ulang atau penerimaan daur ulang.",
+                            "title": "Cerdas Memilih Kemasan: pengenalan kode plastik",
+                            "url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+                          "https://www3.epa.gov/recyclecity/recovery.htm",
+                          "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
+                        ],
+                        "special_handling": false,
+                        "status": "READY",
+                        "steps": [
+                          "Konfirmasi bahan HDPE/kode 2 dan riwayat bekas pangan/minuman; jangan memakai aturan ini untuk bekas kimia atau isi yang tidak diketahui.",
+                          "Kosongkan dan bersihkan sisa pangan sesuai petunjuk penerima; pisahkan sesuai jenis.",
+                          "Serahkan kepada pengelola yang dikonfirmasi menerima HDPE dengan kondisi tersebut. Jangan menganggap botol bekas otomatis aman diisi ulang."
+                        ]
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "recycle": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "GLASS",
+                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "glass_bottle",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [
+                          "glass-intact-recycle-v1"
+                        ],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "pilot-glass-bottle",
+                            "version": 5
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+                        "reason_code": null,
+                        "recommendation_basis": "CONFIRMED",
+                        "recommendation_id": "00000000-0000-0000-0000-000000000002",
+                        "recommendation_scope": "HANDLING",
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": "RECYCLE",
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "title": "How Do I Recycle Common Recyclables",
+                            "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                        ],
+                        "special_handling": false,
+                        "status": "READY",
+                        "steps": [
+                          "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
+                          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+                          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+                        ]
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "reduce": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "GLASS",
+                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "glass_bottle",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [
+                          "glass_bottle-prevent-waste-v2"
+                        ],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "pilot-glass-bottle",
+                            "version": 5
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+                        "reason_code": null,
+                        "recommendation_basis": "CONFIRMED",
+                        "recommendation_id": "00000000-0000-0000-0000-000000000004",
+                        "recommendation_scope": "PREVENTION",
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": "REDUCE",
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Pencegahan pembelian/penggunaan berikutnya. Tidak membuktikan jumlah Reduce yang telah dilakukan.",
+                            "title": "Waste prevention, reuse and recycling",
+                            "url": "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+                        ],
+                        "special_handling": false,
+                        "status": "READY",
+                        "steps": [
+                          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+                        ]
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "reuse": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "PAPER",
+                        "caution": "Jangan sertakan dokumen berisi data pribadi tanpa pengelolaan yang sesuai.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "book",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [
+                          "book-book-reuse-v1"
+                        ],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "demo-book",
+                            "version": 4
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Buku yang masih bersih dan layak dapat digunakan kembali atau didonasikan.",
+                        "reason_code": null,
+                        "recommendation_basis": "CONFIRMED",
+                        "recommendation_id": "00000000-0000-0000-0000-000000000003",
+                        "recommendation_scope": "HANDLING",
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": "REUSE",
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "US EPA",
+                            "region": "Amerika Serikat",
+                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "title": "How Do I Recycle Common Recyclables",
+                            "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+                        ],
+                        "special_handling": false,
+                        "status": "READY",
+                        "steps": [
+                          "Pertimbangkan penggunaan ulang atau donasi jika buku masih layak.",
+                          "Untuk daur ulang, periksa aturan penerimaan buku dan sampul pada fasilitas setempat."
+                        ]
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  },
+                  "trash": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "data": {
+                        "category": "OTHER",
+                        "caution": "Referensi Cornwall, Inggris; bukan aturan penerimaan Indonesia. Sikat gigi elektrik/baterai memerlukan penanganan elektronik khusus.",
+                        "conditions_to_verify": [],
+                        "confirmed_object_key": "toothbrush",
+                        "context_revision": 1,
+                        "detection_id": null,
+                        "evidence_ids": [
+                          "toothbrush-manual-plastic-residue-v2"
+                        ],
+                        "expires_at": "2026-10-21T08:00:00Z",
+                        "guide_refs": [
+                          {
+                            "guide_id": "demo-toothbrush",
+                            "version": 4
+                          }
+                        ],
+                        "missing_context": [],
+                        "object_id": null,
+                        "prototype_only": true,
+                        "provider": "fixture",
+                        "reason": "Sikat gigi plastik manual yang tidak layak dipakai dan tidak memiliki akses daur ulang khusus dapat diarahkan ke residu sesuai aturan lokal. Referensi Cornwall tidak memasukkannya dalam pengumpulan daur ulang biasa.",
+                        "reason_code": null,
+                        "recommendation_basis": "CONFIRMED",
+                        "recommendation_id": "00000000-0000-0000-0000-000000000005",
+                        "recommendation_scope": "HANDLING",
+                        "recommendation_version": "pilot-policy-06",
+                        "recommended_method": "TRASH",
+                        "source_details": [
+                          {
+                            "checked_at": "2026-10-20",
+                            "publisher": "Cornwall Council",
+                            "region": "Cornwall, Inggris",
+                            "scope_note": "Hanya sikat plastik manual; tidak digeneralisasi ke sikat elektrik, baterai, atau semua plastik.",
+                            "title": "Plastic toothbrushes and toothbrush heads",
+                            "url": "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/"
+                          }
+                        ],
+                        "source_urls": [
+                          "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/"
+                        ],
+                        "special_handling": false,
+                        "status": "READY",
+                        "steps": [
+                          "Pastikan ini sikat gigi plastik manual tanpa baterai, bukan limbah medis atau berbahaya.",
+                          "Jika tidak ada program daur ulang khusus, gunakan jalur residu sesuai ketentuan petugas setempat."
+                        ]
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_RecommendationSession_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "rate-limited": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "error": {
+                        "code": "RATE_LIMITED",
+                        "fields": {},
+                        "message": "Batas permintaan tercapai; tunggu sebelum mencoba lagi.",
+                        "retryable": true
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "timeout": {
+                    "value": {
+                      "api_version": "1.0.0",
+                      "error": {
+                        "code": "AI_TIMEOUT",
+                        "fields": {},
+                        "message": "Layanan AI melewati batas waktu.",
+                        "retryable": true
+                      },
+                      "request_id": "00000000-0000-0000-0000-000000000063"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Recommendation"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}

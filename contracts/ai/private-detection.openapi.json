@@ -1,0 +1,920 @@
+{
+  "components": {
+    "schemas": {
+      "DetectionCapabilities": {
+        "additionalProperties": false,
+        "properties": {
+          "class_thresholds": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Thresholds"
+            },
+            "title": "Class Thresholds",
+            "type": "object"
+          },
+          "mapping_version": {
+            "title": "Mapping Version",
+            "type": "string"
+          },
+          "model": {
+            "$ref": "#/components/schemas/ModelSnapshot"
+          },
+          "review_only_classes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Review Only Classes",
+            "type": "array"
+          },
+          "review_profile": {
+            "default": "catalog-default-01",
+            "title": "Review Profile",
+            "type": "string"
+          },
+          "supported_object_labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Supported Object Labels",
+            "type": "object"
+          },
+          "supported_visual_classes": {
+            "minimum": 0.0,
+            "title": "Supported Visual Classes",
+            "type": "integer"
+          },
+          "thresholds": {
+            "$ref": "#/components/schemas/Thresholds"
+          }
+        },
+        "required": [
+          "model",
+          "mapping_version",
+          "thresholds",
+          "supported_visual_classes",
+          "supported_object_labels"
+        ],
+        "title": "DetectionCapabilities",
+        "type": "object"
+      },
+      "DetectionObject": {
+        "additionalProperties": false,
+        "properties": {
+          "ambiguous_with": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 49,
+            "title": "Ambiguous With",
+            "type": "array"
+          },
+          "bbox": {
+            "maxItems": 4,
+            "minItems": 4,
+            "prefixItems": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              }
+            ],
+            "title": "Bbox",
+            "type": "array"
+          },
+          "category": {
+            "title": "Category",
+            "type": "null"
+          },
+          "class_id": {
+            "minimum": 0.0,
+            "title": "Class Id",
+            "type": "integer"
+          },
+          "confidence": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence",
+            "type": "number"
+          },
+          "confidence_band": {
+            "enum": [
+              "OFFERED",
+              "UNCERTAIN",
+              "MANUAL_REQUIRED"
+            ],
+            "title": "Confidence Band",
+            "type": "string"
+          },
+          "object_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Object Id",
+            "type": "string"
+          },
+          "object_key": {
+            "title": "Object Key",
+            "type": "null"
+          },
+          "raw_class": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Raw Class",
+            "type": "string"
+          },
+          "requires_material_confirmation": {
+            "title": "Requires Material Confirmation",
+            "type": "boolean"
+          },
+          "review_reasons": {
+            "items": {
+              "enum": [
+                "CLASS_REVIEW_ONLY",
+                "OVERLAPPING_CLASSES"
+              ],
+              "type": "string"
+            },
+            "maxItems": 2,
+            "title": "Review Reasons",
+            "type": "array"
+          },
+          "review_thresholds": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Thresholds"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "suggested_object_keys": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Suggested Object Keys",
+            "type": "array"
+          },
+          "supported_for_review": {
+            "title": "Supported For Review",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "class_id",
+          "raw_class",
+          "confidence",
+          "bbox",
+          "object_id",
+          "confidence_band",
+          "requires_material_confirmation",
+          "supported_for_review",
+          "suggested_object_keys"
+        ],
+        "title": "DetectionObject",
+        "type": "object"
+      },
+      "Envelope_DetectionCapabilities_": {
+        "additionalProperties": false,
+        "properties": {
+          "api_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Api Version",
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DetectionCapabilities"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "data"
+        ],
+        "title": "Envelope[DetectionCapabilities]",
+        "type": "object"
+      },
+      "Envelope_InternalDetection_": {
+        "additionalProperties": false,
+        "properties": {
+          "api_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Api Version",
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/InternalDetection"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "data"
+        ],
+        "title": "Envelope[InternalDetection]",
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "enum": [
+              "AI_BUSY",
+              "AI_DISABLED",
+              "AI_SESSION_EXPIRED",
+              "AI_TIMEOUT",
+              "AI_UNAVAILABLE",
+              "DETECTION_NOT_FOUND",
+              "FILE_TOO_LARGE",
+              "IDEMPOTENCY_CONFLICT",
+              "IMAGE_DIMENSIONS_EXCEEDED",
+              "INVALID_AI_REFERENCE",
+              "INVALID_AI_RESPONSE",
+              "INVALID_CONTEXT",
+              "INVALID_IMAGE",
+              "METHOD_NOT_ALLOWED",
+              "NOT_FOUND",
+              "OBJECT_REQUIRES_MANUAL",
+              "RATE_LIMITED",
+              "REQUEST_TOO_LARGE",
+              "UNAUTHENTICATED",
+              "UNSUPPORTED_MEDIA_TYPE",
+              "VALIDATION_ERROR"
+            ],
+            "title": "Code",
+            "type": "string"
+          },
+          "fields": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Fields",
+            "type": "object"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "retryable": {
+            "default": false,
+            "title": "Retryable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorDetail",
+        "type": "object"
+      },
+      "ErrorEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "api_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Api Version",
+            "type": "string"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "error"
+        ],
+        "title": "ErrorEnvelope",
+        "type": "object"
+      },
+      "ImageDimensions": {
+        "additionalProperties": false,
+        "properties": {
+          "height": {
+            "maximum": 4096.0,
+            "minimum": 1.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "width": {
+            "maximum": 4096.0,
+            "minimum": 1.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ],
+        "title": "ImageDimensions",
+        "type": "object"
+      },
+      "InternalDetection": {
+        "additionalProperties": false,
+        "properties": {
+          "image": {
+            "$ref": "#/components/schemas/ImageDimensions"
+          },
+          "mapping_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Mapping Version",
+            "type": "string"
+          },
+          "model": {
+            "$ref": "#/components/schemas/ModelSnapshot"
+          },
+          "model_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Model Version",
+            "type": "string"
+          },
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/DetectionObject"
+            },
+            "maxItems": 50,
+            "title": "Objects",
+            "type": "array"
+          },
+          "review_profile": {
+            "default": "catalog-default-01",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Review Profile",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "REVIEW_REQUIRED",
+              "MANUAL_REQUIRED"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "thresholds": {
+            "$ref": "#/components/schemas/Thresholds"
+          }
+        },
+        "required": [
+          "status",
+          "model_version",
+          "mapping_version",
+          "thresholds",
+          "image",
+          "objects",
+          "model"
+        ],
+        "title": "InternalDetection",
+        "type": "object"
+      },
+      "ModelSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "class_names": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 256,
+            "minItems": 1,
+            "title": "Class Names",
+            "type": "array"
+          },
+          "model_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Model Version",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "model_version",
+          "sha256",
+          "class_names"
+        ],
+        "title": "ModelSnapshot",
+        "type": "object"
+      },
+      "Thresholds": {
+        "additionalProperties": false,
+        "properties": {
+          "lower": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Lower",
+            "type": "number"
+          },
+          "offered": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Offered",
+            "type": "number"
+          }
+        },
+        "required": [
+          "lower",
+          "offered"
+        ],
+        "title": "Thresholds",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "description": "Private Go-to-Python credential; never send to Android",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "WasteNot private YOLO worker",
+    "version": "0.1.0",
+    "x-api-version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/health/ready": {
+      "get": {
+        "operationId": "ready_health_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Ready"
+      }
+    },
+    "/internal/v1/capabilities": {
+      "get": {
+        "operationId": "capabilities_internal_v1_capabilities_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_DetectionCapabilities_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Capabilities"
+      }
+    },
+    "/internal/v1/detect": {
+      "post": {
+        "operationId": "detect_internal_v1_detect_post",
+        "requestBody": {
+          "content": {
+            "image/jpeg": {
+              "schema": {
+                "format": "binary",
+                "maxLength": 5242880,
+                "type": "string"
+              }
+            },
+            "image/png": {
+              "schema": {
+                "format": "binary",
+                "maxLength": 5242880,
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_InternalDetection_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json",
+            "headers": {
+              "Retry-After": {
+                "description": "Wait at least this many seconds when present; retry explicitly with the same client_request_id.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "AI error; see errors.json"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Detect"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}

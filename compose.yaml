@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_USER: wastenot
+      POSTGRES_DB: wastenot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a local database password in .env}
+    ports:
+      - 127.0.0.1:5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U wastenot -d wastenot']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    build: .
+    entrypoint: [/migrate]
+    environment:
+      DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@db:5432/wastenot?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+  api:
+    build: .
+    environment:
+      HTTP_ADDR: 0.0.0.0:8080
+      DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@db:5432/wastenot?sslmode=disable
+      JWT_SECRET_BASE64: ${JWT_SECRET_BASE64:?Generate a JWT signing secret in .env}
+      AI_ENABLED: 'false'
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_grace_period: 45s
+    restart: unless-stopped
+volumes:
+  postgres-data:

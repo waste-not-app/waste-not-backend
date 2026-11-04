@@ -1,0 +1,47 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "category": "GLASS",
+    "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+    "conditions_to_verify": [],
+    "confirmed_object_key": "glass_bottle",
+    "context_revision": 1,
+    "detection_id": null,
+    "evidence_ids": [],
+    "expires_at": "2026-10-21T08:00:00Z",
+    "guide_refs": [
+      {
+        "guide_id": "pilot-glass-bottle",
+        "version": 5
+      }
+    ],
+    "missing_context": [],
+    "object_id": null,
+    "prototype_only": true,
+    "provider": "fixture",
+    "reason": "Rekomendasi otomatis belum tersedia; periksa panduan dan coba lagi setelah konteks atau layanan siap.",
+    "reason_code": "LLM_UNAVAILABLE",
+    "recommendation_basis": null,
+    "recommendation_id": "00000000-0000-0000-0000-000000000001",
+    "recommendation_scope": null,
+    "recommendation_version": "pilot-policy-06",
+    "recommended_method": null,
+    "source_details": [
+      {
+        "checked_at": "2026-10-20",
+        "publisher": "US EPA",
+        "region": "Amerika Serikat",
+        "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+        "title": "How Do I Recycle Common Recyclables",
+        "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+      }
+    ],
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "special_handling": false,
+    "status": "UNAVAILABLE",
+    "steps": []
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

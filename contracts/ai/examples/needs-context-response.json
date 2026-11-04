@@ -1,0 +1,58 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "category": "OTHER",
+    "caution": "Ada risiko khusus. Ikuti petunjuk pengemasan dan pengelola yang sesuai; jangan membuang benda berbahaya sembarangan. Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+    "conditions_to_verify": [],
+    "confirmed_object_key": "ceramic_cup",
+    "context_revision": 1,
+    "detection_id": null,
+    "evidence_ids": [],
+    "expires_at": "2026-10-21T08:00:00Z",
+    "guide_refs": [
+      {
+        "guide_id": "demo-ceramic_cup",
+        "version": 4
+      }
+    ],
+    "missing_context": [
+      "risk_type"
+    ],
+    "object_id": null,
+    "prototype_only": true,
+    "provider": "fixture",
+    "reason": "Risiko khusus dicentang, tetapi jenisnya belum dijelaskan. Pilih jenis risiko agar kotor biasa tidak disamakan dengan kontaminasi berbahaya.",
+    "reason_code": "RISK_DETAILS_REQUIRED",
+    "recommendation_basis": null,
+    "recommendation_id": "00000000-0000-0000-0000-000000000006",
+    "recommendation_scope": null,
+    "recommendation_version": "pilot-policy-06",
+    "recommended_method": null,
+    "source_details": [
+      {
+        "checked_at": "2026-10-20",
+        "publisher": "US EPA",
+        "region": "Amerika Serikat",
+        "scope_note": "Prinsip penggunaan ulang peralatan makan/minum yang dirancang untuk digunakan berulang. Bukan sertifikasi keamanan objek dari foto.",
+        "title": "Reusable food service ware: collection, washing and return",
+        "url": "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware"
+      },
+      {
+        "checked_at": "2026-10-20",
+        "publisher": "Pemerintah Kabupaten Banjarnegara",
+        "region": "Banjarnegara, Indonesia",
+        "scope_note": "Contoh kebijakan lokal yang mendorong peralatan guna ulang. Tidak menjadi aturan penerimaan fasilitas seluruh Indonesia.",
+        "title": "Guna ulang peralatan makan-minum dan pemilahan dari sumber",
+        "url": "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+      }
+    ],
+    "source_urls": [
+      "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
+      "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+    ],
+    "special_handling": true,
+    "status": "NEEDS_CONTEXT",
+    "steps": []
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

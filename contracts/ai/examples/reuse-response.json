@@ -1,0 +1,52 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "category": "PAPER",
+    "caution": "Jangan sertakan dokumen berisi data pribadi tanpa pengelolaan yang sesuai.",
+    "conditions_to_verify": [],
+    "confirmed_object_key": "book",
+    "context_revision": 1,
+    "detection_id": null,
+    "evidence_ids": [
+      "book-book-reuse-v1"
+    ],
+    "expires_at": "2026-10-21T08:00:00Z",
+    "guide_refs": [
+      {
+        "guide_id": "demo-book",
+        "version": 4
+      }
+    ],
+    "missing_context": [],
+    "object_id": null,
+    "prototype_only": true,
+    "provider": "fixture",
+    "reason": "Buku yang masih bersih dan layak dapat digunakan kembali atau didonasikan.",
+    "reason_code": null,
+    "recommendation_basis": "CONFIRMED",
+    "recommendation_id": "00000000-0000-0000-0000-000000000003",
+    "recommendation_scope": "HANDLING",
+    "recommendation_version": "pilot-policy-06",
+    "recommended_method": "REUSE",
+    "source_details": [
+      {
+        "checked_at": "2026-10-20",
+        "publisher": "US EPA",
+        "region": "Amerika Serikat",
+        "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+        "title": "How Do I Recycle Common Recyclables",
+        "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+      }
+    ],
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "special_handling": false,
+    "status": "READY",
+    "steps": [
+      "Pertimbangkan penggunaan ulang atau donasi jika buku masih layak.",
+      "Untuk daur ulang, periksa aturan penerimaan buku dan sampul pada fasilitas setempat."
+    ]
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

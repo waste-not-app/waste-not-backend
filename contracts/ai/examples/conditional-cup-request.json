@@ -1,0 +1,11 @@
+{
+  "client_request_id": "00000000-0000-0000-0000-00000000001c",
+  "condition": {},
+  "confirmed_category": "OTHER",
+  "confirmed_object": true,
+  "confirmed_object_key": "ceramic_cup",
+  "context_revision": 1,
+  "input_source": "MANUAL",
+  "recycling_access": "UNKNOWN",
+  "reuse_intention": null
+}

@@ -1,0 +1,10 @@
+{
+  "api_version": "1.0.0",
+  "error": {
+    "code": "AI_TIMEOUT",
+    "fields": {},
+    "message": "Layanan AI melewati batas waktu.",
+    "retryable": true
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

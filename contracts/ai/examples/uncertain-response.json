@@ -1,0 +1,48 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "detection_id": "00000000-0000-0000-0000-000000000001",
+    "expires_at": "2026-10-21T08:00:00Z",
+    "image": {
+      "height": 128,
+      "width": 128
+    },
+    "mapping_version": "drinking-waste-reviewed-02",
+    "model_version": "mock-four-class-v1",
+    "objects": [
+      {
+        "ambiguous_with": [],
+        "bbox": [
+          0.1,
+          0.1,
+          0.8,
+          0.9
+        ],
+        "category": null,
+        "class_id": 1,
+        "confidence": 0.6,
+        "confidence_band": "UNCERTAIN",
+        "object_id": "object-1",
+        "object_key": null,
+        "raw_class": "glass_bottle",
+        "requires_material_confirmation": true,
+        "review_reasons": [],
+        "review_thresholds": {
+          "lower": 0.5,
+          "offered": 0.7
+        },
+        "suggested_object_keys": [
+          "glass_bottle"
+        ],
+        "supported_for_review": true
+      }
+    ],
+    "review_profile": "catalog-default-01",
+    "status": "REVIEW_REQUIRED",
+    "thresholds": {
+      "lower": 0.5,
+      "offered": 0.7
+    }
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

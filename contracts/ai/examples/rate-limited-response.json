@@ -1,0 +1,10 @@
+{
+  "api_version": "1.0.0",
+  "error": {
+    "code": "RATE_LIMITED",
+    "fields": {},
+    "message": "Batas permintaan tercapai; tunggu sebelum mencoba lagi.",
+    "retryable": true
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

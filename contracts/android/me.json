@@ -1,0 +1,18 @@
+{
+  "data": {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "name": "Pengguna Fixture A",
+    "email": "fixture-a@example.com",
+    "timezone": "Asia/Jakarta",
+    "progress": {
+      "active_log_count": 5,
+      "xp": 50,
+      "level": 1,
+      "xp_into_level": 50,
+      "xp_to_next_level": 50,
+      "current_streak": null,
+      "best_streak": null,
+      "has_logged_today": true
+    }
+  }
+}

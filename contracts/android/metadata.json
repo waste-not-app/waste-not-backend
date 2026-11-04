@@ -1,0 +1,25 @@
+{
+  "data": {
+    "categories": ["ORGANIC", "PLASTIC", "PAPER", "GLASS", "METAL", "ELECTRONIC", "OTHER"],
+    "methods": ["REDUCE", "REUSE", "RECYCLE", "TRASH"],
+    "limits": {
+      "weight_g": {"min": 1, "max": 100000},
+      "item_count": {"min": 1, "max": 10000},
+      "name_length": {"min": 2, "max": 60},
+      "email_max_length": 254,
+      "password_length": {"min": 12, "max": 128},
+      "notes_max_length": 500,
+      "activity_date_past_days": 30,
+      "kg_max_decimal_places": 3
+    },
+    "capabilities": {
+      "achievements": false,
+      "reminders": false,
+      "photos": false,
+      "recycling_points": false,
+      "ai_scan": false,
+      "ai_recommendation": false
+    },
+    "ai_object_catalog_version": null
+  }
+}

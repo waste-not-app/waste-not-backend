@@ -1,0 +1,21 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "detection_id": "00000000-0000-0000-0000-000000000001",
+    "expires_at": "2026-10-21T08:00:00Z",
+    "image": {
+      "height": 128,
+      "width": 128
+    },
+    "mapping_version": "drinking-waste-reviewed-02",
+    "model_version": "mock-four-class-v1",
+    "objects": [],
+    "review_profile": "catalog-default-01",
+    "status": "MANUAL_REQUIRED",
+    "thresholds": {
+      "lower": 0.5,
+      "offered": 0.7
+    }
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

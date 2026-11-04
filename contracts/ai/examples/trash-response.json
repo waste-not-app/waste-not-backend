@@ -1,0 +1,52 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "category": "OTHER",
+    "caution": "Referensi Cornwall, Inggris; bukan aturan penerimaan Indonesia. Sikat gigi elektrik/baterai memerlukan penanganan elektronik khusus.",
+    "conditions_to_verify": [],
+    "confirmed_object_key": "toothbrush",
+    "context_revision": 1,
+    "detection_id": null,
+    "evidence_ids": [
+      "toothbrush-manual-plastic-residue-v2"
+    ],
+    "expires_at": "2026-10-21T08:00:00Z",
+    "guide_refs": [
+      {
+        "guide_id": "demo-toothbrush",
+        "version": 4
+      }
+    ],
+    "missing_context": [],
+    "object_id": null,
+    "prototype_only": true,
+    "provider": "fixture",
+    "reason": "Sikat gigi plastik manual yang tidak layak dipakai dan tidak memiliki akses daur ulang khusus dapat diarahkan ke residu sesuai aturan lokal. Referensi Cornwall tidak memasukkannya dalam pengumpulan daur ulang biasa.",
+    "reason_code": null,
+    "recommendation_basis": "CONFIRMED",
+    "recommendation_id": "00000000-0000-0000-0000-000000000005",
+    "recommendation_scope": "HANDLING",
+    "recommendation_version": "pilot-policy-06",
+    "recommended_method": "TRASH",
+    "source_details": [
+      {
+        "checked_at": "2026-10-20",
+        "publisher": "Cornwall Council",
+        "region": "Cornwall, Inggris",
+        "scope_note": "Hanya sikat plastik manual; tidak digeneralisasi ke sikat elektrik, baterai, atau semua plastik.",
+        "title": "Plastic toothbrushes and toothbrush heads",
+        "url": "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/"
+      }
+    ],
+    "source_urls": [
+      "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/"
+    ],
+    "special_handling": false,
+    "status": "READY",
+    "steps": [
+      "Pastikan ini sikat gigi plastik manual tanpa baterai, bukan limbah medis atau berbahaya.",
+      "Jika tidak ada program daur ulang khusus, gunakan jalur residu sesuai ketentuan petugas setempat."
+    ]
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

@@ -1,0 +1,9 @@
+{
+  "data": {
+    "access_token": "fixture-access-new",
+    "access_expires_at": "2026-10-15T00:30:00Z",
+    "refresh_token": "fixture-refresh-new",
+    "refresh_expires_at": "2026-10-22T00:00:00Z",
+    "session_id": "00000000-0000-4000-8000-000000000099"
+  }
+}

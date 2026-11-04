@@ -1,0 +1,46 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+    "conditions_to_verify": [],
+    "evidence_ids": [
+      "glass-intact-recycle-v1"
+    ],
+    "guide_refs": [
+      {
+        "guide_id": "pilot-glass-bottle",
+        "version": 5
+      }
+    ],
+    "missing_context": [],
+    "prototype_only": true,
+    "provider": "fixture",
+    "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+    "reason_code": null,
+    "recommendation_basis": "CONFIRMED",
+    "recommendation_scope": "HANDLING",
+    "recommendation_version": "pilot-policy-06",
+    "recommended_method": "RECYCLE",
+    "source_details": [
+      {
+        "checked_at": "2026-10-20",
+        "publisher": "US EPA",
+        "region": "Amerika Serikat",
+        "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+        "title": "How Do I Recycle Common Recyclables",
+        "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+      }
+    ],
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "special_handling": false,
+    "status": "READY",
+    "steps": [
+      "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
+      "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+      "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+    ]
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

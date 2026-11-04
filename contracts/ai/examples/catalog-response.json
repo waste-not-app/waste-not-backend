@@ -1,0 +1,567 @@
+{
+  "api_version": "1.0.0",
+  "data": {
+    "catalog_version": "demo-catalog-05",
+    "class_thresholds": {},
+    "items": [
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Botol plastik PET (konfirmasi pengguna)",
+        "object_key": "pet_bottle",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Botol HDPE bekas pangan/minuman (konfirmasi pengguna)",
+        "object_key": "hdpe_bottle",
+        "special_handling": false
+      },
+      {
+        "category": "GLASS",
+        "guide_status": "DRAFT",
+        "label": "Botol kaca",
+        "object_key": "glass_bottle",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Kaleng aluminium",
+        "object_key": "aluminium_can",
+        "special_handling": false
+      },
+      {
+        "category": "PAPER",
+        "guide_status": "DRAFT",
+        "label": "Kardus",
+        "object_key": "cardboard",
+        "special_handling": false
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Baterai",
+        "object_key": "battery",
+        "special_handling": true
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Sepeda",
+        "object_key": "bicycle",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Bangku",
+        "object_key": "bench",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Ransel",
+        "object_key": "backpack",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Payung",
+        "object_key": "umbrella",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Tas tangan",
+        "object_key": "handbag",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Dasi",
+        "object_key": "tie",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Koper",
+        "object_key": "suitcase",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Frisbee",
+        "object_key": "frisbee",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Peralatan ski",
+        "object_key": "skis",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Papan snowboard",
+        "object_key": "snowboard",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Bola olahraga",
+        "object_key": "sports_ball",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Layang-layang",
+        "object_key": "kite",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Pemukul bisbol",
+        "object_key": "baseball_bat",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Sarung tangan bisbol",
+        "object_key": "baseball_glove",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Skateboard",
+        "object_key": "skateboard",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Papan selancar",
+        "object_key": "surfboard",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Raket tenis",
+        "object_key": "tennis_racket",
+        "special_handling": false
+      },
+      {
+        "category": "GLASS",
+        "guide_status": "DRAFT",
+        "label": "Gelas berkaki (kaca)",
+        "object_key": "wine_glass",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Gelas plastik",
+        "object_key": "plastic_cup",
+        "special_handling": false
+      },
+      {
+        "category": "GLASS",
+        "guide_status": "DRAFT",
+        "label": "Gelas kaca",
+        "object_key": "glass_cup",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Cangkir keramik",
+        "object_key": "ceramic_cup",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Cangkir logam",
+        "object_key": "metal_cup",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Garpu logam",
+        "object_key": "metal_fork",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Pisau",
+        "object_key": "knife",
+        "special_handling": true
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Sendok logam",
+        "object_key": "metal_spoon",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Mangkuk plastik",
+        "object_key": "plastic_bowl",
+        "special_handling": false
+      },
+      {
+        "category": "GLASS",
+        "guide_status": "DRAFT",
+        "label": "Mangkuk kaca",
+        "object_key": "glass_bowl",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Mangkuk keramik",
+        "object_key": "ceramic_bowl",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Pisang / sisa pisang",
+        "object_key": "banana",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Apel / sisa apel",
+        "object_key": "apple",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Roti isi / sisanya",
+        "object_key": "sandwich",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Jeruk / sisa jeruk",
+        "object_key": "orange",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Brokoli / sisanya",
+        "object_key": "broccoli",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Wortel / sisanya",
+        "object_key": "carrot",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Hot dog / sisanya",
+        "object_key": "hot_dog",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Piza / sisanya",
+        "object_key": "pizza",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Donat / sisanya",
+        "object_key": "donut",
+        "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Kue / sisanya",
+        "object_key": "cake",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Kursi",
+        "object_key": "chair",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Sofa",
+        "object_key": "couch",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Tanaman beserta pot",
+        "object_key": "potted_plant",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Tempat tidur",
+        "object_key": "bed",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Meja makan",
+        "object_key": "dining_table",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Kloset",
+        "object_key": "toilet",
+        "special_handling": false
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Televisi / monitor",
+        "object_key": "tv",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Laptop",
+        "object_key": "laptop",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Mouse komputer",
+        "object_key": "mouse",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Remote kontrol",
+        "object_key": "remote",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Keyboard",
+        "object_key": "keyboard",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Ponsel",
+        "object_key": "cell_phone",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Microwave",
+        "object_key": "microwave",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Oven",
+        "object_key": "oven",
+        "special_handling": true
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Pemanggang roti",
+        "object_key": "toaster",
+        "special_handling": true
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Bak cuci",
+        "object_key": "sink",
+        "special_handling": false
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Kulkas",
+        "object_key": "refrigerator",
+        "special_handling": true
+      },
+      {
+        "category": "PAPER",
+        "guide_status": "DRAFT",
+        "label": "Buku kertas",
+        "object_key": "book",
+        "special_handling": false
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Jam",
+        "object_key": "clock",
+        "special_handling": true
+      },
+      {
+        "category": "GLASS",
+        "guide_status": "DRAFT",
+        "label": "Vas kaca",
+        "object_key": "glass_vase",
+        "special_handling": false
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Vas keramik",
+        "object_key": "ceramic_vase",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Gunting",
+        "object_key": "scissors",
+        "special_handling": true
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Boneka",
+        "object_key": "teddy_bear",
+        "special_handling": false
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Pengering rambut",
+        "object_key": "hair_drier",
+        "special_handling": true
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Sikat gigi plastik manual",
+        "object_key": "toothbrush",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Kaleng baja/tinplate bekas pangan (konfirmasi pengguna)",
+        "object_key": "steel_can",
+        "special_handling": false
+      },
+      {
+        "category": "PAPER",
+        "guide_status": "DRAFT",
+        "label": "Gelas kertas berlapis (konfirmasi pengguna)",
+        "object_key": "paper_cup",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Kantong plastik",
+        "object_key": "plastic_bag",
+        "special_handling": false
+      },
+      {
+        "category": "PAPER",
+        "guide_status": "DRAFT",
+        "label": "Kertas lembaran / majalah",
+        "object_key": "paper",
+        "special_handling": false
+      },
+      {
+        "category": "PAPER",
+        "guide_status": "DRAFT",
+        "label": "Karton minuman berlapis",
+        "object_key": "drink_carton",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Pembungkus / film plastik",
+        "object_key": "plastic_wrapper",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Wadah makanan plastik / foam (konfirmasi pengguna)",
+        "object_key": "plastic_food_container",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Tutup botol plastik",
+        "object_key": "plastic_bottle_cap",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Tutup botol logam",
+        "object_key": "metal_bottle_cap",
+        "special_handling": false
+      }
+    ],
+    "mapping_version": "drinking-waste-reviewed-02",
+    "model_version": "mock-four-class-v1",
+    "review_only_classes": [],
+    "review_profile": "catalog-default-01",
+    "supported_object_labels": {
+      "aluminium_can": "aluminium_can",
+      "glass_bottle": "glass_bottle",
+      "hdpe_bottle": "hdpe_bottle",
+      "pet_bottle": "plastic_bottle"
+    },
+    "supported_visual_classes": 4
+  },
+  "request_id": "00000000-0000-0000-0000-000000000063"
+}

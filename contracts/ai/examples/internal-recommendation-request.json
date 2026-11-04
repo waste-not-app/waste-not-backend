@@ -1,0 +1,34 @@
+{
+  "context": {
+    "category": "GLASS",
+    "condition": {
+      "cleanliness": "CLEAN",
+      "integrity": "INTACT"
+    },
+    "object_key": "glass_bottle",
+    "recycling_access": "YES",
+    "reuse_intention": false
+  },
+  "selection": {
+    "class_names": [
+      "aluminium_can",
+      "glass_bottle",
+      "hdpe_bottle",
+      "plastic_bottle"
+    ],
+    "mapping_version": "drinking-waste-reviewed-02",
+    "model_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "model_version": "mock-four-class-v1",
+    "object": {
+      "bbox": [
+        0.1,
+        0.1,
+        0.8,
+        0.9
+      ],
+      "class_id": 1,
+      "confidence": 0.9,
+      "raw_class": "glass_bottle"
+    }
+  }
+}

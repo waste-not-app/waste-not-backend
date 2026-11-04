@@ -1,0 +1,107 @@
+{
+  "AI_BUSY": {
+    "http_status": 503,
+    "message": "Layanan AI sedang sibuk.",
+    "retryable": true
+  },
+  "AI_DISABLED": {
+    "http_status": 503,
+    "message": "Fitur AI belum diaktifkan.",
+    "retryable": false
+  },
+  "AI_SESSION_EXPIRED": {
+    "http_status": 410,
+    "message": "Sesi AI berakhir; lakukan scan kembali.",
+    "retryable": false
+  },
+  "AI_TIMEOUT": {
+    "http_status": 504,
+    "message": "Layanan AI melewati batas waktu.",
+    "retryable": true
+  },
+  "AI_UNAVAILABLE": {
+    "http_status": 503,
+    "message": "Layanan AI belum tersedia.",
+    "retryable": true
+  },
+  "DETECTION_NOT_FOUND": {
+    "http_status": 404,
+    "message": "Sesi deteksi tidak ditemukan.",
+    "retryable": false
+  },
+  "FILE_TOO_LARGE": {
+    "http_status": 413,
+    "message": "Ukuran gambar maksimal 5 MiB.",
+    "retryable": false
+  },
+  "IDEMPOTENCY_CONFLICT": {
+    "http_status": 409,
+    "message": "ID permintaan sudah dipakai untuk isi yang berbeda.",
+    "retryable": false
+  },
+  "IMAGE_DIMENSIONS_EXCEEDED": {
+    "http_status": 422,
+    "message": "Gambar melampaui batas dimensi.",
+    "retryable": false
+  },
+  "INVALID_AI_REFERENCE": {
+    "http_status": 422,
+    "message": "Referensi hasil deteksi tidak cocok.",
+    "retryable": false
+  },
+  "INVALID_AI_RESPONSE": {
+    "http_status": 503,
+    "message": "Respons layanan AI tidak dapat digunakan.",
+    "retryable": true
+  },
+  "INVALID_CONTEXT": {
+    "http_status": 422,
+    "message": "Objek dan kategori tidak cocok dengan katalog.",
+    "retryable": false
+  },
+  "INVALID_IMAGE": {
+    "http_status": 422,
+    "message": "Gambar tidak dapat dibaca.",
+    "retryable": false
+  },
+  "METHOD_NOT_ALLOWED": {
+    "http_status": 405,
+    "message": "Metode HTTP tidak didukung.",
+    "retryable": false
+  },
+  "NOT_FOUND": {
+    "http_status": 404,
+    "message": "Data tidak ditemukan.",
+    "retryable": false
+  },
+  "OBJECT_REQUIRES_MANUAL": {
+    "http_status": 422,
+    "message": "Pilih objek melalui input manual.",
+    "retryable": false
+  },
+  "RATE_LIMITED": {
+    "http_status": 429,
+    "message": "Batas permintaan tercapai; tunggu sebelum mencoba lagi.",
+    "retryable": true
+  },
+  "REQUEST_TOO_LARGE": {
+    "http_status": 413,
+    "message": "Ukuran permintaan melampaui batas layanan.",
+    "retryable": false
+  },
+  "UNAUTHENTICATED": {
+    "http_status": 401,
+    "message": "Autentikasi diperlukan.",
+    "retryable": false
+  },
+  "UNSUPPORTED_MEDIA_TYPE": {
+    "http_status": 415,
+    "message": "Gunakan JPEG atau PNG.",
+    "retryable": false
+  },
+  "VALIDATION_ERROR": {
+    "http_status": 422,
+    "message": "Periksa kembali isianmu.",
+    "retryable": false
+  }
+}
