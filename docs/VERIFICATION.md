@@ -15,4 +15,16 @@ Tanggal: 4 November 2026. Sumber Android: c1258596cb71bc7b95dc9a4f140f55f759815c
 
 Tes ini membuktikan behavior transport/domain dan pengaman transaksi pada lingkungan pengujian. Bukan benchmark beban, audit keamanan menyeluruh, penerimaan UI Android, akurasi YOLO atau mutu Gemini live. Build container dan deployment telah lulus di GitHub Actions run 41813752013. Sepuluh smoke check melalui prefix Nginx di VM lulus; root Nginx dan UID/restart pod sistem dipertahankan. HTTPS publik pred-autoscaler.bccdev.id dan sepuluh smoke check auth/pencatatan/statistik/logout juga lulus; detail ada di DEPLOYMENT.md.
 
-Sepuluh tes boundary/deployment Python mencakup checksum, tar path/symlink/duplikat/limit, migration failure, rollback readiness dan kebutuhan prefix Nginx.
+Dua belas tes boundary/deployment Python mencakup checksum, tar path/symlink/duplikat/limit, migration failure, rollback readiness, kebutuhan prefix Nginx dan batas source Python rilis.
+
+## Inferensi YOLO nyata pada VM
+
+Run [41821090984](https://github.com/waste-not-app/waste-not-backend/actions/runs/41821090984) meluluskan verify/deploy commit `9a6aefd`. Suite Python memuat 142 tes policy/transport dan audit seluruh 52 versi dependency runtime tanpa advisory yang diketahui pada waktu pengujian. CPU wheel dipasang dengan hash pada environment terpisah. NumPy 2.3.5 dan fallback tanpa NNPACK diuji langsung pada CPU KVM VM ini.
+
+Worker YOLO dan keputusan telah dipasang melalui bootstrap setelah rilis tersebut aktif. Sepuluh pemeriksaan AI melalui HTTPS publik lulus: autentikasi, metadata scan aktif/rekomendasi nonaktif, katalog worker asli, inferensi YOLO botol, replay identik, konflik perubahan foto, gate Gemini, tanpa log/XP otomatis, isolasi akun, dan delete/expiry idempoten. Checksum model pada snapshot DB cocok dengan artifact resmi `0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1`. Akun uji sementara dihapus berdasarkan ID tepatnya setelah pengujian.
+
+Pada satu foto, respons publik melaporkan `candidate-0ebbc80d4a76`, `REVIEW_REQUIRED`, kelas `bottle`, confidence 0.78385, kategori/material belum diputuskan dan konfirmasi pengguna tetap diwajibkan. Waktu request publik sekitar 1002 ms. Tiga inferensi langsung sebelumnya pada foto yang sama memerlukan sekitar 7207/638/635 ms, termasuk cold inference pertama. Angka ini hanya smoke satu contoh, bukan pengukuran akurasi, throughput, p95 atau beban paralel.
+
+Sepuluh pemeriksaan API inti auth/CRUD/statistik/logout diulang setelah AI aktif dan lulus. Setelah inferensi, memori worker YOLO sekitar 329 MiB dan keputusan 44 MiB, tanpa restart gagal; kedua port tetap loopback. Hash konfigurasi, master PID Nginx serta UID/restart tiga pod sistem tetap sama. Tidak ada restart layanan lain.
+
+Gemini nyata, mutu rekomendasi, panduan PUBLISHED, checkpoint fine-tuning empat kelas, holdout dan penerimaan Android belum diverifikasi. Capability rekomendasi tetap false. Bukti transport ini tidak memenuhi gate peluncuran AI untuk pengguna umum.

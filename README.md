@@ -62,3 +62,5 @@ Panduan kosong sampai konten yang benar-benar ditinjau diimpor. Achievement, pen
 Deployment VM dan CI/CD: [panduan cp-bcc](docs/DEPLOYMENT.md).
 
 Runtime YOLO CPU, provenance model dan source Python berada di [ai/](ai/README.md); petunjuk layanan privat ada pada [panduan AI](docs/AI.md).
+
+YOLO11n baseline COCO sudah berjalan di cp-bcc dan upload melalui HTTPS publik telah diuji dengan inferensi nyata. Ini deployment eksperimental, belum validasi akurasi khusus sampah. Metadata saat ini melaporkan `ai_scan=true`, `ai_recommendation=false`; Gemini menunggu kredensial/model dan panduan yang ditinjau. [Bukti dan batas pengujian](docs/VERIFICATION.md).

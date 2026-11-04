@@ -64,3 +64,17 @@ Source, provenance, pin wheel CPU dan service units tersedia di ai/ dan deploy/a
 Bootstrap AI tidak mengubah database atau Nginx. Pemasangan menggunakan environment Python tersendiri di /opt/wastenot-ai/venv, dua akun OS khusus, service tokens berbeda, batas memori/CPU dan port loopback. Detektor tidak memiliki akses jaringan keluar. Key Gemini/AI_GUIDES_PATH tetap kosong sampai operator menyediakannya; tidak memakai fixture atau meloloskan draf diam-diam.
 
 Urutan bootstrap: pasang environment CPU dari lock dengan hash, deploy paket Go/Python, jalankan deploy/ai/bootstrap.py pada staging yang sudah diperiksa, lalu uji deteksi nyata dan metadata capability. AI_RECOMMENDATION_ENABLED tetap false sampai Gemini serta panduan terbitan siap. Gunakan checkpoint fine-tuning sendiri hanya setelah file/manifest/checksum dan hasil evaluasinya tersedia; deployment awal mempertahankan default COCO dari proyek.
+
+## Status dan input operator
+
+Pada 4 November 2026 worker YOLO11n COCO sudah terpasang sebagai layanan dan inferensi melalui HTTPS publik lulus. Ini pemasangan eksperimental untuk verifikasi integrasi; gate evaluasi/holdout dan penerimaan Android di atas tetap belum selesai. Worker keputusan melayani katalog asli, tetapi kesiapan prosesnya tidak membuktikan Gemini dapat menghasilkan rekomendasi. Capability rekomendasi pada Go tetap false.
+
+File `/etc/wastenot/ai-recommendation.env` sudah disiapkan root-only pada VM. Isi `GEMINI_API_KEY` dan `GEMINI_MODEL` langsung melalui sesi operator, tanpa menaruh key di repo, GitHub Actions atau chat:
+
+```sh
+ssh -t cp-bcc 'sudoedit /etc/wastenot/ai-recommendation.env'
+```
+
+Pertahankan `AI_RECOMMENDATION_TOKEN` yang sudah dibuat. Jangan menyalin isi file ke log. `AI_GUIDES_PATH` harus menunjuk JSON dengan schema `Guide` dari worker Python, setelah kontennya benar-benar direview untuk konteks lokal. Panduan bawaan tetap DRAFT dan tidak dipromosikan otomatis. File panduan inti yang diimpor binary Go memiliki schema berbeda; keduanya tidak saling menggantikan.
+
+Setelah input tersedia, validasi schema/masa berlaku panduan, hak baca akun `wastenot-decisions`, akses model Gemini pada akun terkait, dan satu rekomendasi nyata melalui worker privat sebelum mengubah `AI_RECOMMENDATION_ENABLED`. Restart hanya layanan keputusan dan API WasteNot, lalu uji rekomendasi publik, dedup, provenance dan metadata. Key saja belum cukup untuk melewati gate panduan; jangan mengaktifkan `AI_ALLOW_PROTOTYPE` atau demo-guides untuk meloloskannya.
