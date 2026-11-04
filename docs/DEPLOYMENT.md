@@ -25,7 +25,7 @@ Variables: `WASTENOT_DEPLOY_HOST`, `WASTENOT_DEPLOY_PORT`, `WASTENOT_DEPLOY_USER
 
 Akun `wastenot-ci` hanya menerima forced command root `/usr/local/sbin/wastenot-deploy`, tanpa forwarding/PTY dan tanpa shell bebas. Helper root menolak tar compressed, anggota tambahan/duplikat/symlink/path escape, archive >80 MiB, binary >24 MiB dan checksum/ELF/commit invalid. Helper hanya memperbarui direktori/layanan WasteNot; binary dan migrasi berjalan sebagai user layanan, bukan root. Helper/infrastruktur tidak ikut ditimpa oleh paket CI; pembaruannya melalui sesi admin yang ditinjau.
 
-Migrasi dilakukan sebelum perpindahan current. Kegagalan migrasi mempertahankan API sebelumnya. Jika API baru gagal readiness, helper mengaktifkan binary sebelumnya. Rollback binary tidak mengembalikan schema/data; migrasi baru harus kompatibel ke belakang dan backup harus tersedia. Helper menyimpan tiga release terbaru serta current/previous yang dilindungi.
+Migrasi dilakukan sebelum perpindahan current. Kegagalan migrasi mempertahankan API sebelumnya. Jika API baru gagal readiness langsung maupun prefix Nginx yang sudah dipasang, helper mengaktifkan binary sebelumnya. Rollback binary tidak mengembalikan schema/data; migrasi baru harus kompatibel ke belakang dan backup harus tersedia. Helper menyimpan tiga release terbaru serta current/previous yang dilindungi.
 
 ## Bootstrap dan pemeriksaan operator
 
@@ -39,10 +39,19 @@ ssh cp-bcc 'curl -fsS -H "Host: mlops.bccdev.id" http://127.0.0.1/wastenot/api/h
 ssh cp-bcc 'sudo journalctl -u wastenot-api -n 30 --no-pager'
 ```
 
-API AI default nonaktif pada deployment ini; tidak ada key/model/panduan terbitan yang difabrikasi. Konten panduan inti tetap perlu diimpor setelah review. Runtime DB tidak memiliki hak CREATE/ALTER schema; role owner dipakai hanya saat migrasi/import. Setelah migrasi awal, hak DML runtime pada schema_migrations dicabut; SELECT tetap cukup untuk readiness.
+API AI default nonaktif pada deployment ini; tidak ada key/model/panduan terbitan yang difabrikasi. Konten panduan inti tetap perlu diimpor setelah review. Runtime DB tidak memiliki hak CREATE/ALTER schema; role owner dipakai hanya saat migrasi/import. Setelah migrasi awal, jalankan deploy/harden-db.sql melalui psql operator untuk mencabut hak DML runtime pada schema_migrations; SELECT tetap cukup untuk readiness. deploy/install-routing.py memasang include dengan backup, pemeriksaan root tetap identik, penantian reload worker dan rollback konfigurasi bila gagal.
 
 ## Domain dan TLS
 
 Base URL yang dituju Android: `https://mlops.bccdev.id/wastenot/api/v1/`. Status publik harus diverifikasi tersendiri setelah routing/TLS front proxy bekerja; Nginx di VM hanya menerima HTTP origin pada port 80. Jangan mengirim credential Android melalui HTTP publik.
 
 Saat pemeriksaan awal, domain resolve ke `103.179.134.116`, sama dengan gateway SSH. HTTPS dari lokal terputus/reset; VM tidak dapat mencapai port 80/443 domain tersebut. Sementara itu Nginx lokal VM menjawab 200 pada root. Ini menunjukkan forwarding/TLS di depan VM memerlukan verifikasi oleh pengelola gateway; setup backend tidak mengubah DNS, firewall gateway, sertifikat atau routing domain lain.
+
+
+## Bukti deployment 4 November 2026
+
+Run [41813752013](https://github.com/waste-not-app/waste-not-backend/actions/runs/41813752013) meluluskan verify dan deploy commit 2b9b2b6. API hidup sebagai wastenot dengan database runtime nonsuperuser. Sepuluh pemeriksaan HTTP melalui Nginx VM lulus: readiness prefix, register, metadata, create, replay, edit versioned, statistik, delete, XP dan logout. Akun smoke sementara dibersihkan dengan ID-nya sendiri; tidak ada akun seed.
+
+Backup Nginx sebelum include: /var/backups/wastenot/nginx-default.20261104T102847Z.before. Hash sumber sebelum ce0901350a021608139b5639cf4ccd7717bef8c3a9e4f79031eb46386b67b03f dan sesudah 83a7a4e67a9fd244a1aa840ccbf46f35b457191afcb25548c2e7e3fddb80858b. Isi root HTTP sama, master PID Nginx tetap 3088285, dan tiga pod sistem K3s mempertahankan UID serta restart count nol. File routing-verification.json di direktori backup menyimpan hasil.
+
+Bukti ini menyatakan jalur GitHub Actions → SSH khusus → migrasi → service Go → Nginx VM berfungsi. Bukti tersebut belum menyatakan forwarding/TLS domain publik berfungsi.

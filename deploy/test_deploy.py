@@ -91,5 +91,19 @@ class DeploymentRollback(unittest.TestCase):
                 activate.assert_not_called()
 
 
+class ReadinessScope(unittest.TestCase):
+    def test_prefixed_route_is_required_when_installed(self):
+        class Response(io.BytesIO):
+            status=200
+        def response(request,timeout):
+            if request.full_url.startswith('http://127.0.0.1:18080/'):
+                return Response(b'{"ready":true}')
+            raise OSError('prefix unavailable')
+        with patch.object(deploy.Path,'exists',return_value=True), \
+             patch.object(deploy.urllib.request,'urlopen',side_effect=response), \
+             patch.object(deploy.time,'sleep'):
+            self.assertFalse(deploy.ready())
+
+
 if __name__ == '__main__':
     unittest.main()

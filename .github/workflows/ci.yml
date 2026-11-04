@@ -45,6 +45,7 @@ jobs:
 
   deploy:
     needs: verify
+    timeout-minutes: 10
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     concurrency:

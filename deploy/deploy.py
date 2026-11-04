@@ -67,14 +67,19 @@ def activate(target):
 
 
 def ready():
+    urls = ['http://127.0.0.1:18080/health/ready']
+    if Path('/etc/nginx/snippets/wastenot-api.conf').exists():
+        urls.append('http://127.0.0.1/wastenot/api/health/ready')
     for _ in range(60):
         try:
-            with urllib.request.urlopen('http://127.0.0.1:18080/health/ready', timeout=2) as response:
-                if response.status == 200 and json.load(response).get('ready') is True:
-                    return True
+            for url in urls:
+                request = urllib.request.Request(url, headers={'Host': 'mlops.bccdev.id'})
+                with urllib.request.urlopen(request, timeout=2) as response:
+                    if response.status != 200 or json.load(response).get('ready') is not True:
+                        raise ValueError('Readiness failed')
+            return True
         except (OSError, ValueError):
-            pass
-        time.sleep(0.5)
+            time.sleep(0.5)
     return False
 
 
