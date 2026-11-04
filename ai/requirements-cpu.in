@@ -10,3 +10,6 @@ python-multipart==0.0.33
 ultralytics-opencv-headless==8.4.183
 torch==2.14.1+cpu
 torchvision==0.29.1+cpu
+
+# cp-bcc exposes kvm64 (SSE3); NumPy 2.4+ wheels require x86-64-v2.
+numpy==2.3.5
