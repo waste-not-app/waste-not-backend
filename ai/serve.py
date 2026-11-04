@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+from contextlib import nullcontext
 import hashlib
 import io
 import os
@@ -39,9 +40,16 @@ def main():
     parser.add_argument('service', choices=('detection', 'recommendation'))
     args = parser.parse_args()
     import uvicorn
-    app = application(args.service)
-    uvicorn.run(app, host='127.0.0.1', port=8091 if args.service == 'detection' else 8093,
-                access_log=False, log_level='warning', workers=1)
+    backend = nullcontext()
+    if args.service == 'detection':
+        import torch
+        if torch.backends.cpu.get_cpu_capability() in {'DEFAULT', 'NO AVX'}:
+            # The VM CPU cannot run NNPACK; avoid repeating unsupported-kernel initialization for every layer.
+            backend = torch.backends.nnpack.flags(enabled=False)
+    with backend:
+        app = application(args.service)
+        uvicorn.run(app, host='127.0.0.1', port=8091 if args.service == 'detection' else 8093,
+                    access_log=False, log_level='warning', workers=1)
 
 
 if __name__ == '__main__':
