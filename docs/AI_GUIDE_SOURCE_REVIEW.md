@@ -12,6 +12,8 @@ Penghitungan ulang heading preview: **78 panduan / 195 evidence**. Enam panduan 
 
 **Jangan terbitkan seluruh 78 panduan sekaligus.** Kandidat awal paling sempit adalah **empat panduan lengkap**: `pet_bottle`, `hdpe_bottle`, `aluminium_can`, `cardboard` (8 evidence), setelah pemilik editorial menerima batasannya, perubahan kecil di bawah diterapkan, dan perilaku pertanyaan kondisi diverifikasi. Ini kandidat bersyarat untuk peninjauan, belum izin mengubah status publikasi.
 
+Perubahan usulan kini tersedia sebagai [empat kandidat JSON DRAFT versi 6](../ai/guide-proposals/README.md), terpisah dari data runtime. Dua puluh pemeriksaan schema/gerbang kondisi lulus: draf tetap ditolak produksi, riwayat isi yang belum dikonfirmasi meminta konteks, serta akses penerima NO/risiko kimia tidak menghasilkan saran penanganan. Konfirmasi non-aerosol pada kaleng masih memerlukan penyesuaian label katalog sebelum aktivasi; pengujian ini tidak memberikan persetujuan editorial atau bukti penerimaan fasilitas.
+
 Alasannya: sumber mendukung prinsip bahan/daur ulang dan semua evidence RECYCLE pilot ini mensyaratkan `recycling_access=YES`; petunjuk telah mengutamakan penerima setempat. EPA juga secara eksplisit meminta pengecekan program lokal, sehingga tidak mendukung klaim penerimaan nasional Indonesia. [EPA: bahan umum](https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables). BPOM membedakan kode resin dari keamanan kontak pangan dan menjelaskan HDPE kode 2; draf HDPE mempertahankan pembatasan riwayat isi pangan/minuman. [BPOM Tasikmalaya](https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik).
 
 Perubahan minimal sebelum empat kandidat itu dipertimbangkan:

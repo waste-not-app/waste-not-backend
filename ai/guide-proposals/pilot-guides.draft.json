@@ -1,0 +1,225 @@
+[
+  {
+    "id": "pilot-pet-bottle",
+    "version": 6,
+    "object_key": "pet_bottle",
+    "category": "PLASTIC",
+    "publication_status": "DRAFT",
+    "reviewed_at": null,
+    "reviewer": null,
+    "valid_until": null,
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+      "https://www.epa.gov/hw/household-hazardous-waste-hhw"
+    ],
+    "scope_note": "Khusus botol PET bekas pangan/minuman yang material, riwayat isi dan penerimanya dikonfirmasi pengguna. Prinsip EPA dari AS; tidak membuktikan penerimaan fasilitas Indonesia.",
+    "special_handling": false,
+    "steps": [
+      "Konfirmasi material PET dan riwayat bekas pangan/minuman; bila riwayat belum diketahui, lengkapi informasi sebelum memakai panduan ini.",
+      "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+      "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+    ],
+    "caution": "Bentuk botol dan kode resin bukan bukti material atau keamanan isi ulang. Riwayat isi belum diketahui memerlukan klarifikasi; bekas kimia atau kontaminasi berbahaya memerlukan arahan pengelola khusus.",
+    "evidence": [
+      {
+        "id": "pet-clean-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Botol PET bekas pangan/minuman yang bersih dapat diarahkan ke Recycle setelah material, riwayat isi dan penerimaan pengelola dikonfirmasi. Ikuti syarat penerima; deteksi foto tidak membuktikan keamanan atau penerimaan lokal.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT",
+          "recycling_access": "YES",
+          "former_contents": "FOOD_DRINK"
+        },
+        "source_urls": [
+          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+          "https://www.epa.gov/hw/household-hazardous-waste-hhw"
+        ],
+        "steps": [
+          "Konfirmasi material PET dan riwayat bekas pangan/minuman; bila riwayat belum diketahui, lengkapi informasi sebelum memakai panduan ini.",
+          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+        ]
+      },
+      {
+        "id": "pet_bottle-prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pilot-aluminium-can",
+    "version": 6,
+    "object_key": "aluminium_can",
+    "category": "METAL",
+    "publication_status": "DRAFT",
+    "reviewed_at": null,
+    "reviewer": null,
+    "valid_until": null,
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+      "https://www.epa.gov/hw/household-hazardous-waste-hhw"
+    ],
+    "scope_note": "Khusus kaleng aluminium bekas minuman/pangan non-aerosol, tanpa isi bertekanan. Material, riwayat isi dan penerima dikonfirmasi pengguna; tidak menyatakan penerimaan nasional Indonesia.",
+    "special_handling": false,
+    "steps": [
+      "Pastikan kaleng aluminium bekas minuman/pangan non-aerosol, tanpa isi bertekanan; bila tidak pasti, jangan gunakan panduan ini dan minta klarifikasi.",
+      "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+      "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+    ],
+    "caution": "Bukan untuk kaleng aerosol/bertekanan atau bekas bahan kimia. Jangan melubangi, menekan atau mencoba mengosongkan isi bertekanan. Minta arahan pengelola yang sesuai untuk benda di luar cakupan.",
+    "evidence": [
+      {
+        "id": "can-clean-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Kaleng aluminium bekas minuman/pangan non-aerosol yang bersih dapat diarahkan ke Recycle setelah riwayat isi dan penerimaan pengelola dikonfirmasi. Ikuti persyaratan penerima; panduan ini tidak mencakup kaleng bertekanan atau bekas kimia.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT",
+          "recycling_access": "YES",
+          "former_contents": "FOOD_DRINK"
+        },
+        "source_urls": [
+          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+          "https://www.epa.gov/hw/household-hazardous-waste-hhw"
+        ],
+        "steps": [
+          "Pastikan kaleng aluminium bekas minuman/pangan non-aerosol, tanpa isi bertekanan; bila tidak pasti, jangan gunakan panduan ini dan minta klarifikasi.",
+          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+        ]
+      },
+      {
+        "id": "aluminium_can-prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pilot-cardboard",
+    "version": 6,
+    "object_key": "cardboard",
+    "category": "PAPER",
+    "publication_status": "DRAFT",
+    "reviewed_at": null,
+    "reviewer": null,
+    "valid_until": null,
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "scope_note": "Prinsip daur ulang kardus dari EPA AS dengan konfirmasi penerima setempat. Aturan kotak pangan, minyak dan kekeringan mengikuti pengelola; bukan larangan atau penerimaan universal Indonesia.",
+    "special_handling": false,
+    "steps": [
+      "Periksa kebersihan dan aturan penerimaan kardus."
+    ],
+    "caution": "Kardus tercemar makanan tidak otomatis layak didaur ulang.",
+    "evidence": [
+      {
+        "id": "cardboard-clean-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Kardus yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT",
+          "recycling_access": "YES"
+        },
+        "source_urls": [
+          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+        ],
+        "steps": [
+          "Pastikan material kardus dan pengelola yang menerima kondisi benda ini benar.",
+          "Ikuti syarat kebersihan dan kekeringan penerima. Pisahkan sisa pangan; bagian basah atau berminyak tidak otomatis diterima atau ditolak semua program.",
+          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+        ]
+      },
+      {
+        "id": "cardboard-prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pilot-hdpe-bottle",
+    "version": 6,
+    "object_key": "hdpe_bottle",
+    "category": "PLASTIC",
+    "publication_status": "DRAFT",
+    "reviewed_at": null,
+    "reviewer": null,
+    "valid_until": null,
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+      "https://www3.epa.gov/recyclecity/recovery.htm",
+      "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
+    ],
+    "scope_note": "HDPE kode 2 bekas pangan/minuman dikonfirmasi pengguna; sumber BPOM untuk identitas/peruntukan, EPA untuk prinsip daur ulang. Penerimaan wajib dikonfirmasi lokal.",
+    "special_handling": false,
+    "steps": [
+      "Periksa isi sebelumnya dan penerimaan pengelola."
+    ],
+    "caution": "Kode 2 dan bentuk botol bukan bukti aman untuk dipakai ulang atau kontak pangan. Isi sebelumnya yang tidak diketahui atau bahan kimia tidak memakai aturan botol pangan ini.",
+    "evidence": [
+      {
+        "id": "hdpe-food-recycle-v5",
+        "method": "RECYCLE",
+        "text": "Botol HDPE bekas pangan/minuman yang bersih dapat diarahkan ke Recycle karena isi sebelumnya dan penerimaan pengelola telah kamu konfirmasi. Kode resin 2 tidak menjamin aman dipakai ulang atau diterima semua fasilitas.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT",
+          "former_contents": "FOOD_DRINK",
+          "recycling_access": "YES"
+        },
+        "source_urls": [
+          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+          "https://www3.epa.gov/recyclecity/recovery.htm",
+          "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
+        ],
+        "steps": [
+          "Konfirmasi bahan HDPE/kode 2 dan riwayat bekas pangan/minuman; jangan memakai aturan ini untuk bekas kimia atau isi yang tidak diketahui.",
+          "Kosongkan dan bersihkan sisa pangan sesuai petunjuk penerima; pisahkan sesuai jenis.",
+          "Serahkan kepada pengelola yang dikonfirmasi menerima HDPE dengan kondisi tersebut. Jangan menganggap botol bekas otomatis aman diisi ulang."
+        ]
+      },
+      {
+        "id": "hdpe_bottle-prevent-waste-v5",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  }
+]
