@@ -10,3 +10,8 @@ coverage*
 
 __pycache__/
 *.pyc
+
+*.egg-info/
+/ai/runtime/build/
+/ai/runtime/dist/
+/ai/.cache-ai/

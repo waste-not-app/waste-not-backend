@@ -1,0 +1,575 @@
+{
+  "reuse": {
+    "source_urls": [
+      "https://19january2021snapshot.epa.gov/recycle/reducing-and-reusing-basics_.html"
+    ],
+    "steps": [
+      "Periksa kondisi dan kelayakan barang sebelum dipakai kembali.",
+      "Bila masih layak, gunakan ulang atau tawarkan kepada penerima yang membutuhkan."
+    ],
+    "caution": "Barang rusak atau dengan fungsi keselamatan memerlukan pemeriksaan; foto tidak membuktikan kelayakannya.",
+    "evidence": [
+      {
+        "id": "intact-reuse-v1",
+        "method": "REUSE",
+        "text": "Barang bersih, utuh dan dinyatakan masih layak dapat digunakan kembali sesuai fungsinya.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT",
+          "reusable": "YES",
+          "reuse_intention": true
+        }
+      },
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  "tableware": {
+    "source_urls": [
+      "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
+      "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+    ],
+    "steps": [
+      "Konfirmasi bahan dan periksa retak, tepi tajam atau kerusakan.",
+      "Gunakan kembali hanya jika kebersihan dan kelayakannya telah dipastikan pengguna."
+    ],
+    "caution": "Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+    "evidence": [
+      {
+        "id": "tableware-reuse-v1",
+        "method": "REUSE",
+        "text": "Peralatan makan/minum guna ulang yang bersih, utuh dan masih layak dapat dipakai kembali sesuai fungsinya. Pengguna sudah menyatakan ingin menggunakannya kembali.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT",
+          "reusable": "YES",
+          "reuse_intention": true
+        },
+        "source_urls": [
+          "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
+          "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+        ],
+        "steps": [
+          "Periksa kembali kebersihan serta tidak adanya retak atau tepi tajam.",
+          "Gunakan kembali sesuai fungsi dan petunjuk bahan/produk; jangan menambah sampah dengan mengganti peralatan yang masih layak."
+        ]
+      },
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      },
+      {
+        "id": "tableware-wash-food_drink-reuse-v4",
+        "method": "REUSE",
+        "risk_compatible": false,
+        "requires": {
+          "cleanliness": "DIRTY",
+          "integrity": "INTACT",
+          "reusable": "YES",
+          "reuse_intention": true,
+          "cleanable": "YES",
+          "soiling": "FOOD_DRINK"
+        },
+        "text": "Peralatan ini masih utuh dan layak; kotorannya berupa sisa makanan/minuman yang kamu konfirmasi bisa dibersihkan. Gunakan kembali setelah dicuci dan diperiksa kebersihannya.",
+        "source_urls": [
+          "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
+          "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+        ],
+        "steps": [
+          "Bersihkan kotoran, cuci dan bilas sesuai petunjuk bahan/produk, lalu keringkan sebelum digunakan kembali.",
+          "Periksa kembali kondisi setelah dicuci. Bila ada retak, kerusakan atau dugaan kontaminasi berbahaya, hentikan dan perbarui kondisi objek.",
+          "Gunakan kembali sesuai fungsinya setelah bersih dan kering."
+        ]
+      },
+      {
+        "id": "tableware-wash-dust-reuse-v4",
+        "method": "REUSE",
+        "risk_compatible": false,
+        "requires": {
+          "cleanliness": "DIRTY",
+          "integrity": "INTACT",
+          "reusable": "YES",
+          "reuse_intention": true,
+          "cleanable": "YES",
+          "soiling": "DUST"
+        },
+        "text": "Peralatan ini masih utuh dan layak; kotorannya berupa debu biasa yang kamu konfirmasi bisa dibersihkan. Gunakan kembali setelah dicuci dan diperiksa kebersihannya.",
+        "source_urls": [
+          "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
+          "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+        ],
+        "steps": [
+          "Bersihkan kotoran, cuci dan bilas sesuai petunjuk bahan/produk, lalu keringkan sebelum digunakan kembali.",
+          "Periksa kembali kondisi setelah dicuci. Bila ada retak, kerusakan atau dugaan kontaminasi berbahaya, hentikan dan perbarui kondisi objek.",
+          "Gunakan kembali sesuai fungsinya setelah bersih dan kering."
+        ]
+      },
+      {
+        "id": "broken-glass-trash-v3",
+        "method": "TRASH",
+        "risk_compatible": true,
+        "requires": {
+          "category": "GLASS",
+          "integrity": "DAMAGED"
+        },
+        "text": "Kaca pecah diarahkan ke Trash sebagai residu dengan pengemasan pelindung agar tidak melukai petugas. Panduan Cornwall menempatkan pecahan kaca pada jalur residu; konfirmasikan aturan penerima setempat.",
+        "source_urls": [
+          "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/broken-glass/"
+        ],
+        "steps": [
+          "Jangan gunakan kembali kaca yang retak atau pecah dan hindari kontak langsung dengan tepi tajam.",
+          "Gunakan pembungkus pelindung atau wadah kokoh dan beri label berisi pecahan kaca; minta bantuan petugas bila tidak aman.",
+          "Serahkan melalui jalur residu sesuai petunjuk pengelola setempat; jangan campur pecahan lepas dengan daur ulang biasa."
+        ]
+      },
+      {
+        "id": "ceramic-damaged-trash-v3",
+        "method": "TRASH",
+        "risk_compatible": true,
+        "requires": {
+          "category": "OTHER",
+          "integrity": "DAMAGED"
+        },
+        "text": "Keramik yang rusak atau tidak layak digunakan diarahkan ke Trash sesuai jalur residu setempat, bukan dicampur dengan daur ulang botol kaca. Referensi Islington memasukkan peralatan keramik ke sampah rumah tangga.",
+        "source_urls": [
+          "https://www.islington.gov.uk/recycling-and-rubbish/recycling/what-we-pick-up-as-household-rubbish"
+        ],
+        "steps": [
+          "Jangan gunakan kembali peralatan keramik yang rusak atau tidak layak.",
+          "Lindungi bagian tajam dengan pembungkus atau wadah kokoh dan minta petunjuk penyerahan dari petugas setempat."
+        ]
+      },
+      {
+        "id": "ceramic-unusable-trash-v3",
+        "method": "TRASH",
+        "risk_compatible": false,
+        "requires": {
+          "category": "OTHER",
+          "integrity": "INTACT",
+          "reusable": "NO"
+        },
+        "text": "Keramik yang rusak atau tidak layak digunakan diarahkan ke Trash sesuai jalur residu setempat, bukan dicampur dengan daur ulang botol kaca. Referensi Islington memasukkan peralatan keramik ke sampah rumah tangga.",
+        "source_urls": [
+          "https://www.islington.gov.uk/recycling-and-rubbish/recycling/what-we-pick-up-as-household-rubbish"
+        ],
+        "steps": [
+          "Jangan gunakan kembali peralatan keramik yang rusak atau tidak layak.",
+          "Lindungi bagian tajam dengan pembungkus atau wadah kokoh dan minta petunjuk penyerahan dari petugas setempat."
+        ]
+      }
+    ]
+  },
+  "plastic": {
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "steps": [
+      "Pastikan jenis plastik melalui informasi produk, bukan skor gambar.",
+      "Periksa aturan penerimaan fasilitas dan bersihkan sesuai petunjuknya."
+    ],
+    "caution": "Tidak semua plastik atau wadah diterima fasilitas setempat.",
+    "evidence": [
+      {
+        "id": "plastic-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Wadah plastik bersih dapat diarahkan ke daur ulang jika jenisnya diterima fasilitas setempat.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT"
+        }
+      },
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  "book": {
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "steps": [
+      "Pertimbangkan penggunaan ulang atau donasi jika buku masih layak.",
+      "Untuk daur ulang, periksa aturan penerimaan buku dan sampul pada fasilitas setempat."
+    ],
+    "caution": "Jangan sertakan dokumen berisi data pribadi tanpa pengelolaan yang sesuai.",
+    "evidence": [
+      {
+        "id": "book-reuse-v1",
+        "method": "REUSE",
+        "text": "Buku yang masih bersih dan layak dapat digunakan kembali atau didonasikan.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT",
+          "reusable": "YES",
+          "reuse_intention": true
+        }
+      },
+      {
+        "id": "book-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Buku kertas dapat diarahkan ke daur ulang sesuai aturan fasilitas tentang sampul dan bahan campuran.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "integrity": "INTACT"
+        }
+      },
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  "electronics": {
+    "source_urls": [
+      "https://www.epa.gov/recycle/electronics-donation-and-recycling"
+    ],
+    "steps": [
+      "Cari pengelola resmi yang menerima perangkat tersebut.",
+      "Kelola data pribadi sebelum penyerahan; minta bantuan teknisi untuk perangkat yang rusak."
+    ],
+    "caution": "Jangan membongkar perangkat atau baterai sendiri; penerimaan bergantung pengelola setempat.",
+    "evidence": [
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      },
+      {
+        "id": "specialist-electronics-recycle-v3",
+        "method": "RECYCLE",
+        "risk_compatible": true,
+        "requires": {},
+        "text": "Perangkat elektronik diarahkan ke Recycle melalui program pengembalian produsen atau pengelola e-waste yang menerima jenis perangkatnya, agar material dapat dipulihkan. Ini bukan izin memasukkannya ke tong daur ulang biasa.",
+        "source_urls": [
+          "https://www.epa.gov/recycle/electronics-donation-and-recycling"
+        ],
+        "steps": [
+          "Hubungi produsen atau pengelola e-waste untuk memastikan penerimaan dan prosedur penyerahan.",
+          "Lindungi data pribadi bila dapat dilakukan dengan aman; jangan membongkar baterai atau perangkat rusak sendiri.",
+          "Serahkan melalui layanan khusus; perangkat dengan baterai tidak dimasukkan ke tong sampah atau daur ulang biasa."
+        ]
+      }
+    ]
+  },
+  "sharp": {
+    "source_urls": [
+      "https://www.wandsworth.gov.uk/rubbish-and-recycling/recycle-and-reuse/waste-and-recycling-a-z/kitchen-knives/"
+    ],
+    "steps": [
+      "Jauhkan bagian tajam dari kontak langsung dan tanyakan prosedur penyerahan kepada petugas."
+    ],
+    "caution": "Objek tajam memerlukan penanganan khusus; jangan mengikuti saran pembuangan umum.",
+    "evidence": [
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      },
+      {
+        "id": "knife-specialist-recycle-v3",
+        "method": "RECYCLE",
+        "risk_compatible": true,
+        "requires": {
+          "object_key": "knife"
+        },
+        "text": "Pisau logam dapat diarahkan ke Recycle melalui pengelola logam yang menerima benda tajam. Referensi Wandsworth menyediakan jalur scrap metal khusus; konfirmasikan penerimaan dan pengemasan kepada petugas lokal.",
+        "source_urls": [
+          "https://www.wandsworth.gov.uk/rubbish-and-recycling/recycle-and-reuse/waste-and-recycling-a-z/kitchen-knives/"
+        ],
+        "steps": [
+          "Hubungi pengelola logam untuk memastikan pisau diterima dan ikuti prosedur penyerahannya.",
+          "Lindungi bilah agar tidak melukai petugas; jangan masukkan pisau lepas ke tong daur ulang biasa."
+        ]
+      },
+      {
+        "id": "scissors-specialist-recycle-v3",
+        "method": "RECYCLE",
+        "risk_compatible": true,
+        "requires": {
+          "object_key": "scissors"
+        },
+        "text": "Gunting logam diarahkan ke Recycle melalui pusat pengumpulan yang menerima gunting. Referensi Auckland menyediakan jalur tersebut; periksa penerimaan dan lindungi bagian tajam sesuai petunjuk petugas setempat.",
+        "source_urls": [
+          "https://www.aucklandcouncil.govt.nz/en/rubbish-recycling/get-rid-unwanted-items/organisation/331.html"
+        ],
+        "steps": [
+          "Hubungi pusat pengumpulan yang menerima gunting logam dan tanyakan prosedur pengemasannya.",
+          "Lindungi bilah agar tidak melukai petugas; jangan membuang gunting lepas ke tong daur ulang biasa."
+        ]
+      }
+    ]
+  },
+  "food": {
+    "source_urls": [
+      "https://www.epa.gov/sustainable-management-food/sustainable-management-food-basics"
+    ],
+    "steps": [
+      "Pisahkan sisa makanan dari kemasan.",
+      "Periksa layanan pengelolaan organik setempat dan pilih tindakan yang benar-benar dilakukan."
+    ],
+    "caution": "Foto tidak memastikan makanan aman dikonsumsi. REDUCE adalah pencegahan berikutnya; penanganan sisa saat ini mengikuti layanan organik lokal.",
+    "evidence": [
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sisa makanan berikutnya, rencanakan porsi dan beli hanya yang dibutuhkan. Saran ini tidak menetapkan keamanan konsumsi atau pembuangan makanan saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Rencanakan kebutuhan sebelum membeli dan hindari jumlah berlebih."
+        ]
+      }
+    ]
+  },
+  "mixed": {
+    "source_urls": [
+      "https://19january2021snapshot.epa.gov/recycle/reducing-and-reusing-basics_.html"
+    ],
+    "steps": [
+      "Konfirmasi komponen dan kondisi barang.",
+      "Periksa pilihan penerima atau pengelola setempat untuk barang campuran."
+    ],
+    "caution": "Bahan dan penerimaan tidak dapat dipastikan dari label objek; metode perlu dipilih manual.",
+    "evidence": [
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  "toothbrush": {
+    "source_urls": [
+      "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/"
+    ],
+    "steps": [
+      "Konfirmasikan sikat gigi plastik manual, tanpa baterai atau komponen listrik.",
+      "Periksa program pengumpulan khusus sebelum memilih residu sesuai aturan setempat."
+    ],
+    "caution": "Referensi Cornwall, Inggris; bukan aturan penerimaan Indonesia. Sikat gigi elektrik/baterai memerlukan penanganan elektronik khusus.",
+    "evidence": [
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      },
+      {
+        "id": "manual-plastic-residue-v2",
+        "method": "TRASH",
+        "text": "Sikat gigi plastik manual yang tidak layak dipakai dan tidak memiliki akses daur ulang khusus dapat diarahkan ke residu sesuai aturan lokal. Referensi Cornwall tidak memasukkannya dalam pengumpulan daur ulang biasa.",
+        "requires": {
+          "reusable": "NO",
+          "recycling_access": "NO"
+        },
+        "source_urls": [
+          "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/"
+        ],
+        "steps": [
+          "Pastikan ini sikat gigi plastik manual tanpa baterai, bukan limbah medis atau berbahaya.",
+          "Jika tidak ada program daur ulang khusus, gunakan jalur residu sesuai ketentuan petugas setempat."
+        ]
+      }
+    ]
+  },
+  "broad_recyclable": {
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "steps": [
+      "Konfirmasi jenis benda dan bahannya; pastikan tidak berisi bahan kimia atau bahan berbahaya.",
+      "Tanyakan apakah pengelola menerima jenis benda ini, lalu ikuti instruksi pengosongan, pembersihan dan penyerahan."
+    ],
+    "caution": "Referensi EPA berlaku umum di AS, bukan kepastian penerimaan di Indonesia. Kantong/film, styrofoam, kemasan berlapis dan tutup kecil dapat memerlukan jalur khusus; jangan masukkan otomatis ke daur ulang campuran.",
+    "evidence": [
+      {
+        "id": "accepted-material-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Pilih Recycle jika pengelola sudah menerima jenis benda dan bahan ini. Serahkan dalam kondisi bersih melalui jalur yang mereka tentukan.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "recycling_access": "YES"
+        },
+        "source_urls": [
+          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+        ],
+        "steps": [
+          "Pastikan jawaban akses daur ulang berlaku untuk jenis benda dan bahan yang dipilih, bukan hanya ketersediaan tong umum.",
+          "Kosongkan dan bersihkan sesuai petunjuk penerima; pisahkan bahan atau tutup hanya jika diminta penerima.",
+          "Untuk kantong dan film, cari pengumpulan khusus yang menerima bahan tersebut."
+        ]
+      },
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  "broad_food_container": {
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "steps": [
+      "Konfirmasi jenis benda dan bahannya; pastikan tidak berisi bahan kimia atau bahan berbahaya.",
+      "Tanyakan apakah pengelola menerima jenis benda ini, lalu ikuti instruksi pengosongan, pembersihan dan penyerahan."
+    ],
+    "caution": "Referensi EPA berlaku umum di AS, bukan kepastian penerimaan di Indonesia. Kantong/film, styrofoam, kemasan berlapis dan tutup kecil dapat memerlukan jalur khusus; jangan masukkan otomatis ke daur ulang campuran.",
+    "evidence": [
+      {
+        "id": "accepted-material-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Pilih Recycle jika pengelola sudah menerima jenis benda dan bahan ini. Serahkan dalam kondisi bersih melalui jalur yang mereka tentukan.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "recycling_access": "YES",
+          "former_contents": "FOOD_DRINK"
+        },
+        "source_urls": [
+          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+        ],
+        "steps": [
+          "Pastikan jawaban akses daur ulang berlaku untuk jenis benda dan bahan yang dipilih, bukan hanya ketersediaan tong umum.",
+          "Kosongkan dan bersihkan sesuai petunjuk penerima; pisahkan bahan atau tutup hanya jika diminta penerima.",
+          "Untuk kantong dan film, cari pengumpulan khusus yang menerima bahan tersebut."
+        ]
+      },
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  },
+  "broad_paper": {
+    "source_urls": [
+      "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+    ],
+    "steps": [
+      "Konfirmasi jenis benda dan bahannya; pastikan tidak berisi bahan kimia atau bahan berbahaya.",
+      "Tanyakan apakah pengelola menerima jenis benda ini, lalu ikuti instruksi pengosongan, pembersihan dan penyerahan."
+    ],
+    "caution": "Periksa lapisan laminasi dan kontaminasi. Dokumen berisi data pribadi memerlukan pengelolaan sebelum diserahkan. Penerimaan mengikuti pengelola setempat.",
+    "evidence": [
+      {
+        "id": "accepted-material-recycle-v1",
+        "method": "RECYCLE",
+        "text": "Pilih Recycle jika pengelola sudah menerima jenis benda dan bahan ini. Serahkan dalam kondisi bersih melalui jalur yang mereka tentukan.",
+        "requires": {
+          "cleanliness": "CLEAN",
+          "recycling_access": "YES"
+        },
+        "source_urls": [
+          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
+        ],
+        "steps": [
+          "Pastikan jawaban akses daur ulang berlaku untuk jenis benda dan bahan yang dipilih, bukan hanya ketersediaan tong umum.",
+          "Kosongkan dan bersihkan sesuai petunjuk penerima; pisahkan bahan atau tutup hanya jika diminta penerima.",
+          "Untuk kantong dan film, cari pengumpulan khusus yang menerima bahan tersebut."
+        ]
+      },
+      {
+        "id": "prevent-waste-v2",
+        "method": "REDUCE",
+        "requires": {},
+        "risk_compatible": true,
+        "text": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+        "source_urls": [
+          "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
+        ],
+        "steps": [
+          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+        ]
+      }
+    ]
+  }
+}

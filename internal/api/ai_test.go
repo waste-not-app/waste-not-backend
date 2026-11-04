@@ -149,6 +149,7 @@ func TestAIIntegration(t *testing.T) {
 	worker, detectCalls, recommendCalls, mode := workerFixture(t)
 	s, sv := setup(t, func(c *config.Config) {
 		c.AIEnabled = true
+		c.RecommendationEnabled = true
 		c.AllowPrototype = true
 		c.DetectionURL = worker.URL
 		c.RecommendationURL = worker.URL
@@ -274,6 +275,7 @@ func TestMediaAndPrototypeGates(t *testing.T) {
 	worker, _, recommendCalls, _ := workerFixture(t)
 	_, sv := setup(t, func(c *config.Config) {
 		c.AIEnabled = true
+		c.RecommendationEnabled = true
 		c.DetectionURL = worker.URL
 		c.RecommendationURL = worker.URL
 		c.DetectionToken = "service-detection-secret-long"
@@ -329,6 +331,7 @@ func TestPythonDecisionWorker(t *testing.T) {
 	worker, _, _, _ := workerFixture(t)
 	_, sv := setup(t, func(c *config.Config) {
 		c.AIEnabled = true
+		c.RecommendationEnabled = true
 		c.AllowPrototype = true
 		c.DetectionURL = worker.URL
 		c.RecommendationURL = workerURL
@@ -356,6 +359,7 @@ func TestAIDeleteDuringGenerationAndCrashRecovery(t *testing.T) {
 	worker, _, calls, mode := workerFixture(t)
 	s, sv := setup(t, func(c *config.Config) {
 		c.AIEnabled = true
+		c.RecommendationEnabled = true
 		c.AllowPrototype = true
 		c.DetectionURL = worker.URL
 		c.RecommendationURL = worker.URL
@@ -409,5 +413,31 @@ func TestAIDeleteDuringGenerationAndCrashRecovery(t *testing.T) {
 	var exists bool
 	if e = s.DB.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM ai_operations WHERE id=$1)`, expired).Scan(&exists); e != nil || exists {
 		t.Fatal("TTL cleanup", e)
+	}
+}
+func TestScanOnlyDeployment(t *testing.T) {
+	worker, _, calls, _ := workerFixture(t)
+	_, sv := setup(t, func(c *config.Config) {
+		c.AIEnabled = true
+		c.RecommendationEnabled = false
+		c.DetectionURL = worker.URL
+		c.RecommendationURL = worker.URL
+		c.DetectionToken = "service-detection-secret-long"
+		c.RecommendationToken = "service-recommendation-secret-long"
+	})
+	a := registerUser(t, sv.URL, "scan-only@example.com")
+	token := a["access_token"].(string)
+	st, v, _ := call(t, sv.URL, "GET", "/v1/metadata", token, nil, nil)
+	requireStatus(t, st, 200, v)
+	caps := v["data"].(map[string]any)["capabilities"].(map[string]any)
+	if caps["ai_scan"] != true || caps["ai_recommendation"] != false {
+		t.Fatal("incorrect feature state", caps)
+	}
+	st, v = upload(t, sv.URL, token, uuid.NewString(), photo(), "image/jpeg")
+	requireStatus(t, st, 201, v)
+	st, v, _ = call(t, sv.URL, "POST", "/v1/ai/recommendations", token, requestFixture(t, "recycle-request.json"), nil)
+	requireStatus(t, st, 503, v)
+	if calls.Load() != 0 {
+		t.Fatal("disabled recommendation called provider")
 	}
 }

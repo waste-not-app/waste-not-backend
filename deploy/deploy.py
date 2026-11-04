@@ -4,7 +4,7 @@ import hashlib
 import io
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import shutil
 import subprocess
@@ -13,10 +13,14 @@ import tarfile
 import tempfile
 import time
 import urllib.request
+import zipfile
+import stat
 
 ROOT = Path('/opt/wastenot')
 MAX_ARCHIVE = 80 * 1024 * 1024
-NAMES = {'api', 'migrate', 'guides', 'release.json'}
+NAMES = {'api', 'migrate', 'guides', 'ai-runtime.zip', 'ai-serve.py', 'release.json'}
+BINARIES = {'api','migrate','guides'}
+AI_LOCK = Path('/etc/wastenot/ai-requirements.sha256')
 
 
 def parse_release(payload):
@@ -36,22 +40,51 @@ def parse_release(payload):
     if set(files) != NAMES:
         raise ValueError('Incomplete release')
     manifest = json.loads(files['release.json'])
-    if set(manifest) != {'commit', 'sha256'} or not re.fullmatch('[a-f0-9]{40}', manifest['commit']):
+    if set(manifest) != {'commit', 'sha256', 'ai_requirements_sha256'} or not re.fullmatch('[a-f0-9]{40}', manifest['commit']):
         raise ValueError('Invalid source commit')
     if set(manifest['sha256']) != NAMES - {'release.json'}:
         raise ValueError('Invalid checksum manifest')
+    if not re.fullmatch('[a-f0-9]{64}', manifest['ai_requirements_sha256']):
+        raise ValueError('Invalid AI dependency digest')
+    if AI_LOCK.is_file() and AI_LOCK.read_text().strip() != manifest['ai_requirements_sha256']:
+        raise ValueError('AI dependencies differ from the installed environment')
     for name in NAMES - {'release.json'}:
         raw = files[name]
         if hashlib.sha256(raw).hexdigest() != manifest['sha256'][name]:
             raise ValueError('Release checksum mismatch')
-        if raw[:5] != b'\x7fELF\x02' or raw[18:20] != b'\x3e\x00':
+        if name in BINARIES and (raw[:5] != b'\x7fELF\x02' or raw[18:20] != b'\x3e\x00'):
             raise ValueError('Expected Linux amd64 ELF binary')
+    source_files(files['ai-runtime.zip'])
     return manifest['commit'], files
 
 
-def environment():
+def source_files(raw):
+    if len(raw)>2*1024*1024:
+        raise ValueError('AI source archive is too large')
+    output={}
+    total=0
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        if len(archive.infolist())>128:
+            raise ValueError('Too many AI source files')
+        for entry in archive.infolist():
+            path=PurePosixPath(entry.filename)
+            mode=entry.external_attr>>16
+            if (path.is_absolute() or path.as_posix()!=entry.filename or '\\' in entry.filename or '..' in path.parts or len(path.parts)<2 or path.parts[0]!='wastenot_ai'
+                or entry.filename in output or entry.is_dir() or stat.S_ISLNK(mode)
+                or entry.file_size>1024*1024 or entry.compress_size==0):
+                raise ValueError('Invalid AI source member')
+            total+=entry.file_size
+            if total>4*1024*1024:
+                raise ValueError('AI source expands beyond its limit')
+            output[entry.filename]=archive.read(entry)
+    if 'wastenot_ai/__init__.py' not in output:
+        raise ValueError('AI source package is incomplete')
+    return output
+
+
+def environment(path=Path('/etc/wastenot/migrate.env')):
     result = {'PATH': '/usr/local/bin:/usr/sbin:/usr/bin:/bin', 'LANG': 'C.UTF-8'}
-    for line in Path('/etc/wastenot/migrate.env').read_text().splitlines():
+    for line in path.read_text().splitlines():
         if line and not line.startswith('#'):
             key, value = line.split('=', 1)
             result[key] = value
@@ -63,19 +96,26 @@ def activate(target):
     temporary.unlink(missing_ok=True)
     temporary.symlink_to(target)
     temporary.replace(ROOT / 'current')
+    if AI_LOCK.is_file():
+        subprocess.run(['/usr/bin/systemctl','restart','wastenot-yolo.service','wastenot-decisions.service'],check=True,timeout=90)
     subprocess.run(['/usr/bin/systemctl', 'restart', 'wastenot-api.service'], check=True, timeout=55)
 
 
 def ready():
-    urls = ['http://127.0.0.1:18080/health/ready']
+    requests = [('http://127.0.0.1:18080/health/ready',{})]
     if Path('/etc/nginx/snippets/wastenot-api.conf').exists():
-        urls.append('http://127.0.0.1/wastenot/api/health/ready')
+        requests.append(('http://127.0.0.1/wastenot/api/health/ready',{}))
+    if AI_LOCK.is_file():
+        for port,name,key in [(8091,'ai-detection.env','AI_SERVICE_TOKEN'),(8093,'ai-recommendation.env','AI_RECOMMENDATION_TOKEN')]:
+            settings=environment(Path('/etc/wastenot')/name)
+            requests.append((f'http://127.0.0.1:{port}/health/ready',{'Authorization':'Bearer '+settings[key]}))
     for _ in range(60):
         try:
-            for url in urls:
-                request = urllib.request.Request(url, headers={'Host': 'pred-autoscaler.bccdev.id'})
+            for url,headers in requests:
+                request = urllib.request.Request(url, headers={'Host': 'pred-autoscaler.bccdev.id',**headers})
                 with urllib.request.urlopen(request, timeout=2) as response:
-                    if response.status != 200 or json.load(response).get('ready') is not True:
+                    value=json.load(response)
+                    if response.status != 200 or not (value.get('ready') is True or value.get('data',{}).get('ready') is True):
                         raise ValueError('Readiness failed')
             return True
         except (OSError, ValueError):
@@ -99,6 +139,14 @@ def deploy(payload):
             for name, raw in files.items():
                 (stage / name).write_bytes(raw)
                 (stage / name).chmod(0o444 if name == 'release.json' else 0o555)
+            for name,raw in source_files(files['ai-runtime.zip']).items():
+                path=stage/'python'/name
+                path.parent.mkdir(parents=True,exist_ok=True)
+                path.write_bytes(raw)
+                path.chmod(0o444)
+            for directory in (stage/'python').rglob('*'):
+                if directory.is_dir():directory.chmod(0o755)
+            (stage/'python').chmod(0o755)
             stage.chmod(0o755)
             stage.replace(target)
         finally:

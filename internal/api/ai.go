@@ -330,6 +330,10 @@ func (s *Server) aiDetection(w http.ResponseWriter, r *http.Request) {
 	s.complete(w, r, o, result, snapshot, nil)
 }
 func (s *Server) aiRecommendation(w http.ResponseWriter, r *http.Request) {
+	if !s.Config.RecommendationEnabled {
+		fail(w, r, 503, "AI_DISABLED", nil)
+		return
+	}
 	if !s.aiEnabled(w, r) {
 		return
 	}

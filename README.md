@@ -2,7 +2,7 @@
 
 Backend Go untuk aplikasi [WasteNot Android](https://github.com/waste-not-app/waste-not-android). API HTTP `/v1` menggunakan PostgreSQL, mengikuti kontrak Android dan memakai worker Python yang sudah tersedia untuk YOLO/Gemini.
 
-Implementasi mencakup akun/sesi, CRUD catatan, pagination/filter, dashboard, statistik, XP/level/streak, pencarian panduan, dan adapter AI dengan ownership, idempotensi lintas proses, TTL serta provenance saat simpan. Tidak membuat akun demo, panduan terbitan palsu, atau hasil AI pengganti. AI default nonaktif; mode fixture/draf memerlukan pengaktifan eksplisit untuk pengujian.
+Implementasi mencakup akun/sesi, CRUD catatan, pagination/filter, dashboard, statistik, XP/level/streak, pencarian panduan, dan adapter AI dengan ownership, idempotensi lintas proses, TTL serta provenance saat simpan. Tidak membuat akun demo, panduan terbitan palsu, atau hasil AI pengganti. AI memiliki feature gate deteksi/rekomendasi terpisah; mode fixture/draf memerlukan pengaktifan eksplisit untuk pengujian.
 
 ## Menjalankan lokal
 
@@ -60,3 +60,5 @@ Satu layanan Go, router `net/http`, SQL terparameterisasi melalui pgx, pool maks
 Panduan kosong sampai konten yang benar-benar ditinjau diimpor. Achievement, pengingat, lampiran foto permanen dan titik daur ulang memiliki capability `false`. Upload AI bersifat sementara di memori dan berbeda dari lampiran foto. API sudah dideploy ke VM cp-bcc melalui GitHub Actions dan dapat dicapai di [base URL HTTPS](https://pred-autoscaler.bccdev.id/wastenot/api/v1/). Penyambungan write API pada Android tetap pekerjaan integrasi terpisah.
 
 Deployment VM dan CI/CD: [panduan cp-bcc](docs/DEPLOYMENT.md).
+
+Runtime YOLO CPU, provenance model dan source Python berada di [ai/](ai/README.md); petunjuk layanan privat ada pada [panduan AI](docs/AI.md).

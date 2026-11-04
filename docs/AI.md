@@ -1,6 +1,6 @@
 # Adapter AI
 
-Worker Python tetap berasal dari repo Android pada commit `c1258596cb71bc7b95dc9a4f140f55f759815c4e`. Python memiliki mapping, threshold, policy/evidence, kondisi berisiko dan Gemini. Go memiliki auth, ownership, rate limit, dedup, TTL, snapshot dan transaksi simpan. Tidak ada subprocess Python per request atau key Gemini pada Go.
+Snapshot worker Python sekarang dipaketkan pada ai/runtime dan berasal dari repo Android pada commit `c1258596cb71bc7b95dc9a4f140f55f759815c4e`. Python memiliki mapping, threshold, policy/evidence, kondisi berisiko dan Gemini. Go memiliki auth, ownership, rate limit, dedup, TTL, snapshot dan transaksi simpan. Tidak ada subprocess Python per request atau key Gemini pada Go.
 
 ## Konfigurasi
 
@@ -10,6 +10,8 @@ Pada proses Go:
 
 ```sh
 export AI_ENABLED=true
+# Aktifkan rekomendasi hanya setelah key Gemini dan panduan review tersedia.
+export AI_RECOMMENDATION_ENABLED=false
 export AI_ALLOW_PROTOTYPE=false
 export AI_DETECTION_URL=http://127.0.0.1:8091
 export AI_RECOMMENDATION_URL=http://127.0.0.1:8093
@@ -19,7 +21,7 @@ export AI_RECOMMENDATION_URL=http://127.0.0.1:8093
 
 Endpoint privat memakai bearer service masing-masing, deadline 25 detik, koneksi dibatasi, tanpa redirect dan tanpa retry generasi otomatis. Origin worker hanya berasal dari konfigurasi operator; input publik tidak menerima URL, prompt, confidence, raw class, provider, guide atau allowed_methods. Token/key tidak ada di access log. Gemini key hanya pada worker keputusan.
 
-`AI_ENABLED` adalah gate operator. Aktifkan untuk pengguna hanya setelah gate pada AI_SPEC terpenuhi: artifact/taksonomi/lisensi/holdout, threshold, panduan lokal, evaluasi model/LLM, retensi, dan penerimaan Android. `AI_ALLOW_PROTOTYPE=true` mengizinkan hasil fixture/draft yang tetap diberi label asli. Hasil tersebut ditolak Go ketika flag false. Metadata katalog/capability di-cache maksimal 30 detik; setiap deteksi tetap menyimpan model/checksum/mapping aktualnya sendiri. Health ready core tidak menyatakan worker, model, editorial atau Gemini siap.
+`AI_ENABLED` adalah gate operator untuk katalog/deteksi. `AI_RECOMMENDATION_ENABLED` memisahkan generasi saran; false mengembalikan AI_DISABLED tanpa memanggil provider. Deteksi baseline adalah kandidat eksperimental dan tidak membuktikan akurasi sampah/material. Aktifkan untuk pengguna hanya setelah gate pada AI_SPEC terpenuhi: artifact/taksonomi/lisensi/holdout, threshold, panduan lokal, evaluasi model/LLM, retensi, dan penerimaan Android. `AI_ALLOW_PROTOTYPE=true` mengizinkan hasil fixture/draft yang tetap diberi label asli. Hasil tersebut ditolak Go ketika flag false. Metadata katalog/capability di-cache maksimal 30 detik; setiap deteksi tetap menyimpan model/checksum/mapping aktualnya sendiri. Health ready core tidak menyatakan worker, model, editorial atau Gemini siap.
 
 ## Media dan privasi
 
@@ -53,3 +55,12 @@ go test ./internal/api -run TestPythonDecisionWorker -v
 ```
 
 Test memverifikasi empat metode, NEEDS_CONTEXT dan CONDITIONAL melalui Go + DB + Python, dengan deteksi capability fixture. Ini tidak mengukur akurasi YOLO, kualitas Gemini live, latency perangkat atau biaya produksi. Tidak ada key Gemini yang dibaca dari checkout pengguna.
+
+
+## Runtime CPU pada cp-bcc
+
+Source, provenance, pin wheel CPU dan service units tersedia di ai/ dan deploy/ai/. Fingerprint requirements-cpu.lock terikat pada paket rilis. Helper memeriksa worker privat setelah restart dan mengembalikan source/binary sebelumnya bila readiness gagal. Bobot resmi diverifikasi SHA-256 sebelum load; source Python dan service entry dipilih dari direktori release immutable yang sama dengan Go.
+
+Bootstrap AI tidak mengubah database atau Nginx. Pemasangan menggunakan environment Python tersendiri di /opt/wastenot-ai/venv, dua akun OS khusus, service tokens berbeda, batas memori/CPU dan port loopback. Detektor tidak memiliki akses jaringan keluar. Key Gemini/AI_GUIDES_PATH tetap kosong sampai operator menyediakannya; tidak memakai fixture atau meloloskan draf diam-diam.
+
+Urutan bootstrap: pasang environment CPU dari lock dengan hash, deploy paket Go/Python, jalankan deploy/ai/bootstrap.py pada staging yang sudah diperiksa, lalu uji deteksi nyata dan metadata capability. AI_RECOMMENDATION_ENABLED tetap false sampai Gemini serta panduan terbitan siap. Gunakan checkpoint fine-tuning sendiri hanya setelah file/manifest/checksum dan hasil evaluasinya tersedia; deployment awal mempertahankan default COCO dari proyek.

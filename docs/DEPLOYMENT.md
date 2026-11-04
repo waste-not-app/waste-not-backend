@@ -14,7 +14,7 @@ Nginx hanya menambah include lokasi `/wastenot/api/`, dengan proxy prefix ke API
 
 `.github/workflows/ci.yml` menjalankan PostgreSQL integration/race tests, deployment boundary/rollback tests, vet, go mod verify, pemeriksaan kerentanan, build binary dan image Docker. Go dipin 1.27.3 agar gate keamanan tidak memakai patch standard library lama.
 
-Setelah verify sukses pada main, paket tiga binary statis dan release.json diunggah sebagai artifact dengan SHA-256. Job deploy mengunduh artifact dari run yang sama lalu mengirim tar melalui SSH. Push main tidak membatalkan deploy yang sedang berlangsung. Pull request tidak dapat menjalankan deploy atau memperoleh key lewat job ini.
+Setelah verify sukses pada main, paket tiga binary statis, source Python AI, service entry dan release.json diunggah sebagai artifact dengan SHA-256. Job deploy mengunduh artifact dari run yang sama lalu mengirim tar melalui SSH. Push main tidak membatalkan deploy yang sedang berlangsung. Pull request tidak dapat menjalankan deploy atau memperoleh key lewat job ini.
 
 Secrets repository:
 
@@ -39,7 +39,7 @@ ssh cp-bcc 'curl -fsS -H "Host: pred-autoscaler.bccdev.id" http://127.0.0.1/wast
 ssh cp-bcc 'sudo journalctl -u wastenot-api -n 30 --no-pager'
 ```
 
-API AI default nonaktif pada deployment ini; tidak ada key/model/panduan terbitan yang difabrikasi. Konten panduan inti tetap perlu diimpor setelah review. Runtime DB tidak memiliki hak CREATE/ALTER schema; role owner dipakai hanya saat migrasi/import. Setelah migrasi awal, jalankan deploy/harden-db.sql melalui psql operator untuk mencabut hak DML runtime pada schema_migrations; SELECT tetap cukup untuk readiness. deploy/install-routing.py memasang include dengan backup, pemeriksaan root tetap identik, penantian reload worker dan rollback konfigurasi bila gagal.
+Konfigurasi AI diatur terpisah melalui deploy/ai/bootstrap.py dan docs/AI.md; tidak ada key/model/panduan terbitan yang difabrikasi. Konten panduan inti tetap perlu diimpor setelah review. Runtime DB tidak memiliki hak CREATE/ALTER schema; role owner dipakai hanya saat migrasi/import. Setelah migrasi awal, jalankan deploy/harden-db.sql melalui psql operator untuk mencabut hak DML runtime pada schema_migrations; SELECT tetap cukup untuk readiness. deploy/install-routing.py memasang include dengan backup, pemeriksaan root tetap identik, penantian reload worker dan rollback konfigurasi bila gagal.
 
 ## Domain dan TLS
 

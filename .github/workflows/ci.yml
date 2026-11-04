@@ -30,6 +30,18 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: ai/requirements-runtime.lock
+      - run: python -m pip install --require-hashes -r ai/requirements-runtime.lock
+      - run: python -m pip install pytest==9.2.0 pip-audit==2.10.1
+      - run: python ai/verify_source.py
+      - run: python -m pytest ai/tests -q -p no:cacheprovider
+        env:
+          PYTHONPATH: ai/runtime/src
+      - run: python ai/audit_dependencies.py
       - run: go mod verify
       - run: python3 -m unittest discover -s deploy -v
       - run: make check

@@ -1,6 +1,7 @@
 import hashlib
 import io
 import json
+import zipfile
 from pathlib import Path
 import tarfile
 import unittest
@@ -14,7 +15,12 @@ import deploy
 def release(changes=None, extra=None):
     elf = b'\x7fELF\x02' + bytes(13) + b'\x3e\x00' + bytes(100)
     files = {name: elf for name in ('api', 'migrate', 'guides')}
-    files['release.json'] = json.dumps({'commit': 'a' * 40, 'sha256': {
+    source=io.BytesIO()
+    with zipfile.ZipFile(source,'w',zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr('wastenot_ai/__init__.py','# test source\n')
+    files['ai-runtime.zip']=source.getvalue()
+    files['ai-serve.py']=b'# test service entry\n'
+    files['release.json'] = json.dumps({'commit': 'a' * 40, 'ai_requirements_sha256':'c'*64, 'sha256': {
         name: hashlib.sha256(raw).hexdigest() for name, raw in files.items()}}).encode()
     files.update(changes or {})
     stream = io.BytesIO()
@@ -103,6 +109,21 @@ class ReadinessScope(unittest.TestCase):
              patch.object(deploy.urllib.request,'urlopen',side_effect=response), \
              patch.object(deploy.time,'sleep'):
             self.assertFalse(deploy.ready())
+
+
+class AISourceBoundary(unittest.TestCase):
+    def test_path_escape_in_nested_source_is_rejected(self):
+        data=io.BytesIO()
+        with zipfile.ZipFile(data,'w',zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr('wastenot_ai/../../escape.py','malicious')
+        with self.assertRaises(ValueError):deploy.source_files(data.getvalue())
+
+    def test_dependency_mismatch_cannot_replace_live_release(self):
+        with tempfile.TemporaryDirectory() as directory:
+            lock=Path(directory)/'lock'
+            lock.write_text('d'*64)
+            with patch.object(deploy,'AI_LOCK',lock):
+                with self.assertRaises(ValueError):deploy.parse_release(release())
 
 
 if __name__ == '__main__':
