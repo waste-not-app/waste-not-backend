@@ -2,11 +2,12 @@ name: Backend CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
   group: backend-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -30,7 +31,50 @@ jobs:
           go-version-file: go.mod
           cache: true
       - run: go mod verify
+      - run: python3 -m unittest discover -s deploy -v
       - run: make check
       - run: make vuln
       - run: make build
+      - run: python3 scripts/package_release.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: release-${{ github.sha }}
+          path: bin/release.tar
+          retention-days: 7
       - run: docker build --tag wastenot-backend:ci .
+
+  deploy:
+    needs: verify
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: wastenot-vm-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: release-${{ github.sha }}
+          path: release
+      - name: Prepare dedicated SSH identity
+        env:
+          DEPLOY_KEY: ${{ secrets.WASTENOT_DEPLOY_KEY }}
+          KNOWN_HOSTS: ${{ secrets.WASTENOT_KNOWN_HOSTS }}
+        run: |
+          umask 077
+          printf '%s\n' "$DEPLOY_KEY" > "$RUNNER_TEMP/wastenot-key"
+          printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/wastenot-known-hosts"
+      - name: Deploy verified release to the isolated WasteNot service
+        env:
+          DEPLOY_HOST: ${{ vars.WASTENOT_DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ vars.WASTENOT_DEPLOY_PORT }}
+          DEPLOY_USER: ${{ vars.WASTENOT_DEPLOY_USER }}
+        run: |
+          ssh -C -T -o BatchMode=yes -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$RUNNER_TEMP/wastenot-known-hosts" \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
+            -i "$RUNNER_TEMP/wastenot-key" -p "$DEPLOY_PORT" \
+            "$DEPLOY_USER@$DEPLOY_HOST" < release/release.tar
+      - name: Remove temporary SSH files
+        if: always()
+        run: rm -f "$RUNNER_TEMP/wastenot-key" "$RUNNER_TEMP/wastenot-known-hosts"

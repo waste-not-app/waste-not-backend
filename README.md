@@ -6,7 +6,7 @@ Implementasi mencakup akun/sesi, CRUD catatan, pagination/filter, dashboard, sta
 
 ## Menjalankan lokal
 
-Prasyarat: Go 1.27, PostgreSQL 18; atau Docker Compose untuk seluruh layanan inti.
+Prasyarat: Go 1.27.3, PostgreSQL 18; atau Docker Compose untuk seluruh layanan inti.
 
 ```sh
 cp .env.example .env
@@ -58,3 +58,5 @@ Tanpa `TEST_DATABASE_URL`, integration test dilewati dan tidak membuktikan alur 
 Satu layanan Go, router `net/http`, SQL terparameterisasi melalui pgx, pool maksimal 10 koneksi, indeks riwayat aktif, pagination berbasis posisi, dan agregasi SQL. Tidak ada ORM, Redis atau antrean tambahan untuk kebutuhan inti. Dua slot decode gambar dan empat slot hashing membatasi pekerjaan berat per proses. Rate limit dan idempotensi memakai PostgreSQL sehingga berlaku antar instance.
 
 Panduan kosong sampai konten yang benar-benar ditinjau diimpor. Achievement, pengingat, lampiran foto permanen dan titik daur ulang memiliki capability `false`. Upload AI bersifat sementara di memori dan berbeda dari lampiran foto. Belum ada deployment publik atau penyambungan write API pada Android dalam repo ini.
+
+Deployment VM dan CI/CD: [panduan cp-bcc](docs/DEPLOYMENT.md).
