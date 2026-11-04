@@ -35,7 +35,7 @@ Jangan mengeluarkan alternatif. Evidence harus mendukung satu metode yang dipili
 special_handling harus sama dengan nilai dari server. Ini peringatan tambahan, bukan metode kelima.
 Tetap pilih satu metode yang didukung evidence, termasuk saat special_handling=true.
 RECYCLE pada baterai/elektronik/benda tajam berarti rute pengelola khusus, bukan tong daur ulang biasa.
-Isi reason dan caution dalam Bahasa Indonesia sesuai evidence, maksimum 500 karakter.
+Keluarkan hanya recommended_method, special_handling dan evidence_ids. Teks saran dirender server dari evidence.
 Output hanya JSON sesuai schema, tanpa markdown. Tidak ada tools atau akses database."""
 
 
@@ -112,15 +112,23 @@ class GeminiProvider:
             raise ProviderError("LLM_NOT_CONFIGURED")
         if not self.model:
             raise ProviderError("LLM_MODEL_NOT_CONFIGURED")
+        choice_schema = ModelSuggestion.model_json_schema()
+        choice_fields = {"recommended_method", "special_handling", "evidence_ids"}
+        choice_schema["properties"] = {key: value for key, value in choice_schema["properties"].items()
+                                       if key in choice_fields}
+        choice_schema["required"] = [key for key in choice_schema["required"] if key in choice_fields]
         body = {
             "systemInstruction": {"parts": [{"text": SYSTEM_PROMPT}]},
             "contents": [{"role": "user", "parts": [{"text": json.dumps(payload, ensure_ascii=False)}]}],
             "generationConfig": {
                 "temperature": 0, "maxOutputTokens": 2048,
                 "responseMimeType": "application/json",
-                "responseJsonSchema": ModelSuggestion.model_json_schema(),
+                "responseJsonSchema": choice_schema,
             },
         }
+        if self.model.startswith("gemini-3.5-flash-lite"):
+            body["generationConfig"].pop("temperature")
+            body["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "minimal"}
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent"
         deadline = monotonic() + self.timeout
         attempted = set()
@@ -162,6 +170,14 @@ class GeminiProvider:
             text_parts = [p["text"] for p in parts if "text" in p and not p.get("thought", False)]
             if len(text_parts) != 1:
                 raise ProviderError("INVALID_MODEL_OUTPUT")
+            try:
+                choice = json.loads(text_parts[0])
+            except ValueError:
+                return text_parts[0]
+            if isinstance(choice, dict) and set(choice) == choice_fields:
+                # The legacy internal contract requires prose, but public prose always comes from reviewed evidence.
+                choice.update(reason="Pilihan metode dan evidence untuk validasi server.", caution="")
+                return json.dumps(choice)
             return text_parts[0]
         except (TimeoutError, httpx.TimeoutException):
             raise ProviderError("LLM_TIMEOUT") from None

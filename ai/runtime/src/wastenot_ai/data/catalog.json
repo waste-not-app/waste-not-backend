@@ -1,5 +1,5 @@
 {
-  "catalog_version": "demo-catalog-05",
+  "catalog_version": "wastenot-catalog-pilot-06",
   "mapping_version": "coco-reviewed-objects-03",
   "thresholds": {
     "lower": 0.5,
@@ -8,7 +8,7 @@
   "items": [
     {
       "object_key": "pet_bottle",
-      "label": "Botol plastik PET (konfirmasi pengguna)",
+      "label": "Botol plastik PET bekas pangan/minuman (konfirmasi pengguna)",
       "category": "PLASTIC",
       "guide_key": "pet_bottle",
       "special_handling": false,
@@ -38,7 +38,7 @@
     },
     {
       "object_key": "aluminium_can",
-      "label": "Kaleng aluminium",
+      "label": "Kaleng aluminium bekas minuman/pangan non-aerosol",
       "category": "METAL",
       "guide_key": "aluminium_can",
       "special_handling": false,

@@ -40,6 +40,21 @@
       "file": "wastenot_ai/detector.py",
       "reason": "Recognize the official headless distribution metadata without changing inference or policy.",
       "sha256": "b5e2c14c77abd6de7e1627973f0ffe64265dd8443375de4412b4716df6420c22"
+    },
+    {
+      "file": "wastenot_ai/providers.py",
+      "reason": "Request only method, special handling and evidence IDs; retain legacy internal validation and evidence-owned public prose. Use documented Gemini 3.5 minimal thinking without deprecated temperature.",
+      "sha256": "48a9ddfee7f003dd0a52ebf33dd2bf12478a6b016484b4c7b3c3cc340035fe94"
+    },
+    {
+      "file": "wastenot_ai/data/catalog.json",
+      "reason": "Clarify confirmed PET/food-can scope for the source-reviewed pilot; explicitly exclude pressurized aerosol cans from the aluminium-can label. No visual-class IDs, mapping or thresholds change.",
+      "sha256": "162b15c948f6239c1437bd9799e010486ddad5e32ca2cf0eb2cd4246bab95a46"
+    },
+    {
+      "file": "wastenot_ai/data/source_registry.json",
+      "reason": "Record the actual 2026-11-04 source-check date for pilot references verified in the source audit; preserve publisher, region and scope.",
+      "sha256": "52aceccfbf78b8939cb109e42ffcbdd070ac5b2bebb05832f5a152381fb375e6"
     }
   ]
 }
