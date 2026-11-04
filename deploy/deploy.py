@@ -73,7 +73,7 @@ def ready():
     for _ in range(60):
         try:
             for url in urls:
-                request = urllib.request.Request(url, headers={'Host': 'mlops.bccdev.id'})
+                request = urllib.request.Request(url, headers={'Host': 'pred-autoscaler.bccdev.id'})
                 with urllib.request.urlopen(request, timeout=2) as response:
                     if response.status != 200 or json.load(response).get('ready') is not True:
                         raise ValueError('Readiness failed')

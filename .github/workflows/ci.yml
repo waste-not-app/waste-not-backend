@@ -76,6 +76,12 @@ jobs:
             -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
             -i "$RUNNER_TEMP/wastenot-key" -p "$DEPLOY_PORT" \
             "$DEPLOY_USER@$DEPLOY_HOST" < release/release.tar
+      - name: Verify public HTTPS API
+        run: |
+          curl --fail --silent --show-error --max-time 15 --retry 2 --retry-delay 2 \
+            https://pred-autoscaler.bccdev.id/wastenot/api/health/ready \
+            --output "$RUNNER_TEMP/wastenot-health.json"
+          python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))["ready"] is True' "$RUNNER_TEMP/wastenot-health.json"
       - name: Remove temporary SSH files
         if: always()
         run: rm -f "$RUNNER_TEMP/wastenot-key" "$RUNNER_TEMP/wastenot-known-hosts"

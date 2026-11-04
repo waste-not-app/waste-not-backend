@@ -2,6 +2,8 @@
 
 Acuan sumber: Android `c1258596cb71bc7b95dc9a4f140f55f759815c4e`; kontrak core pada design kit v1.2 dan DTO/fixture transport A03/A04. Kontrak HTTP AI terbaru dari `ai/contracts/v1` mengungguli contoh AI lama dalam dokumen desain bila berbeda.
 
+Base URL deployment HTTPS: `https://pred-autoscaler.bccdev.id/wastenot/api/v1/`.
+
 Untuk emulator Android, API lokal memakai base URL `http://10.0.2.2:8080/v1/`. Android memerlukan slash terakhir dan hanya mengizinkan HTTP loopback/emulator pada konfigurasi debug. Staging/release membutuhkan origin HTTPS nyata. Gunakan property build yang sudah didokumentasikan dalam `docs/ANDROID_SETUP.md` Android; jangan hardcode URL di layar. Port API harus dapat dicapai emulator dari host.
 
 Endpoint metadata, auth/login/register/refresh/logout, me dan waste-logs GET sesuai `WasteNotApi.kt`. JSON menggunakan `data`, enum uppercase, gram/count integer, UUID dan tanggal/zona valid. Fixture metadata tersimpan pada `contracts/android/metadata.json`. Capability tambahan tetap boolean; capability nonaktif tidak menggagalkan pencatatan manual.

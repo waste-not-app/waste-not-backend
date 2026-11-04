@@ -35,7 +35,7 @@ Migrasi dilakukan sebelum perpindahan current. Kegagalan migrasi mempertahankan 
 ssh cp-bcc 'sudo systemctl status wastenot-api --no-pager'
 ssh cp-bcc 'sudo kubectl -n wastenot get pods,pvc'
 ssh cp-bcc 'curl -fsS http://127.0.0.1:18080/health/ready'
-ssh cp-bcc 'curl -fsS -H "Host: mlops.bccdev.id" http://127.0.0.1/wastenot/api/health/ready'
+ssh cp-bcc 'curl -fsS -H "Host: pred-autoscaler.bccdev.id" http://127.0.0.1/wastenot/api/health/ready'
 ssh cp-bcc 'sudo journalctl -u wastenot-api -n 30 --no-pager'
 ```
 
@@ -43,9 +43,9 @@ API AI default nonaktif pada deployment ini; tidak ada key/model/panduan terbita
 
 ## Domain dan TLS
 
-Base URL yang dituju Android: `https://mlops.bccdev.id/wastenot/api/v1/`. Status publik harus diverifikasi tersendiri setelah routing/TLS front proxy bekerja; Nginx di VM hanya menerima HTTP origin pada port 80. Jangan mengirim credential Android melalui HTTP publik.
+Base URL yang dituju Android: `https://pred-autoscaler.bccdev.id/wastenot/api/v1/`. HTTPS dan prefix publik sudah terverifikasi; Nginx di VM menerima HTTP origin pada port 80 di belakang gateway yang menangani TLS. Jangan mengirim credential Android melalui HTTP publik.
 
-Saat pemeriksaan awal, domain resolve ke `103.179.134.116`, sama dengan gateway SSH. HTTPS dari lokal terputus/reset; VM tidak dapat mencapai port 80/443 domain tersebut. Sementara itu Nginx lokal VM menjawab 200 pada root. Ini menunjukkan forwarding/TLS di depan VM memerlukan verifikasi oleh pengelola gateway; setup backend tidak mengubah DNS, firewall gateway, sertifikat atau routing domain lain.
+Domain awal `mlops.bccdev.id` merupakan kekeliruan alamat dan sudah dikoreksi pengguna menjadi `pred-autoscaler.bccdev.id`. Domain yang benar mempunyai TLS valid dan endpoint readiness publik mengembalikan 200 dengan ready=true. Tidak ada perubahan DNS, sertifikat gateway atau routing domain lain. Setelah deploy, GitHub Actions juga memeriksa readiness melalui HTTPS publik dari runner.
 
 
 ## Bukti deployment 4 November 2026
@@ -54,4 +54,4 @@ Run [41813752013](https://github.com/waste-not-app/waste-not-backend/actions/run
 
 Backup Nginx sebelum include: /var/backups/wastenot/nginx-default.20261104T102847Z.before. Hash sumber sebelum ce0901350a021608139b5639cf4ccd7717bef8c3a9e4f79031eb46386b67b03f dan sesudah 83a7a4e67a9fd244a1aa840ccbf46f35b457191afcb25548c2e7e3fddb80858b. Isi root HTTP sama, master PID Nginx tetap 3088285, dan tiga pod sistem K3s mempertahankan UID serta restart count nol. File routing-verification.json di direktori backup menyimpan hasil.
 
-Bukti ini menyatakan jalur GitHub Actions → SSH khusus → migrasi → service Go → Nginx VM berfungsi. Bukti tersebut belum menyatakan forwarding/TLS domain publik berfungsi.
+Bukti ini menyatakan jalur GitHub Actions → SSH khusus → migrasi → service Go → Nginx VM berfungsi. HTTPS publik melalui domain yang dikoreksi sudah diuji terpisah, termasuk sepuluh langkah auth/pencatatan/statistik/logout dengan akun sementara yang kemudian dibersihkan.

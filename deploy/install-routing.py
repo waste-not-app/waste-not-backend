@@ -15,7 +15,7 @@ INCLUDE = '\tinclude /etc/nginx/snippets/wastenot-api.conf;\n'
 
 
 def fetch(path):
-    request = urllib.request.Request('http://127.0.0.1' + path, headers={'Host': 'mlops.bccdev.id'})
+    request = urllib.request.Request('http://127.0.0.1' + path, headers={'Host': 'pred-autoscaler.bccdev.id'})
     with urllib.request.urlopen(request, timeout=5) as response:
         return response.read()
 
