@@ -55,3 +55,10 @@ Run [41813752013](https://github.com/waste-not-app/waste-not-backend/actions/run
 Backup Nginx sebelum include: /var/backups/wastenot/nginx-default.20261104T102847Z.before. Hash sumber sebelum ce0901350a021608139b5639cf4ccd7717bef8c3a9e4f79031eb46386b67b03f dan sesudah 83a7a4e67a9fd244a1aa840ccbf46f35b457191afcb25548c2e7e3fddb80858b. Isi root HTTP sama, master PID Nginx tetap 3088285, dan tiga pod sistem K3s mempertahankan UID serta restart count nol. File routing-verification.json di direktori backup menyimpan hasil.
 
 Bukti ini menyatakan jalur GitHub Actions → SSH khusus → migrasi → service Go → Nginx VM berfungsi. HTTPS publik melalui domain yang dikoreksi sudah diuji terpisah, termasuk sepuluh langkah auth/pencatatan/statistik/logout dengan akun sementara yang kemudian dibersihkan.
+
+
+## Pilot AI aktif
+
+YOLO CPU dan Gemini 3.1 Flash-Lite berjalan sebagai dua layanan loopback dengan batas resource pada `deploy/ai/`. Empat policy guides sumber-terperiksa di `/opt/wastenot-ai/guides` dipilih melalui environment root-only; JSON/hash dan batas kontennya ada pada `ai/guides/`. Provider/worker mempunyai deadline 17/18 detik, prototype tetap false. Capability scan serta rekomendasi aktif; jenis di luar panduan tetap UNAVAILABLE. Panduan ini review otomatis yang ditandai eksplisit, bukan persetujuan keselamatan manusia atau validasi holdout.
+
+Helper CI tidak menimpa key, model, panduan operator atau database saat mengganti source. Paket source/binary diperiksa checksum, worker dimuat dari symlink release yang sama, dependency fingerprint dipertahankan, dan readiness privat memakai dua token layanan yang berbeda. Rotasi token keputusan diperbarui pada file env worker dan Go secara terkoordinasi. Bukti semantik foto → Gemini → pencatatan/XP ada di VERIFICATION.md; core readiness saja tidak mewakili keseluruhan bukti itu.

@@ -57,10 +57,10 @@ Tanpa `TEST_DATABASE_URL`, integration test dilewati dan tidak membuktikan alur 
 
 Satu layanan Go, router `net/http`, SQL terparameterisasi melalui pgx, pool maksimal 10 koneksi, indeks riwayat aktif, pagination berbasis posisi, dan agregasi SQL. Tidak ada ORM, Redis atau antrean tambahan untuk kebutuhan inti. Dua slot decode gambar dan empat slot hashing membatasi pekerjaan berat per proses. Rate limit dan idempotensi memakai PostgreSQL sehingga berlaku antar instance.
 
-Panduan kosong sampai konten yang benar-benar ditinjau diimpor. Achievement, pengingat, lampiran foto permanen dan titik daur ulang memiliki capability `false`. Upload AI bersifat sementara di memori dan berbeda dari lampiran foto. API sudah dideploy ke VM cp-bcc melalui GitHub Actions dan dapat dicapai di [base URL HTTPS](https://pred-autoscaler.bccdev.id/wastenot/api/v1/). Penyambungan write API pada Android tetap pekerjaan integrasi terpisah.
+Panduan inti `/v1/guides` kosong sampai artikel yang ditinjau diimpor; panduan policy AI dikelola terpisah. Achievement, pengingat, lampiran foto permanen dan titik daur ulang memiliki capability `false`. Upload AI bersifat sementara di memori dan berbeda dari lampiran foto. API sudah dideploy ke VM cp-bcc melalui GitHub Actions dan dapat dicapai di [base URL HTTPS](https://pred-autoscaler.bccdev.id/wastenot/api/v1/). Penyambungan write API pada Android tetap pekerjaan integrasi terpisah.
 
 Deployment VM dan CI/CD: [panduan cp-bcc](docs/DEPLOYMENT.md).
 
 Runtime YOLO CPU, provenance model dan source Python berada di [ai/](ai/README.md); petunjuk layanan privat ada pada [panduan AI](docs/AI.md).
 
-YOLO11n baseline COCO sudah berjalan di cp-bcc dan upload melalui HTTPS publik telah diuji dengan inferensi nyata. Ini deployment eksperimental, belum validasi akurasi khusus sampah. Metadata saat ini melaporkan `ai_scan=true`, `ai_recommendation=false`; Akses model Gemini sudah diuji secara privat; rekomendasi publik menunggu panduan yang ditinjau serta verifikasi latensi Gemini. [Bukti dan batas pengujian](docs/VERIFICATION.md).
+YOLO11n baseline COCO dan Gemini 3.1 Flash-Lite sudah berjalan di cp-bcc. Alur HTTPS foto → deteksi nyata → rekomendasi Gemini → simpan → statistik/XP lulus 17 pemeriksaan. Metadata melaporkan `ai_scan=true`, `ai_recommendation=true`; empat panduan pilot memakai pemeriksaan sumber otomatis yang ditandai jelas. Ini pilot backend, belum validasi akurasi khusus sampah/material atau penerimaan Android. [Bukti dan batas pengujian](docs/VERIFICATION.md).

@@ -31,9 +31,9 @@ def application(kind):
     from wastenot_ai.recommendation_worker import create_recommendation_app
     guide_path = os.environ.get('AI_GUIDES_PATH')
     provider = GeminiProvider()
-    # Leave one second for the worker envelope and another before Go's 23-second header deadline.
-    if provider.timeout > 21:
-        raise ValueError('GEMINI_TIMEOUT_SECONDS must not exceed 21 for the Go API deadline')
+    # Leave time for the worker envelope before Android's 20-second read and Go's 23-second header deadline.
+    if provider.timeout > 17:
+        raise ValueError('GEMINI_TIMEOUT_SECONDS must not exceed 17 for the Android/Go API deadlines')
     return create_recommendation_app(provider=provider, timeout=provider.timeout + 1,
                                      guides=load_guides(Path(guide_path) if guide_path else None),
                                      demo_guides=False)

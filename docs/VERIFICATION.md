@@ -2,6 +2,21 @@
 
 Tanggal: 4 November 2026. Sumber Android: c1258596cb71bc7b95dc9a4f140f55f759815c4e.
 
+## Status pilot terakhir
+
+178 tes Python lulus secara lokal, termasuk format Gemini ringkas, budget lintas layanan, policy draf dan empat panduan sumber-terperiksa. Source upstream 31 file beserta patch terdaftar lolos verifikasi hash. Empat request HTTP privat ke worker produksi memakai Gemini 3.1 Flash-Lite asli dan panduan PUBLISHED versi 6: seluruhnya READY/RECYCLE, `prototype_only=false`, sekitar 3.38/1.28/8.48/1.36 detik. Ini empat kasus fungsional, bukan benchmark.
+
+Setelah capability dibuka, 17 pemeriksaan HTTPS publik lulus pada rilis e5c40c4: kedua capability, katalog empat pilot/label non-aerosol, foto melalui YOLO asli, isolasi referensi deteksi, Gemini asli/evidence versi 6, replay rekomendasi, konflik revisi, tidak ada auto-save/XP, simpan dengan provenance dan 10 XP, replay simpan, penolakan pemakaian rekomendasi kedua, snapshot DB model/Gemini, statistik 250 gram, isolasi log, delete mengembalikan XP, penghapusan sesi mempertahankan audit snapshot, dan logout mencabut sesi. Akun sementara dihapus berdasarkan ID tepatnya.
+
+Respons rekomendasi publik pada satu konteks uji sekitar 3779 ms. Material PET/kondisi merupakan input konfirmasi sintetis pada smoke, bukan hasil identifikasi material dari foto. Snapshot DB mempertahankan checksum YOLO nyata serta provider Gemini dengan prototype false. Empat panduan diperiksa sumbernya secara otomatis oleh Codex, bukan persetujuan keselamatan manusia; masa tinjau ulang sampai 4 Desember 2026. Tujuh puluh empat draf lain tetap tidak diterbitkan. Batas provider/worker 17/18 detik dipilih agar di bawah read timeout Android 20 detik.
+
+Model 3.5 tidak dipakai pada pilot aktif karena beberapa timeout dan kegagalan upstream; satu diagnostik compact berhasil sekitar 20.17 detik dengan 31 output token. Model 3.1 berhasil pada uji pembanding sekitar 1589 ms dan empat worker checks di atas. Koneksi TCP/TLS 3.5 selesai sekitar 0.29 detik, header Google baru tiba sekitar 20.17 detik; tidak ada bukti bahwa menambah CPU VM akan menghilangkan antrean/upstream delay. Model 2.5 tidak dipilih karena uji request tidak tersedia. Tidak ada klaim percentile, stabilitas atau SLA dari sampel kecil ini.
+
+Detail tahap sebelumnya di bawah membedakan scan-only/draf dari pilot aktif. Holdout checkpoint fine-tuning empat kelas, mutu konten oleh manusia, uji beban, keamanan menyeluruh, retensi/restore produksi dan penerimaan UI Android tetap di luar bukti pengujian ini.
+
+## Pengujian inti dan tahap sebelum aktivasi pilot
+
+
 - Go 1.27.3 dan PostgreSQL 18 dipakai secara lokal. Integration suite membuat schema PostgreSQL terisolasi, melakukan migrasi dan menghapus schema setelah selesai.
 - 49 kasus/subkasus lulus dengan race detector; tambahan kasus campuran unit penanganan juga lulus dengan race detector. Tidak ada race yang dilaporkan.
 - Auth: validasi password/JWT, algoritma/issuer/audience/expiry, login salah, rotasi refresh, replay refresh mencabut sesi, logout idempoten, dan rate limit DB lintas instance.
