@@ -1,8 +1,0 @@
-{
-  "name": "yolo11n-coco-baseline",
-  "filename": "yolo11n.pt",
-  "url": "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt",
-  "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
-  "license": "Ultralytics AGPL-3.0 / Enterprise",
-  "scope": "COCO pretrained baseline; material must be confirmed by the user; no waste-specific accuracy claim"
-}
