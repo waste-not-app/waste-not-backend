@@ -1009,6 +1009,13 @@
       },
       "ValidationError": {
         "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
           "loc": {
             "items": {
               "anyOf": [
@@ -1416,7 +1423,7 @@
                     "recommended_method": "RECYCLE",
                     "source_details": [
                       {
-                        "checked_at": "2026-10-20",
+                        "checked_at": "2026-11-04",
                         "publisher": "US EPA",
                         "region": "Amerika Serikat",
                         "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",

@@ -1,6 +1,7 @@
 name: Backend CI
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -31,6 +32,7 @@ jobs:
           go-version-file: go.mod
           cache: true
       - run: go mod verify
+      - run: python3 scripts/check_contracts.py contracts/ai contracts/ai.lock.json
       - run: python3 -m unittest discover -s deploy -v
       - run: make check
       - run: make vuln
@@ -84,11 +86,14 @@ jobs:
           echo "==> Transferring and loading Docker image into VM..."
           gzip -dc docker-image/wastenot-backend.tar.gz | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "docker load"
 
-          echo "==> Syncing deployment script on VM..."
-          cat deploy/deploy-bluegreen.sh | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "cat > /home/$DEPLOY_USER/deploy-bluegreen.sh && chmod +x /home/$DEPLOY_USER/deploy-bluegreen.sh"
+          echo "==> Installing deployment helper on VM..."
+          STAGE=$($SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" 'mktemp -d /tmp/wastenot-backend-deploy.XXXXXXXX')
+          [[ "$STAGE" =~ ^/tmp/wastenot-backend-deploy\.[a-zA-Z0-9]+$ ]]
+          trap '$SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "rm -rf -- $STAGE"' EXIT
+          cat deploy/bluegreen.py | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "cat > $STAGE/bluegreen.py && sudo -n install -m 0755 -o root -g root $STAGE/bluegreen.py /usr/local/sbin/wastenot-backend-deploy"
 
           echo "==> Executing Blue-Green switch on VM..."
-          $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "/home/$DEPLOY_USER/deploy-bluegreen.sh $IMAGE_TAG"
+          $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy $IMAGE_TAG"
       - name: Verify public HTTPS API
         run: |
           curl --fail --silent --show-error --max-time 15 --retry 3 --retry-delay 2 \

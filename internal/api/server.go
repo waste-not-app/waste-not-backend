@@ -65,6 +65,9 @@ func (s *Server) Handler() http.Handler {
 	m := http.NewServeMux()
 	m.HandleFunc("GET /health/live", func(w http.ResponseWriter, r *http.Request) { respond(w, 200, map[string]bool{"live": true}) })
 	m.HandleFunc("GET /health/ready", func(w http.ResponseWriter, r *http.Request) {
+		if s.Config.Release != "" {
+			w.Header().Set("X-WasteNot-Release", s.Config.Release)
+		}
 		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 		defer cancel()
 		var ready bool

@@ -1,24 +1,54 @@
-# Menghubungkan Android
+# Integrasi Android dengan Go dan AI
 
-Acuan sumber: Android `c1258596cb71bc7b95dc9a4f140f55f759815c4e`; kontrak core pada design kit v1.2 dan DTO/fixture transport A03/A04. Kontrak HTTP AI terbaru dari `ai/contracts/v1` mengungguli contoh AI lama dalam dokumen desain bila berbeda.
+Diperiksa 7 November 2026. Base URL Retrofit harus memiliki slash terakhir:
 
-Base URL deployment HTTPS: `https://pred-autoscaler.bccdev.id/wastenot/api/v1/`.
+```text
+https://pred-autoscaler.bccdev.id/wastenot/api/v1/
+```
 
-Untuk emulator Android, API lokal memakai base URL `http://10.0.2.2:8080/v1/`. Android memerlukan slash terakhir dan hanya mengizinkan HTTP loopback/emulator pada konfigurasi debug. Staging/release membutuhkan origin HTTPS nyata. Gunakan property build yang sudah didokumentasikan dalam `docs/ANDROID_SETUP.md` Android; jangan hardcode URL di layar. Port API harus dapat dicapai emulator dari host.
+Android hanya memakai API Go. Jangan menghubungkan APK ke port 8091/8093, menyertakan service token/key Gemini, atau memuat Python/bobot YOLO. Origin, pilihan adapter dan timeout merupakan konfigurasi build/client, bukan literal pada layar.
 
-Endpoint metadata, auth/login/register/refresh/logout, me dan waste-logs GET sesuai `WasteNotApi.kt`. JSON menggunakan `data`, enum uppercase, gram/count integer, UUID dan tanggal/zona valid. Fixture metadata tersimpan pada `contracts/android/metadata.json`. Capability tambahan tetap boolean; capability nonaktif tidak menggagalkan pencatatan manual.
+## Kontrak yang dipakai
 
-## Wiring Android yang masih diperlukan
+- Core: [core.openapi.json](../contracts/core.openapi.json) dan [API.md](API.md).
+- AI publik: [public.openapi.json](../contracts/ai/public.openapi.json), [contoh request/response](../contracts/ai/examples/) dan [bundle pin](../contracts/ai.lock.json).
+- Implementasi AI: [waste-not-ai](https://github.com/waste-not-app/waste-not-ai), khususnya `docs/INTEGRATION.md`.
+- Snapshot AI di Go merupakan kontrak integrasi yang disepakati; Python menghasilkan schema, Go memvalidasi request publik/respons worker menggunakan schema tersebut. Jangan mengedit schema untuk meloloskan payload yang salah.
 
-Checkout Android belum mengimplementasikan semua panggilan berikut. Backend ini tidak mengubah source atau perubahan lokal Android.
+Ekspor sekarang memakai dependency runtime terkunci. Snapshot mencakup metadata sumber terkini serta representasi upload OpenAPI 3.1 `contentMediaType`. Upload tetap multipart JPEG/PNG dengan part `image`, bukan base64 JSON. Setiap repo memeriksa 34 artifact terhadap pin; sebelum perubahan kontrak diterapkan, jalankan pemeriksaan kedua checkout dan buat perubahan pasangan di kedua repo.
 
-1. Tambahkan POST waste-logs, GET detail, PATCH, DELETE If-Match ke `WasteNotApi` dan DTO. Buat satu UUID pada persiapan draf; pertahankan UUID/payload saat timeout create.
-2. Ganti `RemoteActivityStore.create/update` yang masih menghasilkan NOT_CONFIGURED dengan repository API; hubungkan delete dan penanganan VERSION_CONFLICT. Jangan mengubah demo store menjadi penyimpanan remote.
-3. Tambahkan DTO dashboard/statistics/waste-guide/progress. Jangan memakai data contoh sebagai fallback ketika server gagal.
-4. Tambahkan kontrak AI publik dari `contracts/ai/public.openapi.json`: confirmed_object eksplisit, input_source, context_revision, condition, status READY/NEEDS_CONTEXT/UNAVAILABLE, basis CONDITIONAL dan conditions_to_verify.
-5. Satu request refresh pada satu waktu; setelah hasil refresh tidak diketahui, login ulang. Rotasi membuat access token lama tidak berlaku. Request write tidak boleh direplay otomatis oleh transport.
-6. Buang credential/draf pribadi saat pergantian akun dan logout; cursor terikat akun/filter. Hormati Retry-After dan jangan menganggap respons 200 AI selalu READY.
+```sh
+# Dari checkout backend; Python stdlib saja:
+python3 scripts/check_contracts.py contracts/ai contracts/ai.lock.json \
+  --peer ../waste-not-ai/contracts/v1
+```
 
-AI tidak menyimpan log. Setelah pengguna mengonfirmasi objek/metode dan mengisi jumlah, POST waste-logs dapat membawa ai_provenance berisi recommendation_id dan kedua flag konfirmasi true. Kategori harus sesuai; final method boleh berbeda dari saran. REDUCE tetap manual tanpa provenance sampai kontrak provenance pencegahan diperluas. Hasil fixture/draf harus ditampilkan sebagai simulasi pada pengujian.
+## Status Android yang benar-benar diperiksa
 
-Penerimaan bersama berikutnya harus menjalankan auth → catat → detail/edit/delete → dashboard/statistik → logout pada emulator/perangkat dengan backend ini. Tes HTTP dan schema di repo backend membuktikan transport/domain server, belum membuktikan rendered UI Android atau jaringan perangkat.
+Main Android `69f3e24` telah memisahkan source AI. Pekerjaan integrasi ada pada [PR #102](https://github.com/waste-not-app/waste-not-android/pull/102), snapshot yang dibaca `ce2c19dded58b4fa276012bbacff5adb2d6dddf3`. Jangan menyamakan isi PR dengan main atau APK rilis.
+
+Di snapshot PR tersebut, core auth/catatan/detail/edit/delete/dashboard/statistik/panduan sudah mempunyai transport. `WasteNotAiApi` juga sudah memiliki katalog, upload, rekomendasi, dan delete sesi; DTO memeriksa korelasi ID/revision serta band model. UI scan sudah mempunyai wiring, tetapi dokumen QA-nya masih menandai eksekusi AI produksi dan penerimaan native menyeluruh sebagai pekerjaan terbuka. Perubahan backend ini tidak mengedit Android atau mengubah adapter default.
+
+Baseline perangkat terbaru adalah Android 11/API 30 ke atas. Kegagalan TLS API 24 merupakan catatan historis di luar baseline tersebut. Jangan menambahkan trust-all, hostname bypass atau cleartext release untuk mengatasinya. Penerimaan tetap perlu memakai API 30 dan runtime Android terbaru.
+
+## Urutan integrasi dan semantik retry
+
+1. Register/login, simpan credential sesuai mekanisme sesi Android, lalu GET `metadata` dan `me`. Metadata memerlukan bearer user. Serialisasikan refresh: hasil refresh yang tidak diketahui memerlukan login ulang; jangan mereplay refresh otomatis.
+2. Gunakan server untuk daftar/detail catatan, dashboard/statistik dan progres. Paging menggunakan cursor yang terikat akun/filter; jangan menghitung agregat dari satu halaman daftar atau mengganti error dengan dummy sukses.
+3. GET `ai/objects`, patuhi `ai_scan`/`ai_recommendation`, lalu POST `ai/detections` multipart dengan UUID yang dibuat sekali per operasi. JPEG/PNG maksimal 5 MiB, 12 MP, sisi 4096; orientasikan gambar sebelum menampilkan bbox. Server menormalisasi EXIF dan membuang metadata.
+4. Tampilkan bbox/band/threshold dari server. Pengguna tetap harus mengonfirmasi material; label `bottle` tidak membuktikan PET/HDPE. Kirim `confirmed_object`, object key/category, `input_source`, revision dan kondisi independen menurut schema publik. Ubah revision ketika konteks berubah.
+5. POST `ai/recommendations`. HTTP 200 dapat berarti NEEDS_CONTEXT/UNAVAILABLE; HTTP 201 READY bukan penyimpanan aktivitas. Tampilkan missing context, caution, sumber dan `conditions_to_verify`; jangan mengubah CONDITIONAL menjadi fakta terverifikasi. Status special handling tidak selalu berarti metode null.
+6. Hanya setelah konfirmasi objek/metode dan jumlah, POST `waste-logs` dengan `ai_provenance` berisi recommendation ID dan dua flag konfirmasi. Provenance hanya untuk READY/HANDLING, kategori cocok dan sesi belum expired. Metode final boleh dikoreksi; kategori baru/Reduce pencegahan memakai alur manual. Tidak ada XP dari scan/rekomendasi saja.
+7. UUID dan payload catatan yang hasilnya tidak diketahui harus dipertahankan sampai replay selesai. Create baru 201, replay identik 200; jangan mengganti UUID untuk mengatasi timeout. Replay catatan yang sudah commit tetap ditemukan meskipun referensi AI kemudian expired. PATCH memakai `version`; DELETE memakai `If-Match`.
+8. AI berbeda: replay UUID identik mengembalikan hasil/error tersimpan, tanpa generasi baru. Setelah timeout/FAILED_UNCERTAIN, tindakan pengguna baru dengan UUID baru diperlukan untuk benar-benar mencoba generasi lagi. Tidak ada auto-retry provider. Hormati Retry-After dan jangan retry write secara membabi buta.
+9. Saat bersihkan scan, DELETE `ai/detections/{id}` membatalkan sesi dan rekomendasi turunannya. Saat logout/pergantian akun, hapus credential, cursor/cache dan draf pribadi yang tidak sesuai akun.
+
+Budget pilot: provider 17 detik, worker rekomendasi 18, read Android 20, response-header Go 23 dan total HTTP Go 25. Budget ini bukan jaminan latency: Android tetap harus menangani hasil tidak diketahui ketika request telah diterima tetapi respons belum sampai. Ubah timeout bersama, bukan menambah timeout satu lapisan.
+
+## Cakupan dan penerimaan berikutnya
+
+API core tersedia, tetapi artikel umum PUBLISHED `/waste-guide` masih nol. Empat policy guide AI terpisah: PET, HDPE, kaleng aluminium non-aerosol dan kardus. Model aktif masih YOLO11n COCO, bukan bobot fine-tuning empat kelas. Katalog lebih luas tidak membuktikan seluruh objek memiliki panduan terbitan.
+
+Achievement, foto permanen, fasilitas daur ulang, reset password dan penghapusan akun belum tersedia. Streak ada pada profil; metadata tidak memiliki flag streak tersendiri. Capability tambahan yang false harus disembunyikan/ditangani dengan state yang jelas.
+
+Gate Android: jalankan login → capture/upload → konfirmasi → konteks → READY/NEEDS_CONTEXT/UNAVAILABLE/CONDITIONAL → save/replay → detail/edit/delete → ringkasan → logout/pergantian akun. Uji timeout, cancel, expiry, konflik versi, jaringan terputus dan pemisahan akun. Pisahkan bukti HTTP/schema, MockWebServer, kamera/perangkat dan penerimaan visual; readiness backend tidak menyelesaikan gate UI.

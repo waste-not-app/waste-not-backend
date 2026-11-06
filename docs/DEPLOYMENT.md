@@ -1,83 +1,58 @@
-# CI/CD dan Deployment Containerized Blue-Green (cp-bcc)
+# CI/CD dan deployment blue-green pada cp-bcc
 
-Target deployment: host `okta-mlops`, SSH alias lokal `cp-bcc`, endpoint SSH `proxy.bccdev.id:11049`.
+Diperiksa 7 November 2026. Host `okta-mlops`, SSH `proxy.bccdev.id:11049`, alias operator `cp-bcc`. Database `wastenot-db` memakai PostgreSQL18, loopback5432 dan volume persisten. Deploy API tidak mengubah database container/volume atau workload K3s lain.
 
-## Arsitektur Deployment Baru (Containerized Blue-Green)
+## Jalur aktif
 
-1. **Docker Containerized**:
-   - Seluruh layanan WasteNot dideploy menggunakan Docker Engine dan Docker Compose v2.
-   - **PostgreSQL 18**: Dijalankan sebagai container `wastenot-db` (`postgres:18-bookworm`) dengan persistent Docker volume `wastenot-postgres-data`. Bind port aman `127.0.0.1:5432`.
-   - **Kubernetes (K3s)**: K3s dibiarkan bersih dan tidak lagi digunakan oleh WasteNot, sehingga resource K3s sepenuhnya dialokasikan untuk workload/proyek lain.
-   - **Go Backend API**: Berjalan di dalam container Distroless non-root dengan mode Blue-Green:
-     - Slot Blue: Container `wastenot-api-blue` pada port loopback `127.0.0.1:18081`.
-     - Slot Green: Container `wastenot-api-green` pada port loopback `127.0.0.1:18082`.
+- Nginx `/wastenot/api/` → `wastenot_upstream` → satu slot Go `127.0.0.1:18081` atau18082.
+- Image distroless nonroot; host networking memungkinkan Go memakai worker loopback privat.
+- YOLO/Gemini dikelola [repo AI](https://github.com/waste-not-app/waste-not-ai/blob/main/docs/DEPLOYMENT.md), bukan paket backend. Deploy Go tidak merestart worker AI.
+- API health publik: `https://pred-autoscaler.bccdev.id/wastenot/api/health/ready`. Body `{"ready":true}` memeriksa core DB/migrasi; header `X-WasteNot-Release` mengidentifikasi commit yang benar-benar melayani request.
 
-2. **Nginx Upstream Switching (Zero-Downtime)**:
-   - File upstream: `/etc/nginx/conf.d/wastenot-upstream.conf`:
-     ```nginx
-     upstream wastenot_upstream {
-         server 127.0.0.1:18081; # atau 18082
-     }
-     ```
-   - Snippet Nginx: `/etc/nginx/snippets/wastenot-api.conf` me-routing `location ^~ /wastenot/api/` ke `proxy_pass http://wastenot_upstream/;`.
-   - Perpindahan rilis dilakukan dengan mengubah port upstream, menjalankan `nginx -t`, lalu `systemctl reload nginx` tanpa downtime.
+## Verifikasi dan promosi image
 
-3. **Mekanisme Blue-Green Deploy (`deploy/deploy-bluegreen.sh`)**:
-   - Deteksi slot aktif saat ini (`blue` atau `green`).
-   - Eksekusi database migration terhadap target image:
-     `docker run --rm --network host -e DATABASE_URL=... $IMAGE /migrate`.
-   - Jalankan container pada target slot yang tidak aktif.
-   - Jalankan healthcheck loopback `http://127.0.0.1:<target_port>/health/ready` hingga siap (maksimal 30 detik).
-   - Jika target gagal ready, target container dibatalkan dan container aktif sebelumnya tetap melayani traffic tanpa gangguan.
-   - Jika target sehat, Nginx upstream dialihkan ke slot baru dan Nginx di-reload secara graceful.
-   - Container lama dihentikan dan dibersihkan.
+Job verify: Go mod verify, pin kontrak AI, tes helper deployment, PostgreSQL18, race detector/vet/format, vulncheck, binary build dan Docker build. Artifact image berasal dari job yang sama; deploy tidak membangun ulang image di VM.
 
-## Pipeline GitHub Actions (`.github/workflows/ci.yml`)
+Job deploy hanya main non-PR. SSH memakai key khusus dan known-hosts wajib. Image dikirim lewat `docker load`; helper dipasang root:root pada `/usr/local/sbin/wastenot-backend-deploy`. File konfigurasi `/etc/wastenot/wastenot.env` wajib root-owned0600. Helper mem-parsing data konfigurasi, tidak menjalankannya sebagai shell, serta memakai env-file temporer0600 agar credential tidak muncul di argumen proses/log.
 
-1. **Job `verify`**:
-   - Menjalankan PostgreSQL integration tests (dengan service container).
-   - Menjalankan unit tests, Go vet, race detection, dependency audit, dan vulncheck.
-   - Membangun container image Docker multi-stage Distroless: `wastenot-backend:${{ github.sha }}`.
-   - Mengompres dan mengunggah image container sebagai release artifact.
+Konfigurasi VM memakai DATABASE_URL_APP, DATABASE_URL_MIGRATE, JWT_SECRET_BASE64 serta flag/origin/token AI. `DATABASE_URL` runtime berasal dari DATABASE_URL_APP; migrator hanya menerima DATABASE_URL_MIGRATE. Jangan memberikan credential migrator atau key Gemini kepada API. Capability AI default false bila tidak disetel.
 
-2. **Job `deploy`** (otomatis pada push ke branch `main`):
-   - Mengunduh artifact container image.
-   - Mengirim image melalui SSH ke VM dan memuatnya (`docker load`).
-   - Menjalankan script `/usr/local/bin/wastenot-deploy-bluegreen wastenot-backend:${{ github.sha }}`.
-   - Memverifikasi endpoint publik HTTPS:
-     `https://pred-autoscaler.bccdev.id/wastenot/api/health/ready`.
+## Transaksi deployment
 
-## Secrets dan Variables Repository
+1. File lock host mencegah dua deploy bersamaan. Tag image harus full commit SHA; helper membaca dan memeriksa image ID target.
+2. Simpan **seluruh isi** upstream sebelumnya. Hanya konfigurasi dengan satu slot loopback yang dikenal diterima; jangan menebak slot aktif saat konfigurasi tidak dikenal.
+3. Jalankan migrasi memakai image target sebelum startup API. Kegagalan migrasi mempertahankan slot aktif. Migrasi harus kompatibel dengan versi lama yang masih melayani traffic; gunakan expand/contract. Rollback source tidak melakukan down-migration.
+4. Sebelum membersihkan slot lain, pastikan slot pada file upstream sehat dan rekonsiliasi Nginx dengan reload. Ini menangani switch yang terputus mendadak; konfigurasi aktif yang tidak sehat menghentikan deploy untuk inspeksi. Drain slot lain45detik sebelum menghapusnya. Bersihkan slot tidak aktif, jalankan target nonroot dengan filesystem read-only, cap-drop ALL, no-new-privileges, memory768MiB, CPU1core, pids256, core dump off dan batas log10MiB×3.
+5. Target wajib sehat pada loopback dengan identitas commit yang cocok. Setelah itu tulis upstream atomik, `nginx -t` dan reload.
+6. Periksa route prefiks Nginx **dan HTTPS publik** terhadap ready=true serta header commit baru. Kegagalan write/validasi/reload/routing mengembalikan konfigurasi upstream persis sebelumnya dan reload sebelum target dibersihkan. Jika reload pemulihan juga gagal, kedua slot dipertahankan agar operator dapat memulihkan routing; jangan mematikan slot yang mungkin masih dipakai Nginx.
+7. Setelah seluruh gate lulus, hentikan slot lama dengan budget45detik, melebihi shutdown aplikasi40detik. Container lama yang berhenti tetap tersedia untuk inspeksi/rollback dan baru dihapus saat slotnya digunakan kembali.
 
-Konfigurasi repository GitHub Actions:
+Switch Nginx bersifat graceful, tetapi bukan bukti SLA atau nol request gagal. Belum ada load/drain benchmark pada VM ini. Dua slot sesaat memakai hingga dua pool DB; sisakan koneksi untuk migrasi dan operator.
 
-- **Secrets**:
-  - `SSH_PRIVATE_KEY` / `WASTENOT_DEPLOY_KEY`: SSH private key untuk otentikasi ke VM.
-  - `SSH_KNOWN_HOSTS` / `WASTENOT_KNOWN_HOSTS`: SSH host keys untuk `[proxy.bccdev.id]:11049`.
-- **Variables**:
-  - `VM_HOST` / `WASTENOT_DEPLOY_HOST`: `proxy.bccdev.id`
-  - `VM_PORT` / `WASTENOT_DEPLOY_PORT`: `11049`
-  - `VM_USER` / `WASTENOT_DEPLOY_USER`: `dev`
-  - `VM_IP`: `103.179.134.116`
-
-## Pemeriksaan Status oleh Operator
-
-Perintah untuk memeriksa status runtime di VM:
+## Pemeriksaan dan rollback operator
 
 ```sh
-# Cek container aktif
-ssh cp-bcc "docker ps"
-
-# Cek logs database
-ssh cp-bcc "docker logs wastenot-db --tail 20"
-
-# Cek logs container API yang sedang aktif
-ssh cp-bcc "docker logs wastenot-api-blue --tail 30"  # atau wastenot-api-green
-
-# Cek konfigurasi upstream Nginx saat ini
-ssh cp-bcc "cat /etc/nginx/conf.d/wastenot-upstream.conf"
-
-# Uji health check lokal dan publik
-ssh cp-bcc "curl -fsS http://127.0.0.1:18081/health/ready"
-curl -fsS https://pred-autoscaler.bccdev.id/wastenot/api/health/ready
+ssh cp-bcc 'docker ps; cat /etc/nginx/conf.d/wastenot-upstream.conf'
+curl -fsS -D - https://pred-autoscaler.bccdev.id/wastenot/api/health/ready
+# Jalankan kembali image commit yang sudah tersedia/ditinjau, melalui helper yang sama:
+ssh cp-bcc 'sudo -n /usr/local/sbin/wastenot-backend-deploy wastenot-backend:<full-sha>'
 ```
+
+Retain image sukses sebelumnya. Image sebelum dukungan header commit memerlukan inspeksi operator untuk pemulihan pertama; helper baru sengaja tidak menganggap health dari versi lama sebagai versi target. Jangan menghapus volume DB untuk memperbaiki deploy API. Backup/restore database tetap pekerjaan terpisah yang harus diuji sebelum rilis luas.
+
+Scripts `deploy.py`, `bootstrap.py`, `install-routing.py`, `wastenot-api.service`, manifest K3s dan `deploy/ai/` merupakan jejak provisioning sebelum pemisahan, bukan pipeline aktif. Jangan menjalankan bootstrap lama pada host Docker aktif. Compose blue-green lama tidak menjalankan transaksi helper dan bukan jalur deploy yang didukung; API hanya dikelola helper di atas. Compose root repo tetap untuk pengembangan core lokal.
+
+Secrets: SSH_PRIVATE_KEY/SSH_KNOWN_HOSTS (fallback WASTENOT_DEPLOY_KEY/WASTENOT_KNOWN_HOSTS). Variables: VM_HOST/VM_PORT/VM_USER (fallback WASTENOT_DEPLOY_HOST/PORT/USER). Secrets tidak dicetak atau disimpan dalam artifact.
+
+[Integrasi Android](ANDROID.md), [operasional](OPERATIONS.md), [bukti verifikasi](VERIFICATION.md).
+
+## Smoke publik setelah deploy
+
+Script operator berikut membuat dua akun fixture, memakai satu generasi Gemini nyata, menguji scan/konteks/ownership/replay/save/provenance/statistik/delete/logout, lalu menghapus hanya akun yang UUID-nya diterima dari registrasi script tersebut. Memerlukan SSH admin ke database Docker; jangan mengarahkannya ke host lain tanpa izin. Foto smoke tidak dikomit atau dikirim ke Gemini.
+
+```sh
+python3 scripts/smoke_public.py --ssh cp-bcc --image /path/to/bottle.jpg \
+  --output /path/to/smoke-result.json
+```
+
+Exit0 berarti alur sukses lengkap; exit3 mencatat fallback timeout upstream yang terkendali, bukan keberhasilan alur lengkap. Readiness dan unit test saja tidak menggantikan smoke ini atau penerimaan Android.

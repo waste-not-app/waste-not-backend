@@ -9,7 +9,7 @@
             "type": "string"
           },
           "image": {
-            "format": "binary",
+            "contentMediaType": "application/octet-stream",
             "title": "Image",
             "type": "string"
           }
@@ -1287,6 +1287,13 @@
       },
       "ValidationError": {
         "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
           "loc": {
             "items": {
               "anyOf": [
@@ -2069,7 +2076,7 @@
                         "recommended_method": null,
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
@@ -2077,7 +2084,7 @@
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           },
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Edukasi PET resin 1 dan HDPE resin 2; bukan daftar penerima lokal atau identifikasi material dari foto.",
@@ -2085,7 +2092,7 @@
                             "url": "https://www3.epa.gov/recyclecity/recovery.htm"
                           },
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "Balai POM di Tasikmalaya",
                             "region": "Indonesia",
                             "scope_note": "Kode resin mengenali bahan; tidak membuktikan keamanan kontak pangan, kelayakan penggunaan ulang atau penerimaan daur ulang.",
@@ -2196,7 +2203,7 @@
                         "recommended_method": null,
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
@@ -2247,7 +2254,7 @@
                         "recommended_method": null,
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
@@ -2383,7 +2390,7 @@
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
@@ -2438,7 +2445,7 @@
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
@@ -2446,7 +2453,7 @@
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           },
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Edukasi PET resin 1 dan HDPE resin 2; bukan daftar penerima lokal atau identifikasi material dari foto.",
@@ -2454,7 +2461,7 @@
                             "url": "https://www3.epa.gov/recyclecity/recovery.htm"
                           },
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "Balai POM di Tasikmalaya",
                             "region": "Indonesia",
                             "scope_note": "Kode resin mengenali bahan; tidak membuktikan keamanan kontak pangan, kelayakan penggunaan ulang atau penerimaan daur ulang.",
@@ -2511,7 +2518,7 @@
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
@@ -2566,7 +2573,7 @@
                         "recommended_method": "REDUCE",
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Pencegahan pembelian/penggunaan berikutnya. Tidak membuktikan jumlah Reduce yang telah dilakukan.",
@@ -2619,7 +2626,7 @@
                         "recommended_method": "REUSE",
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",

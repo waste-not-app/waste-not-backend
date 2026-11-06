@@ -1,6 +1,6 @@
 # API WasteNot
 
-Base path `/v1`. JSON UTF-8, snake_case, UUID, timestamp RFC3339 UTC. Semua endpoint di bawah membutuhkan `Authorization: Bearer <access_token>`, kecuali register/login/refresh dan `/health/*`. Respons pribadi memakai `Cache-Control: no-store`; setiap request memperoleh UUID server pada `X-Request-ID`.
+Base path `/v1`. JSON UTF-8, snake_case, UUID, timestamp RFC3339 UTC. Semua endpoint di bawah membutuhkan `Authorization: Bearer <access_token>`, kecuali register/login/refresh dan `/health/*`. Health readiness menambahkan header `X-WasteNot-Release` ketika identitas rilis dikonfigurasi; body readiness tetap `{"ready":true}` dan tidak membuktikan worker/Gemini siap. Respons pribadi memakai `Cache-Control: no-store`; setiap request memperoleh UUID server pada `X-Request-ID`.
 
 | Method | Path | Hasil |
 |---|---|---|

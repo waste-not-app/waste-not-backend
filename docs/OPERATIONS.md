@@ -2,11 +2,11 @@
 
 ## Build, migrasi dan rilis
 
-`make build` membuat tiga binary statis. Image distroless menjalankan UID nonroot, menyertakan CA certificates; data zona waktu dibundel pada binary API. Entrypoint `/api`, sedangkan `/migrate` dan `/guides` tersedia untuk job operator. Docker Compose menjalankan migrasi sebelum API dengan database persisten. `read_only`, cap_drop ALL dan no-new-privileges aktif pada layanan API.
+`make build` membuat tiga binary statis. Image distroless menjalankan UID nonroot, menyertakan CA certificates; data zona waktu dibundel pada binary API. Entrypoint `/api`, sedangkan `/migrate` dan `/guides` tersedia untuk job operator. Docker Compose menjalankan migrasi sebelum API dengan database persisten. `read_only`, cap_drop ALL dan no-new-privileges aktif pada Compose lokal dan deploy API blue-green. Helper produksi juga membatasi memori/CPU/PID/log; lihat [deployment](DEPLOYMENT.md).
 
 Migrasi SQL di-embed, urut berdasarkan nama, dilindungi advisory lock transaksi. Nama dan checksum disimpan; perubahan migrasi yang sudah diterapkan ditolak. Tambahkan file baru untuk evolusi schema. Jalankan `/migrate` sekali pada rilis sebelum mengganti instance. Jangan mengembalikan database dengan destructive down migration; gunakan backup/restore dan migrasi perbaikan yang ditinjau. API tidak memigrasikan database otomatis.
 
-Docker Compose hanya menyediakan core lokal. Untuk AI pada container, gunakan network privat dan service origins yang dapat dicapai container; loopback di dalam container bukan host. Jangan membuka port worker ke internet. Set AI_ENABLED lewat deployment yang terkelola setelah gate AI, bukan mengubah Compose lokal menjadi backend publik tanpa TLS.
+Docker Compose hanya menyediakan core lokal. Untuk AI pada container, gunakan network privat dan service origins yang dapat dicapai container; loopback di dalam container bridge bukan host. Deployment VM memakai host networking secara eksplisit. Jangan membuka port worker ke internet. Set AI_ENABLED lewat deployment yang terkelola setelah gate AI, bukan mengubah Compose lokal menjadi backend publik tanpa TLS.
 
 ## Secret dan transport
 

@@ -71,6 +71,14 @@ func setup(t *testing.T, change func(*config.Config)) (*Server, *httptest.Server
 	t.Cleanup(server.Close)
 	return s, server
 }
+func TestReadinessIdentifiesRelease(t *testing.T) {
+	_, server := setup(t, func(c *config.Config) { c.Release = strings.Repeat("a", 40) })
+	status, body, headers := call(t, server.URL, "GET", "/health/ready", "", nil, nil)
+	if status != 200 || body["ready"] != true || headers.Get("X-WasteNot-Release") != strings.Repeat("a", 40) {
+		t.Fatalf("readiness: %d %v %v", status, body, headers)
+	}
+}
+
 func call(t *testing.T, base, method, path, token string, body any, headers map[string]string) (int, map[string]any, http.Header) {
 	t.Helper()
 	var raw []byte
