@@ -9,6 +9,7 @@ import (
 )
 
 type Config struct {
+	Release                                                              string
 	Address, DatabaseURL, Issuer, Audience                               string
 	Secret                                                               []byte
 	AIEnabled, RecommendationEnabled, AllowPrototype                     bool
@@ -16,7 +17,7 @@ type Config struct {
 }
 
 func Load() (Config, error) {
-	c := Config{Address: env("HTTP_ADDR", "127.0.0.1:8080"), DatabaseURL: os.Getenv("DATABASE_URL"), Issuer: "wastenot-api", Audience: "wastenot-android",
+	c := Config{Release: os.Getenv("WASTENOT_RELEASE"), Address: env("HTTP_ADDR", "127.0.0.1:8080"), DatabaseURL: os.Getenv("DATABASE_URL"), Issuer: "wastenot-api", Audience: "wastenot-android",
 		AIEnabled: os.Getenv("AI_ENABLED") == "true", RecommendationEnabled: env("AI_RECOMMENDATION_ENABLED", os.Getenv("AI_ENABLED")) == "true", AllowPrototype: os.Getenv("AI_ALLOW_PROTOTYPE") == "true",
 		DetectionURL: os.Getenv("AI_DETECTION_URL"), RecommendationURL: os.Getenv("AI_RECOMMENDATION_URL"),
 		DetectionToken: os.Getenv("AI_SERVICE_TOKEN"), RecommendationToken: os.Getenv("AI_RECOMMENDATION_TOKEN")}

@@ -1,5 +1,23 @@
 # Verifikasi
 
+## Review pemisahan repo dan CI/CD — 7 November 2026
+
+Perubahan ini mengoreksi jalur worker yang masih menjalankan salinan pada rilis backend lama, rollback yang hilang, snapshot kontrak stale yang ditutupi ekspor CI, fingerprint dependency yang tidak diperiksa pada VM, identitas model manifest, serta proteksi/drain container Go. File environment gabungan VM dibatasi root0600; nilainya tidak dibaca ke output.
+
+Validasi lokal terhadap perubahan:
+
+- 239 tes AI lulus dengan dependency CI hash-locked, termasuk 13 kasus paket/deploy/pin. Ruff lulus; pip-audit CPU lock melaporkan tidak ada advisory yang diketahui.
+- 34 artifact kontrak dihasilkan secara deterministik dengan `--check`; bundle AI/Go cocok byte-for-byte dengan kedua pin.
+- Bobot YOLO resmi diunduh/diverifikasi sebagai SHA-256 `0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1`; ini bukan hanya validasi format hash.
+- Go/PostgreSQL18 lulus `make check` (vet/race/integration/format), `make vuln`, dan build binary.
+- 23 tes helper deployment lulus: 11 untuk blue-green baru termasuk interrupted switch, Nginx/reload/public failure, identitas rilis, proteksi credential dan drain; 12 adalah regresi helper native lama.
+- Kedua workflow lulus actionlint1.7.12 dan pemeriksaan YAML/syntax shell. Test Client menghasilkan satu peringatan deprecation httpx dari Starlette; tidak ada kegagalan tes. Versi runtime tidak diubah hanya untuk menghilangkan peringatan.
+
+Unit kegagalan memakai simulasi dependency, bukan pemadaman worker/NGINX produksi. Readiness rilis memerlukan header commit yang benar; smoke publik terpisah memakai [script operator](../scripts/smoke_public.py). CI tidak melakukan auto-upgrade CPU venv atau live fetch peer repo privat. [Batas dan prosedur deployment](DEPLOYMENT.md), [handoff Android](ANDROID.md).
+
+Bukti pilot di bawah berasal dari tahap sebelumnya; angka tes dan status perangkatnya adalah catatan historis, bukan klaim bahwa semua gate Android telah selesai.
+
+
 Tanggal: 4 November 2026. Sumber Android: c1258596cb71bc7b95dc9a4f140f55f759815c4e.
 
 ## Status pilot terakhir

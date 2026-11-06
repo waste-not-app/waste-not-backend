@@ -1,13 +1,13 @@
 {
   "api_version": "1.0.0",
   "data": {
-    "catalog_version": "demo-catalog-05",
+    "catalog_version": "wastenot-catalog-pilot-06",
     "class_thresholds": {},
     "items": [
       {
         "category": "PLASTIC",
         "guide_status": "DRAFT",
-        "label": "Botol plastik PET (konfirmasi pengguna)",
+        "label": "Botol plastik PET bekas pangan/minuman (konfirmasi pengguna)",
         "object_key": "pet_bottle",
         "special_handling": false
       },
@@ -28,7 +28,7 @@
       {
         "category": "METAL",
         "guide_status": "DRAFT",
-        "label": "Kaleng aluminium",
+        "label": "Kaleng aluminium bekas minuman/pangan non-aerosol",
         "object_key": "aluminium_can",
         "special_handling": false
       },

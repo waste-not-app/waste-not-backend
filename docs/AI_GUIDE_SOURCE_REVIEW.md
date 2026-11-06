@@ -1,5 +1,7 @@
 # Pemeriksaan sumber draf panduan AI WasteNot
 
+Catatan arsip: path `ai/runtime`, `ai/guides` dan proposal di laporan ini merujuk snapshot sebelum pemisahan repo. Source/policy kini dimiliki [waste-not-ai](https://github.com/waste-not-app/waste-not-ai); laporan mempertahankan bukti historis dan tidak mengubah status review menjadi persetujuan manusia.
+
 Pemeriksaan sumber oleh Codex, 4 November 2026. Dokumen ini adalah audit teknis/sumber dan usulan untuk ditinjau, bukan persetujuan editorial manusia, sertifikasi keselamatan benda, atau bukti fasilitas di wilayah pengguna menerima benda. Tidak ada `publication_status`, `reviewed_at`, `reviewer`, `valid_until`, runtime, atau data panduan yang diubah. Tanggal audit ini tidak mengisi tanggal review penerbitan. Akses model Gemini tidak mengubah status pembuktian sumber atau kelayakan publikasi.
 
 ## Bahan dan cakupan
