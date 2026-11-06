@@ -38,6 +38,7 @@ make run
 - [Integrasi AI](docs/AI.md): menjalankan worker, feature gate, quota dan batas pengujian.
 - [Operasional](docs/OPERATIONS.md): migrasi, backup, TLS, secret, scaling dan pemulihan.
 - [Bukti pengujian](docs/VERIFICATION.md).
+- [Laporan review CI/CD 7 November](docs/CI_CD_REVIEW_2026-11-07.md): temuan, perbaikan, smoke publik dan batas yang masih terbuka.
 
 Kontrak diturunkan dari Android commit [`c125859`](https://github.com/waste-not-app/waste-not-android/commit/c1258596cb71bc7b95dc9a4f140f55f759815c4e). Fixture Android dan kontrak AI asli disalin tanpa perubahan ke [`contracts/`](contracts/README.md). Worker Python tetap menjadi pemilik tunggal keputusan AI. Go tidak memanggil Gemini langsung dan tidak memuat model YOLO.
 

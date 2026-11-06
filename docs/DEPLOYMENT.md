@@ -24,8 +24,8 @@ Konfigurasi VM memakai DATABASE_URL_APP, DATABASE_URL_MIGRATE, JWT_SECRET_BASE64
 3. Jalankan migrasi memakai image target sebelum startup API. Kegagalan migrasi mempertahankan slot aktif. Migrasi harus kompatibel dengan versi lama yang masih melayani traffic; gunakan expand/contract. Rollback source tidak melakukan down-migration.
 4. Sebelum membersihkan slot lain, pastikan slot pada file upstream sehat dan rekonsiliasi Nginx dengan reload. Ini menangani switch yang terputus mendadak; konfigurasi aktif yang tidak sehat menghentikan deploy untuk inspeksi. Drain slot lain45detik sebelum menghapusnya. Bersihkan slot tidak aktif, jalankan target nonroot dengan filesystem read-only, cap-drop ALL, no-new-privileges, memory768MiB, CPU1core, pids256, core dump off dan batas log10MiB×3.
 5. Target wajib sehat pada loopback dengan identitas commit yang cocok. Setelah itu tulis upstream atomik, `nginx -t` dan reload.
-6. Periksa route prefiks Nginx **dan HTTPS publik** terhadap ready=true serta header commit baru. Kegagalan write/validasi/reload/routing mengembalikan konfigurasi upstream persis sebelumnya dan reload sebelum target dibersihkan. Jika reload pemulihan juga gagal, kedua slot dipertahankan agar operator dapat memulihkan routing; jangan mematikan slot yang mungkin masih dipakai Nginx.
-7. Setelah seluruh gate lulus, hentikan slot lama dengan budget45detik, melebihi shutdown aplikasi40detik. Container lama yang berhenti tetap tersedia untuk inspeksi/rollback dan baru dihapus saat slotnya digunakan kembali.
+6. Helper memeriksa route prefiks Nginx. Runner GitHub kemudian memeriksa **HTTPS publik** terhadap ready=true serta header commit baru; VM ini tidak dapat melakukan hairpin ke gateway TLS publiknya sendiri. Jurnal root-only mempertahankan konfigurasi sebelumnya dan slot lama selama menunggu konfirmasi runner. Kegagalan write/validasi/reload/routing mengembalikan konfigurasi upstream persis sebelumnya dan reload sebelum target dibersihkan. Jika reload pemulihan juga gagal, kedua slot dipertahankan agar operator dapat memulihkan routing; jangan mematikan slot yang mungkin masih dipakai Nginx.
+7. Runner memanggil `--confirm` hanya setelah gate HTTPS lulus; trap kegagalan memanggil `--rollback`. Jika runner terputus, jurnal tetap ada dan deploy berikutnya memulihkan transaksi pending terlebih dahulu. Pemulihan menyalakan slot sebelumnya dan memeriksa readiness sebelum mengembalikan route, termasuk bila interupsi terjadi setelah drain konfirmasi. Setelah seluruh gate lulus, hentikan slot lama dengan budget45detik, melebihi shutdown aplikasi40detik. Container lama yang berhenti tetap tersedia untuk inspeksi/rollback dan baru dihapus saat slotnya digunakan kembali.
 
 Switch Nginx bersifat graceful, tetapi bukan bukti SLA atau nol request gagal. Belum ada load/drain benchmark pada VM ini. Dua slot sesaat memakai hingga dua pool DB; sisakan koneksi untuk migrasi dan operator.
 
@@ -36,6 +36,11 @@ ssh cp-bcc 'docker ps; cat /etc/nginx/conf.d/wastenot-upstream.conf'
 curl -fsS -D - https://pred-autoscaler.bccdev.id/wastenot/api/health/ready
 # Jalankan kembali image commit yang sudah tersedia/ditinjau, melalui helper yang sama:
 ssh cp-bcc 'sudo -n /usr/local/sbin/wastenot-backend-deploy wastenot-backend:<full-sha>'
+# Dari luar VM, periksa ready=true DAN X-WasteNot-Release=<full-sha>:
+curl -fsS -D - https://pred-autoscaler.bccdev.id/wastenot/api/health/ready
+# Jika sesuai:
+ssh cp-bcc 'sudo -n /usr/local/sbin/wastenot-backend-deploy --confirm wastenot-backend:<full-sha>'
+# Jika tidak sesuai, gunakan --rollback dengan tag yang sama.
 ```
 
 Retain image sukses sebelumnya. Image sebelum dukungan header commit memerlukan inspeksi operator untuk pemulihan pertama; helper baru sengaja tidak menganggap health dari versi lama sebagai versi target. Jangan menghapus volume DB untuk memperbaiki deploy API. Backup/restore database tetap pekerjaan terpisah yang harus diuji sebelum rilis luas.
