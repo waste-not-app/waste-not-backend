@@ -89,17 +89,39 @@ jobs:
           echo "==> Installing deployment helper on VM..."
           STAGE=$($SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" 'mktemp -d /tmp/wastenot-backend-deploy.XXXXXXXX')
           [[ "$STAGE" =~ ^/tmp/wastenot-backend-deploy\.[a-zA-Z0-9]+$ ]]
-          trap '$SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "rm -rf -- $STAGE"' EXIT
+          DEPLOY_PENDING=0
+          cleanup() {
+            RESULT=$?
+            trap - EXIT
+            if [[ "$DEPLOY_PENDING" == 1 ]]; then
+              $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy --rollback $IMAGE_TAG" || RESULT=1
+            fi
+            $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "rm -rf -- $STAGE" || true
+            exit "$RESULT"
+          }
+          trap cleanup EXIT
           cat deploy/bluegreen.py | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "cat > $STAGE/bluegreen.py && sudo -n install -m 0755 -o root -g root $STAGE/bluegreen.py /usr/local/sbin/wastenot-backend-deploy"
 
           echo "==> Executing Blue-Green switch on VM..."
+          DEPLOY_PENDING=1
           $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy $IMAGE_TAG"
-      - name: Verify public HTTPS API
-        run: |
+
+          # Probe from the external runner: this VM cannot hairpin to the public TLS gateway.
           curl --fail --silent --show-error --max-time 15 --retry 3 --retry-delay 2 \
+            --dump-header "$RUNNER_TEMP/wastenot-health.headers" \
             https://pred-autoscaler.bccdev.id/wastenot/api/health/ready \
             --output "$RUNNER_TEMP/wastenot-health.json"
-          python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))["ready"] is True' "$RUNNER_TEMP/wastenot-health.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          assert json.loads((root / 'wastenot-health.json').read_text())['ready'] is True
+          releases = [line.partition(':')[2].strip() for line in (root / 'wastenot-health.headers').read_text().splitlines()
+                      if line.partition(':')[0].lower() == 'x-wastenot-release']
+          assert releases and releases[-1] == os.environ['IMAGE_TAG'].split(':', 1)[1]
+          PY
+          $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy --confirm $IMAGE_TAG"
+          DEPLOY_PENDING=0
       - name: Remove temporary SSH files
         if: always()
         run: rm -f "$RUNNER_TEMP/wastenot-key" "$RUNNER_TEMP/wastenot-known-hosts"

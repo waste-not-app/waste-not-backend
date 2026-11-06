@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Deploy the verified image, preserving the old slot until routing is verified."""
 import fcntl
+import base64
 import json
 import os
 from pathlib import Path
@@ -13,7 +14,8 @@ import time
 import urllib.request
 
 UPSTREAM = Path('/etc/nginx/conf.d/wastenot-upstream.conf')
-PUBLIC = 'https://pred-autoscaler.bccdev.id/wastenot/api/health/ready'
+PENDING = Path('/var/lib/wastenot-deploy/pending.json')
+PREFIX = 'http://127.0.0.1/wastenot/api/health/ready'
 
 
 def run(*args):
@@ -70,8 +72,56 @@ def reconcile(active_port):
     if not ready(f'http://127.0.0.1:{active_port}/health/ready', None, attempts=3):
         raise ValueError('Persisted active slot is not ready; inspect routing before deployment')
     reload_nginx()
-    if not ready('http://127.0.0.1/wastenot/api/health/ready', None, attempts=3):
+    if not ready(PREFIX, None, attempts=3):
         raise ValueError('Existing upstream cannot be reconciled safely')
+
+
+def pending(image=None):
+    value = json.loads(PENDING.read_text()) if PENDING.exists() else None
+    if value is not None and image is not None and value['image'] != image:
+        raise ValueError('Pending deployment belongs to another image')
+    return value
+
+
+def drain(name, *, required=False):
+    result = subprocess.run(['docker', 'stop', '--time', '45', name], capture_output=True, check=False, timeout=55)
+    if required and result.returncode != 0:
+        raise ValueError('Container could not be drained safely')
+
+
+def rollback(image=None):
+    value = pending(image)
+    if value is None:
+        return {'rolled_back': False}
+    original = base64.b64decode(value['upstream'], validate=True)
+    ports = re.findall(rb'server\s+127\.0\.0\.1:(1808[12])\s*;', original)
+    if len(ports) != 1:
+        raise ValueError('Pending upstream is invalid')
+    # Confirmation may have stopped the old slot just before the process was interrupted.
+    run('docker', 'start', value['previous'])
+    if not ready(f'http://127.0.0.1:{int(ports[0])}/health/ready', None):
+        raise ValueError('Previous slot cannot recover; preserve the running route and journal')
+    write_upstream(original)
+    # Keep both slots and the journal if reload fails; Nginx may still use the new one.
+    reload_nginx()
+    if not ready(PREFIX, None, attempts=3):
+        raise ValueError('Restored upstream is not ready; preserve both slots for recovery')
+    drain(value['target'], required=True)
+    subprocess.run(['docker', 'rm', '-f', value['target']], capture_output=True, check=False, timeout=30)
+    PENDING.unlink()
+    return {'rolled_back': True}
+
+
+def confirm(image):
+    value = pending(image)
+    if value is None:
+        raise ValueError('No pending deployment to confirm')
+    release = image.split(':', 1)[1]
+    if not ready(f'http://127.0.0.1:{value["port"]}/health/ready', release) or not ready(PREFIX, release, attempts=3):
+        raise ValueError('Pending deployment no longer serves its release')
+    drain(value['previous'], required=True)
+    PENDING.unlink()
+    return {'release': release, 'ready': True, 'confirmed': True}
 
 
 def deploy(image, env_file):
@@ -79,6 +129,8 @@ def deploy(image, env_file):
         raise ValueError('Use a full source commit image tag')
     release = image.split(':', 1)[1]
     values = settings(env_file)
+    if pending() is not None:
+        rollback()
     original = UPSTREAM.read_bytes()
     ports = re.findall(rb'server\s+127\.0\.0\.1:(1808[12])\s*;', original)
     if len(ports) != 1:
@@ -107,7 +159,7 @@ def deploy(image, env_file):
         runtime_env.chmod(0o600)
         reconcile(active_port)
         # After reconciliation an interrupted deployment may still have requests in the other slot.
-        subprocess.run(['docker', 'stop', '--time', '45', name], capture_output=True, check=False, timeout=55)
+        drain(name)
         subprocess.run(['docker', 'rm', '-f', name], capture_output=True, check=False, timeout=30)
         switched = False
         try:
@@ -120,24 +172,26 @@ def deploy(image, env_file):
                 raise ValueError('Target image identity differs')
             if not ready(f'http://127.0.0.1:{port}/health/ready', release):
                 raise ValueError('Target slot not ready')
+            PENDING.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+            stage = PENDING.with_suffix('.pending')
+            stage.write_text(json.dumps({'image': image, 'previous': current_name, 'target': name,
+                                         'port': port, 'upstream': base64.b64encode(original).decode()}))
+            stage.chmod(0o600)
+            stage.replace(PENDING)
             switched = True
             write_upstream(re.sub(rb'(server\s+127\.0\.0\.1:)1808[12](\s*;)',
                                   lambda m: m[1] + str(port).encode() + m[2], original))
             reload_nginx()
-            for url in ('http://127.0.0.1/wastenot/api/health/ready', PUBLIC):
-                if not ready(url, release, attempts=3):
-                    raise ValueError('New release not reachable through gateway')
+            if not ready(PREFIX, release, attempts=3):
+                raise ValueError('New release not reachable through Nginx')
         except Exception:
             if switched:
-                write_upstream(original)
-                # Do not remove the new slot if the rollback reload fails: Nginx may still use it.
-                reload_nginx()
-            subprocess.run(['docker', 'rm', '-f', name], capture_output=True, check=False, timeout=30)
+                rollback(image)
+            else:
+                subprocess.run(['docker', 'rm', '-f', name], capture_output=True, check=False, timeout=30)
             raise
-    # Keep the drained container for rollback. It is removed only when its slot is reused.
-    subprocess.run(['docker', 'stop', '--time', '45', current_name],
-                   capture_output=True, check=False, timeout=55)
-    return {'release': release, 'slot': target, 'ready': True}
+    # The external runner can reach public HTTPS; retain the old slot until it confirms.
+    return {'release': release, 'slot': target, 'ready': True, 'awaiting_public_verification': True}
 
 
 def main():
@@ -145,8 +199,11 @@ def main():
         raise ValueError('Run as administrator with image tag and optional environment path')
     with open('/run/lock/wastenot-deploy.lock', 'w') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        print(json.dumps(deploy(sys.argv[1], Path(sys.argv[2] if len(sys.argv) == 3
-                                                else '/etc/wastenot/wastenot.env'))))
+        if sys.argv[1] in ('--confirm', '--rollback') and len(sys.argv) == 3:
+            result = confirm(sys.argv[2]) if sys.argv[1] == '--confirm' else rollback(sys.argv[2])
+        else:
+            result = deploy(sys.argv[1], Path(sys.argv[2] if len(sys.argv) == 3 else '/etc/wastenot/wastenot.env'))
+        print(json.dumps(result))
 
 
 if __name__ == '__main__':

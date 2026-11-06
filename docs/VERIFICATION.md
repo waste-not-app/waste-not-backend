@@ -2,6 +2,8 @@
 
 ## Review pemisahan repo dan CI/CD — 7 November 2026
 
+[Laporan lengkap, temuan dan hasil smoke publik](CI_CD_REVIEW_2026-11-07.md).
+
 Perubahan ini mengoreksi jalur worker yang masih menjalankan salinan pada rilis backend lama, rollback yang hilang, snapshot kontrak stale yang ditutupi ekspor CI, fingerprint dependency yang tidak diperiksa pada VM, identitas model manifest, serta proteksi/drain container Go. File environment gabungan VM dibatasi root0600; nilainya tidak dibaca ke output.
 
 Validasi lokal terhadap perubahan:
@@ -10,8 +12,10 @@ Validasi lokal terhadap perubahan:
 - 34 artifact kontrak dihasilkan secara deterministik dengan `--check`; bundle AI/Go cocok byte-for-byte dengan kedua pin.
 - Bobot YOLO resmi diunduh/diverifikasi sebagai SHA-256 `0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1`; ini bukan hanya validasi format hash.
 - Go/PostgreSQL18 lulus `make check` (vet/race/integration/format), `make vuln`, dan build binary.
-- 23 tes helper deployment lulus: 11 untuk blue-green baru termasuk interrupted switch, Nginx/reload/public failure, identitas rilis, proteksi credential dan drain; 12 adalah regresi helper native lama.
+- 27 tes helper deployment lulus: 15 untuk blue-green baru termasuk interrupted switch, Nginx/reload/public failure, identitas rilis, proteksi credential dan drain; 12 adalah regresi helper native lama.
 - Kedua workflow lulus actionlint1.7.12 dan pemeriksaan YAML/syntax shell. Test Client menghasilkan satu peringatan deprecation httpx dari Starlette; tidak ada kegagalan tes. Versi runtime tidak diubah hanya untuk menghilangkan peringatan.
+
+Rollout pertama juga menemukan bahwa VM tidak bisa mengakses port443 gateway publiknya sendiri. Target lokal/prefix sehat, tetapi gate HTTPS host gagal dan upstream lama dipulihkan. Probe publik kini dijalankan runner eksternal dengan jurnal pending/konfirmasi dan rollback; ini bukan pelemahan verifikasi TLS.
 
 Unit kegagalan memakai simulasi dependency, bukan pemadaman worker/NGINX produksi. Readiness rilis memerlukan header commit yang benar; smoke publik terpisah memakai [script operator](../scripts/smoke_public.py). CI tidak melakukan auto-upgrade CPU venv atau live fetch peer repo privat. [Batas dan prosedur deployment](DEPLOYMENT.md), [handoff Android](ANDROID.md).
 

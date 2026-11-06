@@ -1,4 +1,6 @@
 import io
+import base64
+import json
 from pathlib import Path
 import subprocess
 import tempfile
@@ -10,7 +12,7 @@ import bluegreen
 
 
 class BlueGreenRollback(unittest.TestCase):
-    def scenario(self, *, readiness=None, reloads=None, migration_error=False):
+    def scenario(self, *, readiness=None, reloads=None, migration_error=False, public_ok=True, finalize=True):
         with tempfile.TemporaryDirectory() as directory:
             config = Path(directory) / 'upstream.conf'
             original = b'# preserve operator comment\nupstream wastenot_upstream { server 127.0.0.1:18081; }\n'
@@ -25,15 +27,21 @@ class BlueGreenRollback(unittest.TestCase):
 
             values = {'DATABASE_URL_APP': 'private-runtime', 'DATABASE_URL_MIGRATE': 'private-migrate',
                       'JWT_SECRET_BASE64': 'private-jwt'}
-            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'settings', return_value=values), \
+            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'PENDING', Path(directory) / 'pending.json'), patch.object(bluegreen, 'settings', return_value=values), \
                  patch.object(bluegreen, 'run', side_effect=run), \
                  patch.object(bluegreen, 'reconcile'), \
-                 patch.object(bluegreen, 'ready', side_effect=readiness or [True, True, True]), \
+                 patch.object(bluegreen, 'ready', side_effect=readiness or (lambda *args, **kwargs: True)), \
                  patch.object(bluegreen, 'reload_nginx', side_effect=reloads) as reload, \
-                 patch.object(bluegreen.subprocess, 'run') as commands:
+                 patch.object(bluegreen.subprocess, 'run', return_value=subprocess.CompletedProcess([],0)) as commands:
                 error = None
                 try:
-                    bluegreen.deploy('wastenot-backend:' + 'a' * 40, Path('unused'))
+                    image='wastenot-backend:' + 'a' * 40
+                    bluegreen.deploy(image, Path('unused'))
+                    if not public_ok:
+                        bluegreen.rollback(image)
+                        raise ValueError('Public HTTPS rejected by runner')
+                    if finalize:
+                        bluegreen.confirm(image)
                 except (ValueError, subprocess.CalledProcessError) as exc:
                     error = exc
                 return config.read_bytes(), original, calls, commands.call_args_list, reload.call_count, error
@@ -46,7 +54,7 @@ class BlueGreenRollback(unittest.TestCase):
         self.assertFalse(any('stop' in call.args[0] and 'wastenot-api-blue' in call.args[0] for call in commands))
 
     def test_failed_public_route_restores_config_and_keeps_old_slot(self):
-        raw, original, _, commands, _, error = self.scenario(readiness=[True, True, False])
+        raw, original, _, commands, _, error = self.scenario(public_ok=False)
         self.assertIsNotNone(error)
         self.assertEqual(raw, original)
         self.assertFalse(any('stop' in call.args[0] and 'wastenot-api-blue' in call.args[0] for call in commands))
@@ -57,6 +65,71 @@ class BlueGreenRollback(unittest.TestCase):
         self.assertEqual(raw, original)
         self.assertEqual(commands, [])
         self.assertEqual(reloads, 0)
+
+    def test_public_confirmation_is_required_before_old_slot_stops(self):
+        _, _, _, commands, _, error = self.scenario(finalize=False)
+        self.assertIsNone(error)
+        self.assertFalse(any('stop' in call.args[0] and 'wastenot-api-blue' in call.args[0] for call in commands))
+
+    def test_wrong_run_cannot_confirm_or_roll_back_another_pending_image(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state = Path(directory) / 'pending.json'
+            state.write_text('{"image":"wastenot-backend:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}')
+            with patch.object(bluegreen, 'PENDING', state), patch.object(bluegreen, 'drain') as drain:
+                with self.assertRaises(ValueError):
+                    bluegreen.confirm('wastenot-backend:' + 'b' * 40)
+                with self.assertRaises(ValueError):
+                    bluegreen.rollback('wastenot-backend:' + 'b' * 40)
+                drain.assert_not_called()
+                self.assertTrue(state.exists())
+
+    def test_interrupted_confirmation_recovers_old_slot_before_restoring_traffic(self):
+        with tempfile.TemporaryDirectory() as directory:
+            config = Path(directory) / 'upstream.conf'
+            state = Path(directory) / 'pending.json'
+            original = b'upstream wastenot_upstream { server 127.0.0.1:18081; }'
+            current = b'upstream wastenot_upstream { server 127.0.0.1:18082; }'
+            config.write_bytes(current)
+            image = 'wastenot-backend:' + 'a' * 40
+            state.write_text(json.dumps({'image': image, 'previous': 'wastenot-api-blue',
+                                         'target': 'wastenot-api-green', 'port': 18082,
+                                         'upstream': base64.b64encode(original).decode()}))
+            events = []
+            def run(*args):
+                events.append(args)
+                if args[:2] == ('docker', 'start'):
+                    self.assertEqual(config.read_bytes(), current)
+                return ''
+            def ready(url, *args, **kwargs):
+                events.append(url)
+                if ':18081/' in url:
+                    self.assertEqual(config.read_bytes(), current)
+                return True
+            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'PENDING', state), \
+                 patch.object(bluegreen, 'run', side_effect=run), patch.object(bluegreen, 'ready', side_effect=ready), \
+                 patch.object(bluegreen.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0)):
+                bluegreen.rollback(image)
+            self.assertEqual(events[0], ('docker', 'start', 'wastenot-api-blue'))
+            self.assertEqual(config.read_bytes(), original)
+            self.assertFalse(state.exists())
+
+    def test_failed_old_slot_recovery_does_not_replace_working_route(self):
+        with tempfile.TemporaryDirectory() as directory:
+            config = Path(directory) / 'upstream.conf'
+            state = Path(directory) / 'pending.json'
+            original = b'upstream wastenot_upstream { server 127.0.0.1:18081; }'
+            current = b'upstream wastenot_upstream { server 127.0.0.1:18082; }'
+            config.write_bytes(current)
+            image = 'wastenot-backend:' + 'a' * 40
+            state.write_text(json.dumps({'image': image, 'previous': 'wastenot-api-blue',
+                                         'target': 'wastenot-api-green', 'port': 18082,
+                                         'upstream': base64.b64encode(original).decode()}))
+            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'PENDING', state), \
+                 patch.object(bluegreen, 'run'), patch.object(bluegreen, 'ready', return_value=False):
+                with self.assertRaises(ValueError):
+                    bluegreen.rollback(image)
+            self.assertEqual(config.read_bytes(), current)
+            self.assertTrue(state.exists())
 
     def test_failed_target_does_not_switch_route(self):
         raw, original, _, _, reloads, error = self.scenario(readiness=[False])
@@ -95,7 +168,7 @@ class BlueGreenRollback(unittest.TestCase):
             def command(args, **kwargs):
                 events.append(args)
             values = {'DATABASE_URL_APP': 'db', 'DATABASE_URL_MIGRATE': 'db', 'JWT_SECRET_BASE64': 'jwt'}
-            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'settings', return_value=values), \
+            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'PENDING', Path(directory) / 'pending.json'), patch.object(bluegreen, 'settings', return_value=values), \
                  patch.object(bluegreen, 'run', side_effect=run), patch.object(bluegreen, 'ready', side_effect=ready), \
                  patch.object(bluegreen.subprocess, 'run', side_effect=command):
                 bluegreen.deploy('wastenot-backend:' + 'a' * 40, Path('unused'))
