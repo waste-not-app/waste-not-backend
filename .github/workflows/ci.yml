@@ -53,7 +53,17 @@ jobs:
           name: release-${{ github.sha }}
           path: bin/release.tar
           retention-days: 7
-      - run: docker build --tag wastenot-backend:ci .
+      - name: Build Docker image
+        run: docker build --tag wastenot-backend:${{ github.sha }} .
+      - name: Package Docker image artifact
+        run: |
+          mkdir -p docker-image
+          docker save wastenot-backend:${{ github.sha }} | gzip > docker-image/wastenot-backend.tar.gz
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: docker-image-${{ github.sha }}
+          path: docker-image/wastenot-backend.tar.gz
+          retention-days: 7
 
   deploy:
     needs: verify
@@ -64,33 +74,42 @@ jobs:
       group: wastenot-vm-deploy
       cancel-in-progress: false
     steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
-          name: release-${{ github.sha }}
-          path: release
+          name: docker-image-${{ github.sha }}
+          path: docker-image
       - name: Prepare dedicated SSH identity
         env:
-          DEPLOY_KEY: ${{ secrets.WASTENOT_DEPLOY_KEY }}
-          KNOWN_HOSTS: ${{ secrets.WASTENOT_KNOWN_HOSTS }}
+          DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY || secrets.WASTENOT_DEPLOY_KEY }}
+          KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS || secrets.WASTENOT_KNOWN_HOSTS }}
         run: |
           umask 077
           printf '%s\n' "$DEPLOY_KEY" > "$RUNNER_TEMP/wastenot-key"
           printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/wastenot-known-hosts"
-      - name: Deploy verified release to the isolated WasteNot service
+      - name: Deploy containerized release via Blue-Green deployment
         env:
-          DEPLOY_HOST: ${{ vars.WASTENOT_DEPLOY_HOST }}
-          DEPLOY_PORT: ${{ vars.WASTENOT_DEPLOY_PORT }}
-          DEPLOY_USER: ${{ vars.WASTENOT_DEPLOY_USER }}
+          DEPLOY_HOST: ${{ vars.VM_HOST || vars.WASTENOT_DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ vars.VM_PORT || vars.WASTENOT_DEPLOY_PORT }}
+          DEPLOY_USER: ${{ vars.VM_USER || vars.WASTENOT_DEPLOY_USER }}
+          IMAGE_TAG: wastenot-backend:${{ github.sha }}
         run: |
-          ssh -C -T -o BatchMode=yes -o IdentitiesOnly=yes \
-            -o StrictHostKeyChecking=yes \
-            -o UserKnownHostsFile="$RUNNER_TEMP/wastenot-known-hosts" \
+          SSH_CMD="ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=$RUNNER_TEMP/wastenot-known-hosts \
             -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
-            -i "$RUNNER_TEMP/wastenot-key" -p "$DEPLOY_PORT" \
-            "$DEPLOY_USER@$DEPLOY_HOST" < release/release.tar
+            -i $RUNNER_TEMP/wastenot-key -p $DEPLOY_PORT"
+
+          echo "==> Transferring and loading Docker image into VM..."
+          gzip -dc docker-image/wastenot-backend.tar.gz | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "docker load"
+
+          echo "==> Syncing deployment script on VM..."
+          cat deploy/deploy-bluegreen.sh | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "cat > /home/$DEPLOY_USER/deploy-bluegreen.sh && chmod +x /home/$DEPLOY_USER/deploy-bluegreen.sh"
+
+          echo "==> Executing Blue-Green switch on VM..."
+          $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "/home/$DEPLOY_USER/deploy-bluegreen.sh $IMAGE_TAG"
       - name: Verify public HTTPS API
         run: |
-          curl --fail --silent --show-error --max-time 15 --retry 2 --retry-delay 2 \
+          curl --fail --silent --show-error --max-time 15 --retry 3 --retry-delay 2 \
             https://pred-autoscaler.bccdev.id/wastenot/api/health/ready \
             --output "$RUNNER_TEMP/wastenot-health.json"
           python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))["ready"] is True' "$RUNNER_TEMP/wastenot-health.json"
