@@ -1,0 +1,49 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "sql/queries/"
+    schema: "sql/migrations/"
+    gen:
+      go:
+        package: "db"
+        out: "internal/shared/db"
+        sql_package: "pgx/v5"
+        overrides:
+          - db_type: "uuid"
+            go_type: "string"
+          - db_type: "uuid"
+            nullable: true
+            go_type:
+              type: "string"
+              pointer: true
+          - db_type: "timestamptz"
+            go_type: "time.Time"
+          - db_type: "timestamptz"
+            nullable: true
+            go_type:
+              import: "time"
+              type: "Time"
+              pointer: true
+          - db_type: "date"
+            go_type: "string"
+          - db_type: "pg_catalog.int4"
+            go_type: "int"
+          - db_type: "pg_catalog.int4"
+            nullable: true
+            go_type:
+              type: "int"
+              pointer: true
+          - db_type: "pg_catalog.int8"
+            go_type: "int64"
+          - db_type: "text"
+            nullable: true
+            go_type: "string"
+          - db_type: "jsonb"
+            go_type:
+              import: "encoding/json"
+              type: "RawMessage"
+          - db_type: "jsonb"
+            nullable: true
+            go_type:
+              import: "encoding/json"
+              type: "RawMessage"

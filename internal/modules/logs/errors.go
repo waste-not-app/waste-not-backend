@@ -1,0 +1,22 @@
+package logs
+
+import "errors"
+
+var (
+	ErrLogNotFound         = errors.New("waste log not found")
+	ErrLogDeleted          = errors.New("waste log has been deleted")
+	ErrIdempotencyConflict = errors.New("idempotency conflict")
+	ErrVersionConflict     = errors.New("version conflict")
+	ErrAIReferenceInvalid  = errors.New("invalid AI provenance reference")
+	ErrAIAlreadyLinked     = errors.New("AI recommendation already linked")
+	ErrAISessionExpired    = errors.New("AI session expired")
+	ErrInvalidPatchRequest = errors.New("invalid patch request")
+)
+
+type ValidationError struct {
+	Fields map[string]string
+}
+
+func (e *ValidationError) Error() string {
+	return "validation error"
+}

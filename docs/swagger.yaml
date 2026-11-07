@@ -1,0 +1,1408 @@
+basePath: /
+definitions:
+  github_com_waste-not-app_waste-not-backend_internal_domain.Log:
+    properties:
+      activity_date:
+        type: string
+      activity_timezone:
+        type: string
+      category:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      item_count:
+        type: integer
+      method:
+        type: string
+      notes:
+        type: string
+      quantity_kind:
+        type: string
+      updated_at:
+        type: string
+      version:
+        type: integer
+      weight_g:
+        type: integer
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_domain.LogInput:
+    properties:
+      activity_date:
+        type: string
+      ai_provenance:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Provenance'
+      category:
+        type: string
+      client_request_id:
+        type: string
+      item_count:
+        type: integer
+      method:
+        type: string
+      notes:
+        type: string
+      photo_id:
+        type: string
+      quantity_kind:
+        type: string
+      weight_g:
+        type: integer
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_domain.Progress:
+    properties:
+      active_log_count:
+        type: integer
+      best_streak:
+        type: integer
+      current_streak:
+        type: integer
+      has_logged_today:
+        type: boolean
+      level:
+        type: integer
+      xp:
+        type: integer
+      xp_into_level:
+        type: integer
+      xp_to_next_level:
+        type: integer
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_domain.Provenance:
+    properties:
+      recommendation_id:
+        type: string
+      user_confirmed_method:
+        type: boolean
+      user_confirmed_object:
+        type: boolean
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_domain.Summary:
+    properties:
+      activity_count:
+        type: integer
+      avoided_count:
+        type: integer
+      avoided_weight_g:
+        type: integer
+      handled_activity_count:
+        type: integer
+      recycled_activity_count:
+        type: integer
+      recycling_rate_basis:
+        type: string
+      recycling_rate_percent:
+        type: number
+      total_handled_count:
+        type: integer
+      total_handled_weight_g:
+        type: integer
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail:
+    properties:
+      code:
+        type: string
+      fields:
+        additionalProperties:
+          type: string
+        type: object
+      message:
+        type: string
+      retryable:
+        type: boolean
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse:
+    properties:
+      api_version:
+        type: string
+      error:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo:
+    properties:
+      has_more:
+        type: boolean
+      next_cursor:
+        type: string
+    type: object
+  ? github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log
+  : properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Log'
+        type: array
+      page:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo'
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/internal_modules_guides.GuideRes'
+        type: array
+      page:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo'
+    type: object
+  ? github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log
+  : properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Log'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_ai.AICatalogRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_ai.AIDetectionRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_ai.AIRecommendationRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_analytics.DashboardRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_analytics.StatisticsRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_auth.AuthTokensRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_auth.UserRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_guides.GuideRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_logs.LogWithProgressRes'
+      request_id:
+        type: string
+    type: object
+  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_system.MetadataRes'
+      request_id:
+        type: string
+    type: object
+  internal_modules_ai.AICatalogObjectRes:
+    properties:
+      default_category:
+        type: string
+      display_name_id:
+        type: string
+      object_code:
+        type: string
+      supports_direct_ai:
+        type: boolean
+    type: object
+  internal_modules_ai.AICatalogRes:
+    properties:
+      catalog_version:
+        type: string
+      objects:
+        items:
+          $ref: '#/definitions/internal_modules_ai.AICatalogObjectRes'
+        type: array
+    type: object
+  internal_modules_ai.AICitationRes:
+    properties:
+      guide_id:
+        type: string
+      title:
+        type: string
+    type: object
+  internal_modules_ai.AIDetectionCandidateRes:
+    properties:
+      category:
+        type: string
+      confidence:
+        type: number
+      display_name_id:
+        type: string
+      object_code:
+        type: string
+    type: object
+  internal_modules_ai.AIDetectionRes:
+    properties:
+      candidates:
+        items:
+          $ref: '#/definitions/internal_modules_ai.AIDetectionCandidateRes'
+        type: array
+      detection_id:
+        type: string
+      expires_at:
+        type: string
+      status:
+        type: string
+    type: object
+  internal_modules_ai.AIRecommendationRes:
+    properties:
+      category:
+        type: string
+      citations:
+        items:
+          $ref: '#/definitions/internal_modules_ai.AICitationRes'
+        type: array
+      detection_id:
+        type: string
+      expires_at:
+        type: string
+      recommendation_id:
+        type: string
+      recommended_method:
+        type: string
+      steps:
+        items:
+          type: string
+        type: array
+      summary:
+        type: string
+    type: object
+  internal_modules_ai.RecommendationReq:
+    properties:
+      candidate_index:
+        type: integer
+      client_request_id:
+        type: string
+      detection_id:
+        type: string
+      input_source:
+        type: string
+      object_code:
+        type: string
+      selection_mode:
+        type: string
+      user_hint:
+        type: string
+    type: object
+  internal_modules_analytics.CategoryTotalRes:
+    properties:
+      category:
+        type: string
+      handled_count:
+        type: integer
+      handled_weight_g:
+        type: integer
+    type: object
+  internal_modules_analytics.DailyStatRes:
+    properties:
+      activity_count:
+        type: integer
+      date:
+        type: string
+      handled_count:
+        type: integer
+      handled_weight_g:
+        type: integer
+    type: object
+  internal_modules_analytics.DashboardRes:
+    properties:
+      date:
+        type: string
+      progress:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Progress'
+      recent_logs:
+        items:
+          $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Log'
+        type: array
+      summary:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Summary'
+      timezone:
+        type: string
+    type: object
+  internal_modules_analytics.StatisticsRes:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/internal_modules_analytics.CategoryTotalRes'
+        type: array
+      daily:
+        items:
+          $ref: '#/definitions/internal_modules_analytics.DailyStatRes'
+        type: array
+      from:
+        type: string
+      method_counts:
+        additionalProperties:
+          format: int64
+          type: integer
+        type: object
+      summary:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Summary'
+      timezone:
+        type: string
+      to:
+        type: string
+    type: object
+  internal_modules_auth.AuthTokensRes:
+    properties:
+      access_expires_at:
+        type: string
+      access_token:
+        type: string
+      refresh_expires_at:
+        type: string
+      refresh_token:
+        type: string
+      session_id:
+        type: string
+      user:
+        $ref: '#/definitions/internal_modules_auth.UserRes'
+    type: object
+  internal_modules_auth.LoginReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  internal_modules_auth.RefreshTokenReq:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  internal_modules_auth.RegisterReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      timezone:
+        type: string
+    type: object
+  internal_modules_auth.UserRes:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      progress:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Progress'
+      timezone:
+        type: string
+    type: object
+  internal_modules_guides.GuideRes:
+    properties:
+      category:
+        type: string
+      cautions:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      keywords:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      publication_status:
+        type: string
+      recommended_method:
+        type: string
+      reviewed_at:
+        type: string
+      reviewer:
+        type: string
+      slug:
+        type: string
+      source_url:
+        type: string
+      steps:
+        items:
+          type: string
+        type: array
+      summary:
+        type: string
+    type: object
+  internal_modules_logs.LogWithProgressRes:
+    properties:
+      activity_date:
+        type: string
+      activity_timezone:
+        type: string
+      category:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      item_count:
+        type: integer
+      method:
+        type: string
+      notes:
+        type: string
+      progress:
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Progress'
+      quantity_kind:
+        type: string
+      updated_at:
+        type: string
+      version:
+        type: integer
+      weight_g:
+        type: integer
+    type: object
+  internal_modules_logs.UpdateLogReq:
+    properties:
+      activity_date:
+        type: string
+      category:
+        type: string
+      item_count:
+        type: integer
+      method:
+        type: string
+      notes:
+        type: string
+      quantity_kind:
+        type: string
+      version:
+        type: integer
+      weight_g:
+        type: integer
+    type: object
+  internal_modules_system.CapabilitiesRes:
+    properties:
+      achievements:
+        type: boolean
+      ai_recommendation:
+        type: boolean
+      ai_scan:
+        type: boolean
+      photos:
+        type: boolean
+      recycling_points:
+        type: boolean
+      reminders:
+        type: boolean
+    type: object
+  internal_modules_system.HealthLiveRes:
+    properties:
+      live:
+        type: boolean
+    type: object
+  internal_modules_system.HealthReadyRes:
+    properties:
+      ready:
+        type: boolean
+    type: object
+  internal_modules_system.LimitsRes:
+    properties:
+      activity_date_past_days:
+        type: integer
+      email_max_length:
+        type: integer
+      item_count:
+        $ref: '#/definitions/internal_modules_system.RangeLimit'
+      kg_max_decimal_places:
+        type: integer
+      name_length:
+        $ref: '#/definitions/internal_modules_system.RangeLimit'
+      notes_max_length:
+        type: integer
+      password_length:
+        $ref: '#/definitions/internal_modules_system.RangeLimit'
+      weight_g:
+        $ref: '#/definitions/internal_modules_system.RangeLimit'
+    type: object
+  internal_modules_system.MetadataRes:
+    properties:
+      ai_object_catalog_version:
+        type: string
+      capabilities:
+        $ref: '#/definitions/internal_modules_system.CapabilitiesRes'
+      categories:
+        items:
+          type: string
+        type: array
+      limits:
+        $ref: '#/definitions/internal_modules_system.LimitsRes'
+      methods:
+        items:
+          type: string
+        type: array
+    type: object
+  internal_modules_system.RangeLimit:
+    properties:
+      max:
+        type: integer
+      min:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Documentation for WasteNot Android Backend (Waste Logging, Gamification,
+    Guides & AI Scan)
+  title: WasteNot API
+  version: "1.0"
+paths:
+  /health/live:
+    get:
+      description: Check if the API process is alive
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_modules_system.HealthLiveRes'
+      summary: Liveness Probe
+      tags:
+      - System
+  /health/ready:
+    get:
+      description: Check if PostgreSQL database and core schema migrations are ready
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_modules_system.HealthReadyRes'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      summary: Readiness Probe
+      tags:
+      - System
+  /v1/ai/detections:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a JPEG or PNG image (max 5MB) to detect waste object candidates
+      parameters:
+      - description: Idempotency UUID
+        in: formData
+        name: client_request_id
+        required: true
+        type: string
+      - description: Waste image file (image/jpeg or image/png)
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes'
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Detect Waste Object from Image
+      tags:
+      - AI Scan
+  /v1/ai/detections/{id}:
+    delete:
+      description: Soft-delete an AI detection operation and its snapshot
+      parameters:
+      - description: Detection UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete AI Detection Session
+      tags:
+      - AI Scan
+  /v1/ai/objects:
+    get:
+      description: Retrieve the catalog of waste objects detectable by the AI vision
+        service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get AI Object Catalog
+      tags:
+      - AI Scan
+  /v1/ai/recommendations:
+    post:
+      consumes:
+      - application/json
+      description: Request an AI disposal recommendation from a detection candidate
+        or manual object selection
+      parameters:
+      - description: Recommendation Input
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/internal_modules_ai.RecommendationReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes'
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "410":
+          description: Gone
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Generate AI Waste Disposal Recommendation
+      tags:
+      - AI Scan
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate with email and password to receive access and refresh
+        tokens
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/internal_modules_auth.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      summary: Login User
+      tags:
+      - Auth
+  /v1/auth/logout:
+    post:
+      description: Revoke the current authenticated session and refresh token chain
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Logout Session
+      tags:
+      - Auth
+  /v1/auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Rotate refresh token and issue a new access/refresh token pair
+      parameters:
+      - description: Refresh Token Payload
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/internal_modules_auth.RefreshTokenReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      summary: Refresh Access Token
+      tags:
+      - Auth
+  /v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new WasteNot user account and issue initial session
+        tokens
+      parameters:
+      - description: Registration Data
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/internal_modules_auth.RegisterReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      summary: Register User
+      tags:
+      - Auth
+  /v1/dashboard:
+    get:
+      description: Retrieve today's waste summary, recent logs, and gamification progress
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Today's Dashboard
+      tags:
+      - Analytics
+  /v1/me:
+    get:
+      description: Retrieve the authenticated user's profile and gamification progress
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Current User Profile
+      tags:
+      - Auth
+  /v1/metadata:
+    get:
+      description: Retrieve supported waste categories, methods, validation limits,
+        and feature capabilities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Client Metadata & Capabilities
+      tags:
+      - System
+  /v1/statistics:
+    get:
+      description: Retrieve aggregated waste statistics, daily trends, and category
+        breakdown for a date range
+      parameters:
+      - description: Start Date (YYYY-MM-DD, defaults to 6 days before 'to')
+        in: query
+        name: from
+        type: string
+      - description: End Date (YYYY-MM-DD, defaults to user's today)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Waste Statistics
+      tags:
+      - Analytics
+  /v1/waste-guide:
+    get:
+      description: Search and filter waste disposal guides with cursor pagination
+      parameters:
+      - description: Search query (max 100 chars)
+        in: query
+        name: q
+        type: string
+      - description: Waste Category (ORGANIC, PLASTIC, PAPER, GLASS, METAL, ELECTRONIC,
+          OTHER)
+        in: query
+        name: category
+        type: string
+      - description: Page size (1-100, default 20)
+        in: query
+        name: limit
+        type: integer
+      - description: Opaque pagination cursor
+        in: query
+        name: cursor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Waste Guides
+      tags:
+      - Guides
+  /v1/waste-guide/{id}:
+    get:
+      description: Retrieve detailed instructions and tips for a specific waste guide
+        entry
+      parameters:
+      - description: Guide ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Waste Guide by ID
+      tags:
+      - Guides
+  /v1/waste-logs:
+    get:
+      description: Retrieve cursor-paginated waste logs filtered by category, method,
+        and date range
+      parameters:
+      - description: Waste Category (ORGANIC, PLASTIC, PAPER, GLASS, METAL, ELECTRONIC,
+          OTHER)
+        in: query
+        name: category
+        type: string
+      - description: Handling Method (REDUCE, REUSE, RECYCLE, TRASH)
+        in: query
+        name: method
+        type: string
+      - description: Start Date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End Date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      - description: Page size (1-100, default 20)
+        in: query
+        name: limit
+        type: integer
+      - description: Opaque pagination cursor
+        in: query
+        name: cursor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List Waste Logs
+      tags:
+      - Waste Logs
+    post:
+      consumes:
+      - application/json
+      description: Record a new waste management activity with idempotency support
+        via client_request_id
+      parameters:
+      - description: Waste Log Input
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.LogInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "410":
+          description: Gone
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create Waste Log
+      tags:
+      - Waste Logs
+  /v1/waste-logs/{id}:
+    delete:
+      description: Soft-delete a waste log entry with If-Match version precondition
+      parameters:
+      - description: Waste Log UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Quoted version number (e.g. \
+        in: header
+        name: If-Match
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "428":
+          description: Precondition Required
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Waste Log
+      tags:
+      - Waste Logs
+    get:
+      description: Retrieve a specific waste log entry belonging to the authenticated
+        user
+      parameters:
+      - description: Waste Log UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Waste Log by ID
+      tags:
+      - Waste Logs
+    patch:
+      consumes:
+      - application/json
+      description: Partially update an existing waste log using optimistic concurrency
+        control (version)
+      parameters:
+      - description: Waste Log UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Waste Log Patch Payload
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/internal_modules_logs.UpdateLogReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update Waste Log
+      tags:
+      - Waste Logs
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

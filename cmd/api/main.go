@@ -3,63 +3,82 @@ package main
 import (
 	"context"
 	"log/slog"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 	_ "time/tzdata"
 
+	"github.com/gofiber/fiber/v3"
 	"github.com/waste-not-app/waste-not-backend/internal/api"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/database"
 )
 
+// @title WasteNot API
+// @version 1.0
+// @description API Documentation for WasteNot Android Backend (Waste Logging, Gamification, Guides & AI Scan)
+// @host localhost:8080
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	if run(log) != nil {
-		log.Error("API stopped; check configuration and database availability")
+	slog.SetDefault(log)
+
+	if err := run(log); err != nil {
+		log.Error("API stopped; check configuration and database availability", "detail", err)
 		os.Exit(1)
 	}
 }
+
 func run(log *slog.Logger) error {
-	c, e := config.Load()
-	if e != nil {
-		log.Error(e.Error())
-		return e
+	cfg, err := config.Load()
+	if err != nil {
+		log.Error(err.Error())
+		return err
 	}
+
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
 	startup, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	db, e := database.Open(startup, c.DatabaseURL)
-	if e != nil {
-		return e
+
+	dbPool, err := database.Open(startup, cfg.DatabaseURL)
+	if err != nil {
+		return err
 	}
-	defer db.Close()
-	app, e := api.New(db, c, log)
-	if e != nil {
-		return e
+	defer dbPool.Close()
+
+	srv, err := api.New(dbPool, cfg, log)
+	if err != nil {
+		return err
 	}
-	server := &http.Server{Addr: c.Address, Handler: app.Handler(), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 40 * time.Second, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 16 * 1024}
+
 	result := make(chan error, 1)
-	go func() { log.Info("API listening", "address", c.Address); result <- server.ListenAndServe() }()
+	go func() {
+		log.Info("API listening", "address", cfg.Address)
+		result <- srv.App.Listen(cfg.Address, fiber.ListenConfig{
+			DisableStartupMessage: true,
+		})
+	}()
+
 	tick := time.NewTicker(time.Minute)
 	defer tick.Stop()
+
 	for {
 		select {
 		case <-ctx.Done():
 			shutdown, cancel := context.WithTimeout(context.Background(), 40*time.Second)
 			defer cancel()
-			return server.Shutdown(shutdown)
-		case e := <-result:
-			if e == http.ErrServerClosed {
-				return nil
-			}
-			return e
+			return srv.App.ShutdownWithContext(shutdown)
+		case err := <-result:
+			return err
 		case <-tick.C:
 			cleanup, cancel := context.WithTimeout(ctx, 10*time.Second)
-			if database.Cleanup(cleanup, db) != nil {
+			if database.Cleanup(cleanup, dbPool) != nil {
 				log.Error("cleanup failed")
 			}
 			cancel()
