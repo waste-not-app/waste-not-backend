@@ -12,7 +12,7 @@
     "guide_refs": [
       {
         "guide_id": "pilot-glass-bottle",
-        "version": 5
+        "version": 6
       }
     ],
     "missing_context": [
@@ -26,7 +26,7 @@
     "recommendation_basis": null,
     "recommendation_id": "00000000-0000-0000-0000-000000000009",
     "recommendation_scope": null,
-    "recommendation_version": "pilot-policy-06",
+    "recommendation_version": "pilot-policy-08",
     "recommended_method": null,
     "source_details": [
       {
@@ -43,7 +43,12 @@
     ],
     "special_handling": false,
     "status": "NEEDS_CONTEXT",
-    "steps": []
+    "steps": [
+      "Periksa jenis kaca, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
+      "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
+      "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
+      "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+    ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"
 }

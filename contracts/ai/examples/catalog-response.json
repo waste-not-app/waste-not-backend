@@ -549,6 +549,55 @@
         "label": "Tutup botol logam",
         "object_key": "metal_bottle_cap",
         "special_handling": false
+      },
+      {
+        "category": "ORGANIC",
+        "guide_status": "DRAFT",
+        "label": "Barang organik lain",
+        "object_key": "other_organic",
+        "special_handling": false
+      },
+      {
+        "category": "PLASTIC",
+        "guide_status": "DRAFT",
+        "label": "Barang plastik lain",
+        "object_key": "other_plastic",
+        "special_handling": false
+      },
+      {
+        "category": "PAPER",
+        "guide_status": "DRAFT",
+        "label": "Barang kertas / kardus lain",
+        "object_key": "other_paper",
+        "special_handling": false
+      },
+      {
+        "category": "GLASS",
+        "guide_status": "DRAFT",
+        "label": "Barang kaca lain",
+        "object_key": "other_glass",
+        "special_handling": false
+      },
+      {
+        "category": "METAL",
+        "guide_status": "DRAFT",
+        "label": "Barang logam lain",
+        "object_key": "other_metal",
+        "special_handling": false
+      },
+      {
+        "category": "ELECTRONIC",
+        "guide_status": "DRAFT",
+        "label": "Elektronik / baterai lain",
+        "object_key": "other_electronic",
+        "special_handling": true
+      },
+      {
+        "category": "OTHER",
+        "guide_status": "DRAFT",
+        "label": "Barang lain / bahan belum diketahui",
+        "object_key": "other_other",
+        "special_handling": false
       }
     ],
     "mapping_version": "drinking-waste-reviewed-02",

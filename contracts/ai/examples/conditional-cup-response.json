@@ -31,7 +31,7 @@
     "recommendation_basis": "CONDITIONAL",
     "recommendation_id": "00000000-0000-0000-0000-00000000000a",
     "recommendation_scope": "HANDLING",
-    "recommendation_version": "pilot-policy-06",
+    "recommendation_version": "pilot-policy-08",
     "recommended_method": "REUSE",
     "source_details": [
       {

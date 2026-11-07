@@ -1143,7 +1143,7 @@
             "title": "Recommendation Scope"
           },
           "recommendation_version": {
-            "default": "pilot-policy-06",
+            "default": "pilot-policy-08",
             "title": "Recommendation Version",
             "type": "string"
           },
@@ -2072,7 +2072,7 @@
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000008",
                         "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": null,
                         "source_details": [
                           {
@@ -2082,32 +2082,19 @@
                             "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
-                          },
-                          {
-                            "checked_at": "2026-11-04",
-                            "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Edukasi PET resin 1 dan HDPE resin 2; bukan daftar penerima lokal atau identifikasi material dari foto.",
-                            "title": "Recycle City: Materials Recovery Center",
-                            "url": "https://www3.epa.gov/recyclecity/recovery.htm"
-                          },
-                          {
-                            "checked_at": "2026-11-04",
-                            "publisher": "Balai POM di Tasikmalaya",
-                            "region": "Indonesia",
-                            "scope_note": "Kode resin mengenali bahan; tidak membuktikan keamanan kontak pangan, kelayakan penggunaan ulang atau penerimaan daur ulang.",
-                            "title": "Cerdas Memilih Kemasan: pengenalan kode plastik",
-                            "url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
                           }
                         ],
                         "source_urls": [
-                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
-                          "https://www3.epa.gov/recyclecity/recovery.htm",
-                          "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
+                          "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                         ],
                         "special_handling": false,
                         "status": "NEEDS_CONTEXT",
-                        "steps": []
+                        "steps": [
+                          "Periksa jenis plastik, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
+                          "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
+                          "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
+                          "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+                        ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
                     }
@@ -2141,33 +2128,28 @@
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000006",
                         "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": null,
                         "source_details": [
                           {
-                            "checked_at": "2026-10-20",
+                            "checked_at": "2026-11-04",
                             "publisher": "US EPA",
                             "region": "Amerika Serikat",
-                            "scope_note": "Prinsip penggunaan ulang peralatan makan/minum yang dirancang untuk digunakan berulang. Bukan sertifikasi keamanan objek dari foto.",
-                            "title": "Reusable food service ware: collection, washing and return",
-                            "url": "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware"
-                          },
-                          {
-                            "checked_at": "2026-10-20",
-                            "publisher": "Pemerintah Kabupaten Banjarnegara",
-                            "region": "Banjarnegara, Indonesia",
-                            "scope_note": "Contoh kebijakan lokal yang mendorong peralatan guna ulang. Tidak menjadi aturan penerimaan fasilitas seluruh Indonesia.",
-                            "title": "Guna ulang peralatan makan-minum dan pemilahan dari sumber",
-                            "url": "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+                            "scope_note": "Jangan mencampur atau membuang limbah kimia sembarangan; ikuti label dan tanyakan pengelola setempat.",
+                            "title": "Household Hazardous Waste: safe management",
+                            "url": "https://www.epa.gov/hw/household-hazardous-waste-hhw"
                           }
                         ],
                         "source_urls": [
-                          "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
-                          "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+                          "https://www.epa.gov/hw/household-hazardous-waste-hhw"
                         ],
                         "special_handling": true,
                         "status": "NEEDS_CONTEXT",
-                        "steps": []
+                        "steps": [
+                          "Periksa label dan jenis risiko tanpa membongkar, mencampur isi, atau mencoba mengolah barang.",
+                          "Jangan gunakan ulang atau campurkan barang berisiko dengan aliran sampah umum sebelum jenis bahayanya jelas.",
+                          "Hubungi pengelola sampah atau DLH setempat dengan menjelaskan jenis barang serta risiko yang diketahui."
+                        ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
                     }
@@ -2187,19 +2169,19 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 5
+                            "version": 6
                           }
                         ],
                         "missing_context": [],
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Rekomendasi otomatis belum tersedia; periksa panduan dan coba lagi setelah konteks atau layanan siap.",
+                        "reason": "Pilihan metode untuk Botol kaca belum dapat dipastikan. Berikut arahan awal berdasarkan informasi yang tersedia.",
                         "reason_code": "LLM_UNAVAILABLE",
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000001",
                         "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": null,
                         "source_details": [
                           {
@@ -2216,7 +2198,12 @@
                         ],
                         "special_handling": false,
                         "status": "UNAVAILABLE",
-                        "steps": []
+                        "steps": [
+                          "Periksa jenis kaca, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
+                          "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
+                          "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
+                          "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+                        ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
                     }
@@ -2236,7 +2223,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 5
+                            "version": 6
                           }
                         ],
                         "missing_context": [
@@ -2250,7 +2237,7 @@
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000009",
                         "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": null,
                         "source_details": [
                           {
@@ -2267,7 +2254,12 @@
                         ],
                         "special_handling": false,
                         "status": "NEEDS_CONTEXT",
-                        "steps": []
+                        "steps": [
+                          "Periksa jenis kaca, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
+                          "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
+                          "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
+                          "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+                        ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
                     }
@@ -2318,7 +2310,7 @@
                         "recommendation_basis": "CONDITIONAL",
                         "recommendation_id": "00000000-0000-0000-0000-00000000000a",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": "REUSE",
                         "source_details": [
                           {
@@ -2374,7 +2366,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 5
+                            "version": 6
                           }
                         ],
                         "missing_context": [],
@@ -2386,7 +2378,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-00000000000b",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
@@ -2441,7 +2433,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000007",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
@@ -2502,7 +2494,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 5
+                            "version": 6
                           }
                         ],
                         "missing_context": [],
@@ -2514,7 +2506,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000002",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
@@ -2557,7 +2549,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 5
+                            "version": 6
                           }
                         ],
                         "missing_context": [],
@@ -2569,7 +2561,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000004",
                         "recommendation_scope": "PREVENTION",
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": "REDUCE",
                         "source_details": [
                           {
@@ -2622,7 +2614,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000003",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": "REUSE",
                         "source_details": [
                           {
@@ -2676,7 +2668,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000005",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-06",
+                        "recommendation_version": "pilot-policy-08",
                         "recommended_method": "TRASH",
                         "source_details": [
                           {
