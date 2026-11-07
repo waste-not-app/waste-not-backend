@@ -11,9 +11,9 @@ Diperiksa 7 November 2026. Host `okta-mlops`, SSH `proxy.bccdev.id:11049`, alias
 
 ## Verifikasi dan promosi image
 
-Job verify: Go mod verify, pin kontrak AI, tes helper deployment, PostgreSQL18, race detector/vet/format, vulncheck, binary build dan Docker build. Artifact image berasal dari job yang sama; deploy tidak membangun ulang image di VM.
+Satu job menjalankan Go mod verify, pin kontrak AI, tes helper deployment, PostgreSQL18, race detector/vet/format, vulncheck, binary build dan Docker build. Image yang telah diuji disimpan lokal pada runner dan diteruskan ke deployment dalam job yang sama. Alur ini dapat berjalan saat kuota penyimpanan artifact GitHub habis.
 
-Job deploy hanya main non-PR. SSH memakai key khusus dan known-hosts wajib. Image dikirim lewat `docker load`; helper dipasang root:root pada `/usr/local/sbin/wastenot-backend-deploy`. File konfigurasi `/etc/wastenot/wastenot.env` wajib root-owned0600. Helper mem-parsing data konfigurasi, tidak menjalankannya sebagai shell, serta memakai env-file temporer0600 agar credential tidak muncul di argumen proses/log.
+Langkah packaging, SSH dan deployment hanya dijalankan untuk main non-PR setelah seluruh pemeriksaan lulus. SSH memakai key khusus dan known-hosts wajib. Image dikirim lewat `docker load`; helper dipasang root:root pada `/usr/local/sbin/wastenot-backend-deploy`. File konfigurasi `/etc/wastenot/wastenot.env` wajib root-owned0600. Helper mem-parsing data konfigurasi, tidak menjalankannya sebagai shell, serta memakai env-file temporer0600 agar credential tidak muncul di argumen proses/log.
 
 Konfigurasi VM memakai DATABASE_URL_APP, DATABASE_URL_MIGRATE, JWT_SECRET_BASE64 serta flag/origin/token AI. `DATABASE_URL` runtime berasal dari DATABASE_URL_APP; migrator hanya menerima DATABASE_URL_MIGRATE. Jangan memberikan credential migrator atau key Gemini kepada API. Capability AI default false bila tidak disetel.
 
@@ -59,5 +59,7 @@ Script operator berikut membuat dua akun fixture, memakai satu generasi Gemini n
 python3 scripts/smoke_public.py --ssh cp-bcc --image /path/to/bottle.jpg \
   --output /path/to/smoke-result.json
 ```
+
+Untuk host tanpa alias SSH, gunakan `--ssh dev@proxy.bccdev.id --ssh-port 11049`. Probe memeriksa identitas dan hash model gabungan v4 + COCO11s. Pengujian release pemulihan dapat mengisi `--expected-model-version` dan `--expected-model-sha256` sesuai manifest model release yang diuji.
 
 Exit0 berarti alur sukses lengkap; exit3 mencatat fallback timeout upstream yang terkendali, bukan keberhasilan alur lengkap. Readiness dan unit test saja tidak menggantikan smoke ini atau penerimaan Android.

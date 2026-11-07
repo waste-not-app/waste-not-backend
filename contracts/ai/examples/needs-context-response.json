@@ -26,33 +26,28 @@
     "recommendation_basis": null,
     "recommendation_id": "00000000-0000-0000-0000-000000000006",
     "recommendation_scope": null,
-    "recommendation_version": "pilot-policy-06",
+    "recommendation_version": "pilot-policy-08",
     "recommended_method": null,
     "source_details": [
       {
-        "checked_at": "2026-10-20",
+        "checked_at": "2026-11-04",
         "publisher": "US EPA",
         "region": "Amerika Serikat",
-        "scope_note": "Prinsip penggunaan ulang peralatan makan/minum yang dirancang untuk digunakan berulang. Bukan sertifikasi keamanan objek dari foto.",
-        "title": "Reusable food service ware: collection, washing and return",
-        "url": "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware"
-      },
-      {
-        "checked_at": "2026-10-20",
-        "publisher": "Pemerintah Kabupaten Banjarnegara",
-        "region": "Banjarnegara, Indonesia",
-        "scope_note": "Contoh kebijakan lokal yang mendorong peralatan guna ulang. Tidak menjadi aturan penerimaan fasilitas seluruh Indonesia.",
-        "title": "Guna ulang peralatan makan-minum dan pemilahan dari sumber",
-        "url": "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+        "scope_note": "Jangan mencampur atau membuang limbah kimia sembarangan; ikuti label dan tanyakan pengelola setempat.",
+        "title": "Household Hazardous Waste: safe management",
+        "url": "https://www.epa.gov/hw/household-hazardous-waste-hhw"
       }
     ],
     "source_urls": [
-      "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware",
-      "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
+      "https://www.epa.gov/hw/household-hazardous-waste-hhw"
     ],
     "special_handling": true,
     "status": "NEEDS_CONTEXT",
-    "steps": []
+    "steps": [
+      "Periksa label dan jenis risiko tanpa membongkar, mencampur isi, atau mencoba mengolah barang.",
+      "Jangan gunakan ulang atau campurkan barang berisiko dengan aliran sampah umum sebelum jenis bahayanya jelas.",
+      "Hubungi pengelola sampah atau DLH setempat dengan menjelaskan jenis barang serta risiko yang diketahui."
+    ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"
 }

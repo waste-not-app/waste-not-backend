@@ -14,7 +14,7 @@
     "guide_refs": [
       {
         "guide_id": "pilot-glass-bottle",
-        "version": 5
+        "version": 6
       }
     ],
     "missing_context": [],
@@ -26,7 +26,7 @@
     "recommendation_basis": "CONFIRMED",
     "recommendation_id": "00000000-0000-0000-0000-00000000000b",
     "recommendation_scope": "HANDLING",
-    "recommendation_version": "pilot-policy-06",
+    "recommendation_version": "pilot-policy-08",
     "recommended_method": "RECYCLE",
     "source_details": [
       {

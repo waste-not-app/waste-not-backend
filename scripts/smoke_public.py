@@ -15,6 +15,9 @@ parser.add_argument("--image", type=Path, required=True)
 parser.add_argument(
     "--ssh", required=True, help="Authorized SSH host alias for scoped fixture cleanup"
 )
+parser.add_argument("--ssh-port", type=int, default=22)
+parser.add_argument("--expected-model-version", default="broad-coco-b0f633193403")
+parser.add_argument("--expected-model-sha256", default="b0f633193403d0f6c475f3ebd616ce55d47b738ff115d867efed92de193c687c")
 parser.add_argument("--output", type=Path, required=True)
 args = parser.parse_args()
 BASE = args.base.rstrip("/")
@@ -85,6 +88,8 @@ def sql(query):
             "ssh",
             "-o",
             "BatchMode=yes",
+            "-p",
+            str(args.ssh_port),
             args.ssh,
             "sudo -n docker exec -i wastenot-db psql -At -U wastenot -d wastenot -v ON_ERROR_STOP=1",
         ],
@@ -175,6 +180,7 @@ try:
     status, value = upload(token)
     assert status == 201, (status, value)
     detection = value["data"]
+    assert detection["model_version"] == args.expected_model_version
     obj = next(
         item
         for item in detection["objects"]
@@ -255,6 +261,7 @@ try:
         rec["provider"] == "gemini"
         and rec["prototype_only"] is False
         and rec["recommended_method"] == "RECYCLE"
+        and rec["recommendation_version"] == "pilot-policy-08"
     )
     assert rec["recommendation_scope"] == "HANDLING" and all(
         item["version"] == 6 for item in rec["guide_refs"]
@@ -306,7 +313,7 @@ try:
         + users[0]
         + "';"
     )
-    expected = "t|PLASTIC|RECYCLE|gemini|false|0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1"
+    expected = "t|PLASTIC|RECYCLE|gemini|false|" + args.expected_model_sha256
     assert sql(query) == expected
     checks.append("database provenance retains real model hash and Gemini decision")
     status, value = call("/v1/statistics", token=token)

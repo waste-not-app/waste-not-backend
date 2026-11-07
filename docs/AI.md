@@ -1,5 +1,9 @@
 # Adapter AI
 
+Kontrak disinkronkan dengan `pilot-policy-08` dari AI commit `5ae4670bb812e783672d95c96f4b447b47744697`. Kedua pin mengunci 34 artifact identik. Perubahan schema memperbarui default versi rekomendasi. Adapter Go memakai schema tersebut serta snapshot kelas/checksum dari worker aktif.
+
+Pengujian `TestPythonCombinedDetectionWorker` menguji foto botol publik melalui Go, PostgreSQL, detektor v4 + COCO11s nyata dan keputusan Python dengan provider fixture. Hasil memeriksa versi gabungan, rekomendasi kaca berisiko tajam, sumber/peringatan, replay dan konfirmasi simpan. Untuk menjalankannya, isi `TEST_DATABASE_URL`, `TEST_AI_DETECTION_URL`, `TEST_AI_DETECTION_TOKEN`, `TEST_AI_RECOMMENDATION_URL`, `TEST_AI_RECOMMENDATION_TOKEN` dan `TEST_AI_IMAGE`. Worker keputusan pengujian memakai fixture/draft secara eksplisit. Test dilewati ketika worker/gambar pengujian belum disediakan.
+
 Worker Python sekarang dimiliki [waste-not-ai](https://github.com/waste-not-app/waste-not-ai). Riwayatnya diekstrak dari Android `c1258596cb71bc7b95dc9a4f140f55f759815c4e`; source/runtime tidak lagi dipaketkan bersama Go. Python memiliki mapping, threshold, policy/evidence, kondisi berisiko dan Gemini. Go memiliki auth, ownership, rate limit, dedup, TTL, snapshot dan transaksi simpan. Tidak ada subprocess Python per request atau key Gemini pada Go.
 
 ## Konfigurasi
