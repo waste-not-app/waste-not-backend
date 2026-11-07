@@ -1,0 +1,2157 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API Documentation for WasteNot Android Backend (Waste Logging, Gamification, Guides \u0026 AI Scan)",
+        "title": "WasteNot API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/health/live": {
+            "get": {
+                "description": "Check if the API process is alive",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Liveness Probe",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_system.HealthLiveRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/health/ready": {
+            "get": {
+                "description": "Check if PostgreSQL database and core schema migrations are ready",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Readiness Probe",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_system.HealthReadyRes"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/ai/detections": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload a JPEG or PNG image (max 5MB) to detect waste object candidates",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AI Scan"
+                ],
+                "summary": "Detect Waste Object from Image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Idempotency UUID",
+                        "name": "client_request_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Waste image file (image/jpeg or image/png)",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes"
+                        }
+                    },
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/ai/detections/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Soft-delete an AI detection operation and its snapshot",
+                "tags": [
+                    "AI Scan"
+                ],
+                "summary": "Delete AI Detection Session",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Detection UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/ai/objects": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the catalog of waste objects detectable by the AI vision service",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AI Scan"
+                ],
+                "summary": "Get AI Object Catalog",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/ai/recommendations": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Request an AI disposal recommendation from a detection candidate or manual object selection",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AI Scan"
+                ],
+                "summary": "Generate AI Waste Disposal Recommendation",
+                "parameters": [
+                    {
+                        "description": "Recommendation Input",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_ai.RecommendationReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes"
+                        }
+                    },
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "410": {
+                        "description": "Gone",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/login": {
+            "post": {
+                "description": "Authenticate with email and password to receive access and refresh tokens",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login User",
+                "parameters": [
+                    {
+                        "description": "Login Credentials",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_auth.LoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/logout": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Revoke the current authenticated session and refresh token chain",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout Session",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/refresh": {
+            "post": {
+                "description": "Rotate refresh token and issue a new access/refresh token pair",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh Access Token",
+                "parameters": [
+                    {
+                        "description": "Refresh Token Payload",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_auth.RefreshTokenReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/register": {
+            "post": {
+                "description": "Register a new WasteNot user account and issue initial session tokens",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register User",
+                "parameters": [
+                    {
+                        "description": "Registration Data",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_auth.RegisterReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/dashboard": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve today's waste summary, recent logs, and gamification progress",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get Today's Dashboard",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/me": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the authenticated user's profile and gamification progress",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get Current User Profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/metadata": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve supported waste categories, methods, validation limits, and feature capabilities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Get Client Metadata \u0026 Capabilities",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/statistics": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve aggregated waste statistics, daily trends, and category breakdown for a date range",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Analytics"
+                ],
+                "summary": "Get Waste Statistics",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start Date (YYYY-MM-DD, defaults to 6 days before 'to')",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date (YYYY-MM-DD, defaults to user's today)",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/waste-guide": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Search and filter waste disposal guides with cursor pagination",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Guides"
+                ],
+                "summary": "List Waste Guides",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search query (max 100 chars)",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Waste Category (ORGANIC, PLASTIC, PAPER, GLASS, METAL, ELECTRONIC, OTHER)",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size (1-100, default 20)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Opaque pagination cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/waste-guide/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve detailed instructions and tips for a specific waste guide entry",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Guides"
+                ],
+                "summary": "Get Waste Guide by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Guide ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/waste-logs": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve cursor-paginated waste logs filtered by category, method, and date range",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Waste Logs"
+                ],
+                "summary": "List Waste Logs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Waste Category (ORGANIC, PLASTIC, PAPER, GLASS, METAL, ELECTRONIC, OTHER)",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Handling Method (REDUCE, REUSE, RECYCLE, TRASH)",
+                        "name": "method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date (YYYY-MM-DD)",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date (YYYY-MM-DD)",
+                        "name": "to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size (1-100, default 20)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Opaque pagination cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Record a new waste management activity with idempotency support via client_request_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Waste Logs"
+                ],
+                "summary": "Create Waste Log",
+                "parameters": [
+                    {
+                        "description": "Waste Log Input",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.LogInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
+                        }
+                    },
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "410": {
+                        "description": "Gone",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/waste-logs/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a specific waste log entry belonging to the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Waste Logs"
+                ],
+                "summary": "Get Waste Log by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Waste Log UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Soft-delete a waste log entry with If-Match version precondition",
+                "tags": [
+                    "Waste Logs"
+                ],
+                "summary": "Delete Waste Log",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Waste Log UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Quoted version number (e.g. \\",
+                        "name": "If-Match",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "428": {
+                        "description": "Precondition Required",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Partially update an existing waste log using optimistic concurrency control (version)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Waste Logs"
+                ],
+                "summary": "Update Waste Log",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Waste Log UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Waste Log Patch Payload",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_logs.UpdateLogReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_waste-not-app_waste-not-backend_internal_domain.Log": {
+            "type": "object",
+            "properties": {
+                "activity_date": {
+                    "type": "string"
+                },
+                "activity_timezone": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "item_count": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "quantity_kind": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                },
+                "weight_g": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_domain.LogInput": {
+            "type": "object",
+            "properties": {
+                "activity_date": {
+                    "type": "string"
+                },
+                "ai_provenance": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Provenance"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "client_request_id": {
+                    "type": "string"
+                },
+                "item_count": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "photo_id": {
+                    "type": "string"
+                },
+                "quantity_kind": {
+                    "type": "string"
+                },
+                "weight_g": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_domain.Progress": {
+            "type": "object",
+            "properties": {
+                "active_log_count": {
+                    "type": "integer"
+                },
+                "best_streak": {
+                    "type": "integer"
+                },
+                "current_streak": {
+                    "type": "integer"
+                },
+                "has_logged_today": {
+                    "type": "boolean"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "xp": {
+                    "type": "integer"
+                },
+                "xp_into_level": {
+                    "type": "integer"
+                },
+                "xp_to_next_level": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_domain.Provenance": {
+            "type": "object",
+            "properties": {
+                "recommendation_id": {
+                    "type": "string"
+                },
+                "user_confirmed_method": {
+                    "type": "boolean"
+                },
+                "user_confirmed_object": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_domain.Summary": {
+            "type": "object",
+            "properties": {
+                "activity_count": {
+                    "type": "integer"
+                },
+                "avoided_count": {
+                    "type": "integer"
+                },
+                "avoided_weight_g": {
+                    "type": "integer"
+                },
+                "handled_activity_count": {
+                    "type": "integer"
+                },
+                "recycled_activity_count": {
+                    "type": "integer"
+                },
+                "recycling_rate_basis": {
+                    "type": "string"
+                },
+                "recycling_rate_percent": {
+                    "type": "number"
+                },
+                "total_handled_count": {
+                    "type": "integer"
+                },
+                "total_handled_weight_g": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "retryable": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "error": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo": {
+            "type": "object",
+            "properties": {
+                "has_more": {
+                    "type": "boolean"
+                },
+                "next_cursor": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Log"
+                    }
+                },
+                "page": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_modules_guides.GuideRes"
+                    }
+                },
+                "page": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Log"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_ai.AICatalogRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_ai.AIDetectionRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_ai.AIRecommendationRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_analytics.DashboardRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_analytics.StatisticsRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_auth.AuthTokensRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_auth.UserRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_guides.GuideRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_logs.LogWithProgressRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_system.MetadataRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_ai.AICatalogObjectRes": {
+            "type": "object",
+            "properties": {
+                "default_category": {
+                    "type": "string"
+                },
+                "display_name_id": {
+                    "type": "string"
+                },
+                "object_code": {
+                    "type": "string"
+                },
+                "supports_direct_ai": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "internal_modules_ai.AICatalogRes": {
+            "type": "object",
+            "properties": {
+                "catalog_version": {
+                    "type": "string"
+                },
+                "objects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_modules_ai.AICatalogObjectRes"
+                    }
+                }
+            }
+        },
+        "internal_modules_ai.AICitationRes": {
+            "type": "object",
+            "properties": {
+                "guide_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_ai.AIDetectionCandidateRes": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "confidence": {
+                    "type": "number"
+                },
+                "display_name_id": {
+                    "type": "string"
+                },
+                "object_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_ai.AIDetectionRes": {
+            "type": "object",
+            "properties": {
+                "candidates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_modules_ai.AIDetectionCandidateRes"
+                    }
+                },
+                "detection_id": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_ai.AIRecommendationRes": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "citations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_modules_ai.AICitationRes"
+                    }
+                },
+                "detection_id": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "recommendation_id": {
+                    "type": "string"
+                },
+                "recommended_method": {
+                    "type": "string"
+                },
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "summary": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_ai.RecommendationReq": {
+            "type": "object",
+            "properties": {
+                "candidate_index": {
+                    "type": "integer"
+                },
+                "client_request_id": {
+                    "type": "string"
+                },
+                "detection_id": {
+                    "type": "string"
+                },
+                "input_source": {
+                    "type": "string"
+                },
+                "object_code": {
+                    "type": "string"
+                },
+                "selection_mode": {
+                    "type": "string"
+                },
+                "user_hint": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_analytics.CategoryTotalRes": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "handled_count": {
+                    "type": "integer"
+                },
+                "handled_weight_g": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_modules_analytics.DailyStatRes": {
+            "type": "object",
+            "properties": {
+                "activity_count": {
+                    "type": "integer"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "handled_count": {
+                    "type": "integer"
+                },
+                "handled_weight_g": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_modules_analytics.DashboardRes": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "progress": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Progress"
+                },
+                "recent_logs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Log"
+                    }
+                },
+                "summary": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Summary"
+                },
+                "timezone": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_analytics.StatisticsRes": {
+            "type": "object",
+            "properties": {
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_modules_analytics.CategoryTotalRes"
+                    }
+                },
+                "daily": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_modules_analytics.DailyStatRes"
+                    }
+                },
+                "from": {
+                    "type": "string"
+                },
+                "method_counts": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "summary": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Summary"
+                },
+                "timezone": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.AuthTokensRes": {
+            "type": "object",
+            "properties": {
+                "access_expires_at": {
+                    "type": "string"
+                },
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_expires_at": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "session_id": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/internal_modules_auth.UserRes"
+                }
+            }
+        },
+        "internal_modules_auth.LoginReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.RefreshTokenReq": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.RegisterReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "timezone": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.UserRes": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "progress": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Progress"
+                },
+                "timezone": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_guides.GuideRes": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "cautions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publication_status": {
+                    "type": "string"
+                },
+                "recommended_method": {
+                    "type": "string"
+                },
+                "reviewed_at": {
+                    "type": "string"
+                },
+                "reviewer": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "source_url": {
+                    "type": "string"
+                },
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "summary": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_logs.LogWithProgressRes": {
+            "type": "object",
+            "properties": {
+                "activity_date": {
+                    "type": "string"
+                },
+                "activity_timezone": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "item_count": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "progress": {
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Progress"
+                },
+                "quantity_kind": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                },
+                "weight_g": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_modules_logs.UpdateLogReq": {
+            "type": "object",
+            "properties": {
+                "activity_date": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "item_count": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "quantity_kind": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                },
+                "weight_g": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_modules_system.CapabilitiesRes": {
+            "type": "object",
+            "properties": {
+                "achievements": {
+                    "type": "boolean"
+                },
+                "ai_recommendation": {
+                    "type": "boolean"
+                },
+                "ai_scan": {
+                    "type": "boolean"
+                },
+                "photos": {
+                    "type": "boolean"
+                },
+                "recycling_points": {
+                    "type": "boolean"
+                },
+                "reminders": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "internal_modules_system.HealthLiveRes": {
+            "type": "object",
+            "properties": {
+                "live": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "internal_modules_system.HealthReadyRes": {
+            "type": "object",
+            "properties": {
+                "ready": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "internal_modules_system.LimitsRes": {
+            "type": "object",
+            "properties": {
+                "activity_date_past_days": {
+                    "type": "integer"
+                },
+                "email_max_length": {
+                    "type": "integer"
+                },
+                "item_count": {
+                    "$ref": "#/definitions/internal_modules_system.RangeLimit"
+                },
+                "kg_max_decimal_places": {
+                    "type": "integer"
+                },
+                "name_length": {
+                    "$ref": "#/definitions/internal_modules_system.RangeLimit"
+                },
+                "notes_max_length": {
+                    "type": "integer"
+                },
+                "password_length": {
+                    "$ref": "#/definitions/internal_modules_system.RangeLimit"
+                },
+                "weight_g": {
+                    "$ref": "#/definitions/internal_modules_system.RangeLimit"
+                }
+            }
+        },
+        "internal_modules_system.MetadataRes": {
+            "type": "object",
+            "properties": {
+                "ai_object_catalog_version": {
+                    "type": "string"
+                },
+                "capabilities": {
+                    "$ref": "#/definitions/internal_modules_system.CapabilitiesRes"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "limits": {
+                    "$ref": "#/definitions/internal_modules_system.LimitsRes"
+                },
+                "methods": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "internal_modules_system.RangeLimit": {
+            "type": "object",
+            "properties": {
+                "max": {
+                    "type": "integer"
+                },
+                "min": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
