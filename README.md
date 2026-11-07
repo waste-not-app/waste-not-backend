@@ -30,6 +30,14 @@ make run
 
 `DATABASE_URL` pada contoh `.env` memakai password placeholder. Sesuaikan dengan PostgreSQL sendiri; URL-encode password bila mengandung karakter khusus. Binary tidak membaca `.env` otomatis. `make build` menghasilkan `bin/api`, `bin/migrate`, dan `bin/guides`.
 
+### Struktur kode, sqlc, dan Swagger
+
+- Modul fitur ada di `internal/modules/<fitur>/{dto,errors,repository,service,handler}.go`; kode bersama di `internal/shared/`.
+- Query SQL ada di `sql/queries/*.sql`; kode Go-nya digenerate ke `internal/shared/db` dengan `make sqlc` (jangan edit manual).
+- **Skema ada di dua tempat:** `internal/database/001_core.sql` (dipakai runner `cmd/migrate`, checksum-nya sudah tercatat di database produksi, jangan diubah) dan `sql/migrations/*.up.sql` (hanya dibaca `sqlc`). Test `TestSchemaCopiesStayInSync` (butuh `TEST_DATABASE_URL`) memastikan keduanya menghasilkan skema yang sama. Perubahan skema berikutnya: tambahkan file migrasi baru di kedua tempat.
+- Dokumentasi endpoint: `make swag` menggenerate `docs/`. Swagger UI di `/swagger/index.html` hanya aktif bila `SWAGGER_ENABLED=true` (untuk lokal; biarkan `false` di VM).
+- Nginx di VM harus meneruskan `X-Real-IP` (lihat `deploy/nginx-location.conf`); pasang ulang dengan `sudo python3 deploy/install-routing.py deploy/nginx-location.conf` sebelum rilis ini, bila tidak rate limit login dihitung dari IP loopback yang sama untuk semua pengguna.
+
 ## API dan integrasi
 
 - [Panduan API](docs/API.md): envelope, endpoint, retry, konflik, dan contoh request.
