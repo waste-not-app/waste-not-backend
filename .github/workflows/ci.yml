@@ -11,6 +11,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   verify:
+    timeout-minutes: 25
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -40,30 +41,12 @@ jobs:
       - name: Build Docker image
         run: docker build --tag wastenot-backend:${{ github.sha }} .
       - name: Package Docker image artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           mkdir -p docker-image
           docker save wastenot-backend:${{ github.sha }} | gzip > docker-image/wastenot-backend.tar.gz
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
-        with:
-          name: docker-image-${{ github.sha }}
-          path: docker-image/wastenot-backend.tar.gz
-          retention-days: 7
-
-  deploy:
-    needs: verify
-    timeout-minutes: 10
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    concurrency:
-      group: wastenot-vm-deploy
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
-        with:
-          name: docker-image-${{ github.sha }}
-          path: docker-image
       - name: Prepare dedicated SSH identity
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY || secrets.WASTENOT_DEPLOY_KEY }}
           KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS || secrets.WASTENOT_KNOWN_HOSTS }}
@@ -72,6 +55,7 @@ jobs:
           printf '%s\n' "$DEPLOY_KEY" > "$RUNNER_TEMP/wastenot-key"
           printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/wastenot-known-hosts"
       - name: Deploy containerized release via Blue-Green deployment
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           DEPLOY_HOST: ${{ vars.VM_HOST || vars.WASTENOT_DEPLOY_HOST }}
           DEPLOY_PORT: ${{ vars.VM_PORT || vars.WASTENOT_DEPLOY_PORT }}
