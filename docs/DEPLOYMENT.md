@@ -60,4 +60,6 @@ python3 scripts/smoke_public.py --ssh cp-bcc --image /path/to/bottle.jpg \
   --output /path/to/smoke-result.json
 ```
 
+Untuk host tanpa alias SSH, gunakan `--ssh dev@proxy.bccdev.id --ssh-port 11049`. Probe memeriksa identitas dan hash model gabungan v4 + COCO11s. Pengujian release pemulihan dapat mengisi `--expected-model-version` dan `--expected-model-sha256` sesuai manifest model release yang diuji.
+
 Exit0 berarti alur sukses lengkap; exit3 mencatat fallback timeout upstream yang terkendali, bukan keberhasilan alur lengkap. Readiness dan unit test saja tidak menggantikan smoke ini atau penerimaan Android.
