@@ -149,6 +149,13 @@ def deploy(image, env_file):
             '--security-opt', 'no-new-privileges', '--env-file', str(migrate_env),
             '--entrypoint', '/migrate', image)
         runtime = {key: value for key, value in values.items() if key.startswith('AI_')}
+        photo_dir = values.get('PHOTO_STORAGE_DIR', '').strip()
+        photo_mounts = []
+        if photo_dir:
+            if not re.fullmatch(r'/[A-Za-z0-9/_-]+', photo_dir) or '..' in Path(photo_dir).parts:
+                raise ValueError('PHOTO_STORAGE_DIR must be a safe absolute path')
+            runtime['PHOTO_STORAGE_DIR'] = photo_dir
+            photo_mounts = ['--volume', f'{photo_dir}:{photo_dir}']
         runtime.update(DATABASE_URL=values['DATABASE_URL_APP'], JWT_SECRET_BASE64=values['JWT_SECRET_BASE64'],
                        HTTP_ADDR=f'127.0.0.1:{port}', WASTENOT_RELEASE=release)
         runtime.setdefault('AI_ENABLED', 'false')
@@ -167,6 +174,7 @@ def deploy(image, env_file):
                 '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
                 '--memory', '768m', '--cpus', '1', '--pids-limit', '256', '--ulimit', 'core=0',
                 '--log-opt', 'max-size=10m', '--log-opt', 'max-file=3',
+                *photo_mounts,
                 '--env-file', str(runtime_env), image)
             if run('docker', 'inspect', '--format', '{{.Image}}', name) != image_id:
                 raise ValueError('Target image identity differs')
