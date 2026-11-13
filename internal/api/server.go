@@ -25,6 +25,7 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/modules/logs"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/system"
+	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
