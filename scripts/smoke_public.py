@@ -2,7 +2,7 @@
 """Operator smoke: create disposable accounts, exercise public AI/save, then delete only those accounts.
 
 Requires authorized SSH administrator access to the Docker/PostgreSQL host for cleanup.
-Uses one real Gemini generation; never prints or persists user/service credentials.
+Requests one Gemini decision with evidence-backed rules fallback; never prints credentials.
 """
 
 import argparse
@@ -315,7 +315,7 @@ try:
     )
     expected = "t|PLASTIC|RECYCLE|" + rec["provider"] + "|false|" + args.expected_model_sha256
     assert sql(query) == expected
-    checks.append("database provenance retains real model hash and Gemini decision")
+    checks.append("database provenance retains real model hash and declared decision provider")
     status, value = call("/v1/statistics", token=token)
     assert status == 200 and value["data"]["summary"]["total_handled_weight_g"] == 250
     checks.append("live statistics include explicitly saved waste")
