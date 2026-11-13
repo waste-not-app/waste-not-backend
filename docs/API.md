@@ -16,6 +16,10 @@ Base path `/v1`. JSON UTF-8, snake_case, UUID, timestamp RFC3339 UTC. Semua endp
 | GET | `/v1/statistics` | Ringkasan, metode, kategori dan seluruh tanggal dalam rentang |
 | GET | `/v1/waste-guide` | Panduan PUBLISHED; `q`, `category`, `limit`, `cursor` |
 | GET | `/v1/waste-guide/{id}` | Detail panduan terbitan |
+| GET | `/v1/achievements` | Daftar achievement dan progres turunan |
+| POST | `/v1/photos` | Upload multipart foto lampiran privat (`STAGED`) |
+| GET | `/v1/photos/{id}` | Unduh foto lampiran milik sendiri |
+| DELETE | `/v1/photos/{id}` | Hapus foto `STAGED` yang belum dipakai |
 | GET | `/v1/ai/objects` | Katalog keputusan + capability model aktif |
 | POST | `/v1/ai/detections` | Multipart gambar ephemeral + `client_request_id` |
 | POST | `/v1/ai/recommendations` | Keputusan Python + sesi rekomendasi milik pengguna |
@@ -50,11 +54,11 @@ Contoh format create, dengan tanggal yang harus disesuaikan ke hari ini dalam ti
 }
 ```
 
-WEIGHT wajib 1–100000 gram dan item_count null. COUNT wajib 1–10000 benda dan weight_g null. Tanggal create hari ini sampai 30 hari sebelumnya menurut zona akun. Catatan di-trim maksimal 500 karakter. Identitas pemilik, timestamp dan XP tidak diterima dari client. `photo_id` hanya null sampai lampiran permanen diimplementasikan.
+WEIGHT wajib 1–100000 gram dan item_count null. COUNT wajib 1–10000 benda dan weight_g null. Tanggal create hari ini sampai 30 hari sebelumnya menurut zona akun. Catatan di-trim maksimal 500 karakter. Identitas pemilik, timestamp dan XP tidak diterima dari client. `photo_id` menerima UUID foto `STAGED` milik pengguna jika `capabilities.photos=true` (atau `null`).
 
 Buat satu client_request_id per draf, lalu pertahankan ID dan payload saat retry timeout. Create baru 201; replay kanonis identik 200 dengan log yang sama; payload berubah 409 IDEMPOTENCY_CONFLICT; replay log terhapus 410 LOG_DELETED. Identitas create tetap disimpan setelah soft-delete. Replay diperiksa sebelum jendela tanggal dan TTL provenance, agar request yang sebelumnya sudah commit dapat ditemukan lagi.
 
-PATCH hanya menerima category, method, quantity_kind, weight_g, item_count, activity_date, notes dan version. Field tidak dikirim tetap; notes null menjadi kosong. Setelah merge, validasi XOR unit tetap berlaku. Tanggal lama yang tidak berubah boleh berada di luar 30 hari. Version tidak cocok menghasilkan 409 VERSION_CONFLICT. DELETE wajib `If-Match: "2"`; missing header 428, version berbeda 409, sukses/replay delete milik sendiri 204. Objek asing/hilang/terhapus pada GET dan PATCH selalu 404.
+PATCH hanya menerima category, method, quantity_kind, weight_g, item_count, activity_date, notes, photo_id dan version. Field tidak dikirim tetap; notes null menjadi kosong; photo_id null melepas lampiran lama dan menandainya terhapus. Setelah merge, validasi XOR unit tetap berlaku. Tanggal lama yang tidak berubah boleh berada di luar 30 hari. Version tidak cocok menghasilkan 409 VERSION_CONFLICT. DELETE wajib `If-Match: "2"`; missing header 428, version berbeda 409, sukses/replay delete milik sendiri 204 (dan langsung mencabut akses foto terkait). Objek asing/hilang/terhapus pada GET dan PATCH selalu 404.
 
 Daftar menggunakan filter AND category/method/from/to, tanggal inklusif, limit 1–100 default 20. Urutan `activity_date DESC,id DESC`. Cursor bertanda tangan HMAC terikat pengguna dan filter; perubahan filter membutuhkan halaman pertama. Cursor bukan otorisasi dan tidak memuat token. Perubahan data selama pagination memerlukan deduplikasi ID di Android.
 
@@ -62,6 +66,6 @@ Daftar menggunakan filter AND category/method/from/to, tanggal inklusif, limit 1
 
 Default tujuh hari sampai hari ini; from/to inklusif maksimal 366 hari dan tanpa tanggal mendatang. Dashboard memakai timezone akun dan snapshot transaksi konsisten. Hari/kategori/metode tanpa data dikirim nol. Reduce terpisah dari sampah ditangani. Berat dan jumlah benda tidak dijumlahkan. Recycling rate = jumlah aktivitas Recycle / aktivitas Reuse+Recycle+Trash; denominator nol menghasilkan null. XP = catatan aktif × 10, level = floor(XP/100)+1. Streak memakai hari berbeda, tetap mempertahankan streak kemarin jika hari ini belum mencatat.
 
-Panduan tidak diisi contoh desain. Impor konten nyata melalui `go run ./cmd/guides reviewed-guides.json`; importer mensyaratkan UUID, enum, langkah, sumber HTTPS, reviewer dan tanggal review. Hanya status PUBLISHED yang dapat dibaca. Format entitas lengkap terdapat pada `internal/database/guides.go`; importer memperbarui berdasarkan id secara atomik dan tidak membuat akun admin publik.
+Panduan tidak diisi contoh desain. Draf kurasi awal 16 artikel tersedia di `guides/core-guides-v1.json`; setelah ditinjau penanggung jawab konten dan status diubah ke `PUBLISHED`, impor via `go run ./cmd/guides guides/core-guides-v1.json`. Importer mensyaratkan UUID, enum, langkah, sumber HTTPS, reviewer dan tanggal review. Hanya status `PUBLISHED` yang dapat dibaca pada `/v1/waste-guide`.
 
-Error stabil utama: 400 INVALID_REQUEST, 401 UNAUTHENTICATED/SESSION_EXPIRED, 404 NOT_FOUND, 409 EMAIL_EXISTS/VERSION_CONFLICT/IDEMPOTENCY_CONFLICT, 410 LOG_DELETED/AI_SESSION_EXPIRED, 413 FILE_TOO_LARGE/REQUEST_TOO_LARGE, 415 UNSUPPORTED_MEDIA_TYPE, 422 VALIDATION_ERROR, 428 PRECONDITION_REQUIRED, 429 RATE_LIMITED, 503 UNAVAILABLE/AI_DISABLED/AI_UNAVAILABLE/INVALID_AI_RESPONSE, 504 AI_TIMEOUT. Hormati Retry-After; jangan membuat retry loop atau mengganti UUID otomatis.
+Error stabil utama: 400 INVALID_REQUEST, 401 UNAUTHENTICATED/SESSION_EXPIRED, 404 NOT_FOUND, 409 EMAIL_EXISTS/VERSION_CONFLICT/IDEMPOTENCY_CONFLICT/PHOTO_ALREADY_LINKED/PHOTO_IN_USE, 410 LOG_DELETED/AI_SESSION_EXPIRED, 413 FILE_TOO_LARGE/REQUEST_TOO_LARGE, 415 UNSUPPORTED_MEDIA_TYPE, 422 VALIDATION_ERROR/INVALID_IMAGE/IMAGE_DIMENSIONS_EXCEEDED, 428 PRECONDITION_REQUIRED, 429 RATE_LIMITED, 503 UNAVAILABLE/AI_DISABLED/AI_UNAVAILABLE/INVALID_AI_RESPONSE, 504 AI_TIMEOUT. Hormati Retry-After; jangan membuat retry loop atau mengganti UUID otomatis.

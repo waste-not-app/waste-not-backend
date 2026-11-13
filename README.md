@@ -40,14 +40,15 @@ make run
 
 ## API dan integrasi
 
+- [Panduan Integrasi Lengkap (Android & AI)](docs/INTEGRATION.md): alur end-to-end Android ↔ Go ↔ Python AI, `achievements`, `photos`, `waste-guide`, dan `pilot-policy-09`.
 - [Panduan API](docs/API.md): envelope, endpoint, retry, konflik, dan contoh request.
 - [OpenAPI core](contracts/core.openapi.json) dan [OpenAPI AI publik](contracts/ai/public.openapi.json).
 - [Integrasi Android](docs/ANDROID.md): konfigurasi base URL dan adapter Android yang masih harus dihubungkan.
 - [Integrasi AI](docs/AI.md): menjalankan worker, feature gate, quota dan batas pengujian.
+- [Kurasi Panduan Awal](guides/README.md): 16 artikel kurasi di `guides/core-guides-v1.json` untuk impor via `cmd/guides`.
 - [Operasional](docs/OPERATIONS.md): migrasi, backup, TLS, secret, scaling dan pemulihan.
 - [Bukti pengujian](docs/VERIFICATION.md).
 - [Laporan review CI/CD 7 November](docs/CI_CD_REVIEW_2026-11-07.md): temuan, perbaikan, smoke publik dan batas yang masih terbuka.
-
 Kontrak diturunkan dari Android commit [`c125859`](https://github.com/waste-not-app/waste-not-android/commit/c1258596cb71bc7b95dc9a4f140f55f759815c4e). Fixture Android dan kontrak AI asli disalin tanpa perubahan ke [`contracts/`](contracts/README.md). Worker Python tetap menjadi pemilik tunggal keputusan AI. Go tidak memanggil Gemini langsung dan tidak memuat model YOLO.
 
 ## Pengujian
@@ -66,8 +67,7 @@ Tanpa `TEST_DATABASE_URL`, integration test dilewati dan tidak membuktikan alur 
 
 Satu layanan Go, router `net/http`, SQL terparameterisasi melalui pgx, pool maksimal 10 koneksi, indeks riwayat aktif, pagination berbasis posisi, dan agregasi SQL. Tidak ada ORM, Redis atau antrean tambahan untuk kebutuhan inti. Dua slot decode gambar dan empat slot hashing membatasi pekerjaan berat per proses. Rate limit dan idempotensi memakai PostgreSQL sehingga berlaku antar instance.
 
-Panduan inti `/v1/waste-guide` kosong sampai artikel yang ditinjau diimpor; panduan policy AI dikelola terpisah. Achievement, pengingat, lampiran foto permanen dan titik daur ulang memiliki capability `false`. Upload AI bersifat sementara di memori dan berbeda dari lampiran foto. API sudah dideploy ke VM cp-bcc melalui GitHub Actions dan dapat dicapai di [base URL HTTPS](https://pred-autoscaler.bccdev.id/wastenot/api/v1/). Transport write dan AI sudah tersedia pada PR integrasi Android; penerimaan perangkat/layar mengikuti [status integrasi](docs/ANDROID.md).
-
+Panduan inti `/v1/waste-guide` kosong sampai artikel yang ditinjau diimpor (`guides/core-guides-v1.json`); panduan policy AI dikelola terpisah. Endpoint `GET /v1/achievements` aktif (`capabilities.achievements=true`) dengan 4 definisi baseline yang otomatis sinkron & relock saat edit/hapus catatan. Lampiran foto privat (`POST/GET/DELETE /v1/photos`) aktif saat `PHOTO_STORAGE_DIR` dikonfigurasi (`capabilities.photos=true`), terpisah dari upload ephemeral scan AI. Pengingat dan titik daur ulang memiliki capability `false`. API sudah dideploy ke VM cp-bcc melalui GitHub Actions dan dapat dicapai di [base URL HTTPS](https://pred-autoscaler.bccdev.id/wastenot/api/v1/).
 Deployment VM dan CI/CD: [panduan cp-bcc](docs/DEPLOYMENT.md).
 
 Runtime YOLO CPU, provenance model dan source Python berada di [repo AI](https://github.com/waste-not-app/waste-not-ai); petunjuk layanan privat ada pada [panduan AI](docs/AI.md).

@@ -17,11 +17,13 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/achievements"
 	aiMod "github.com/waste-not-app/waste-not-backend/internal/modules/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/analytics"
 	authMod "github.com/waste-not-app/waste-not-backend/internal/modules/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/guides"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/logs"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/system"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
@@ -77,14 +79,22 @@ func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
 
 	authMw := middleware.Protected(db, signer, limiter, log)
 
-	// Initialize repositories & services per module (Betala modular + sqlc pattern)
+	var photoStorage photos.Storage
+	if c.PhotoStorageDir != "" {
+		photoStorage, err = photos.NewLocalStorage(c.PhotoStorageDir)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// Initialize repositories & services per module
 	sysRepo := system.NewRepository(db)
 	sysService := system.NewService(sysRepo, c, aiClient)
 
 	authRepo := authMod.NewRepository(db)
 	authService := authMod.NewService(authRepo, signer, limiter, dummyHash)
 
-	logsRepo := logs.NewRepository(db)
+	logsRepo := logs.NewRepository(db, photoStorage)
 	logsService := logs.NewService(logsRepo, c, limiter, cursorCodec)
 
 	analyticsRepo := analytics.NewRepository(db)
@@ -92,6 +102,12 @@ func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
 
 	guidesRepo := guides.NewRepository(db)
 	guidesService := guides.NewService(guidesRepo, cursorCodec)
+
+	achievementsRepo := achievements.NewRepository(db)
+	achievementsService := achievements.NewService(achievementsRepo, limiter)
+
+	photosRepo := photos.NewRepository(db)
+	photosService := photos.NewService(photosRepo, photoStorage)
 
 	aiRepo := aiMod.NewRepository(db)
 	aiService := aiMod.NewService(aiRepo, c, aiClient, limiter)
@@ -107,6 +123,8 @@ func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
 	logs.RegisterHTTPRoutes(app, logsService, log, authMw)
 	analytics.RegisterHTTPRoutes(app, analyticsService, log, authMw)
 	guides.RegisterHTTPRoutes(app, guidesService, log, authMw)
+	achievements.RegisterHTTPRoutes(app, achievementsService, log, authMw)
+	photos.RegisterHTTPRoutes(app, photosService, limiter, log, authMw)
 	aiMod.RegisterHTTPRoutes(app, aiService, limiter, log, authMw)
 
 	s := &Server{

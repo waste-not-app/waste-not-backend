@@ -47,8 +47,8 @@ Budget pilot: provider 17 detik, worker rekomendasi 18, read Android 20, respons
 
 ## Cakupan dan penerimaan berikutnya
 
-API core tersedia, tetapi artikel umum PUBLISHED `/waste-guide` masih nol. Empat policy guide AI terpisah: PET, HDPE, kaleng aluminium non-aerosol dan kardus. Model aktif masih YOLO11n COCO, bukan bobot fine-tuning empat kelas. Katalog lebih luas tidak membuktikan seluruh objek memiliki panduan terbitan.
+API core tersedia beserta endpoint `GET /v1/achievements` (`capabilities.achievements=true`) dan `POST/GET/DELETE /v1/photos` (aktif ketika `PHOTO_STORAGE_DIR` dikonfigurasi). Draf kurasi 16 artikel Panduan umum tersedia di `guides/core-guides-v1.json` dan siap di-impor setelah tinjauan manusia menjadi `PUBLISHED`. Empat policy guide AI terpisah: PET, HDPE, kaleng aluminium non-aerosol dan kardus. Model aktif gabungan v4 + COCO11s.
 
-Achievement, foto permanen, fasilitas daur ulang, reset password dan penghapusan akun belum tersedia. Streak ada pada profil; metadata tidak memiliki flag streak tersendiri. Capability tambahan yang false harus disembunyikan/ditangani dengan state yang jelas.
+Pengingat lokal (`S17`) dijalankan lokal oleh Android, sementara fasilitas daur ulang (`S19`), reset password, dan penghapusan akun belum tersedia di backend. Lihat [panduan integrasi lengkap Android & AI](INTEGRATION.md) untuk detail payload `achievements`, `photos`, dan `pilot-policy-09` (`provider=rules`).
 
 Gate Android: jalankan login → capture/upload → konfirmasi → konteks → READY/NEEDS_CONTEXT/UNAVAILABLE/CONDITIONAL → save/replay → detail/edit/delete → ringkasan → logout/pergantian akun. Uji timeout, cancel, expiry, konflik versi, jaringan terputus dan pemisahan akun. Pisahkan bukti HTTP/schema, MockWebServer, kamera/perangkat dan penerimaan visual; readiness backend tidak menyelesaikan gate UI.
