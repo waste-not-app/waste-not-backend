@@ -61,8 +61,8 @@ func TestPythonCombinedDetectionWorker(t *testing.T) {
 	status, value, _ = call(t, httpServer.URL, "POST", "/v1/ai/recommendations", token, input, nil)
 	requireStatus(t, status, 201, value)
 	result := value["data"].(map[string]any)
-	if result["status"] != "READY" || result["recommended_method"] != "RECYCLE" || result["recommendation_version"] != "pilot-policy-08" || result["caution"] == "" || len(result["source_urls"].([]any)) == 0 {
-		t.Fatalf("sharp-glass policy08 bridge mismatch %v", result)
+	if result["status"] != "READY" || result["recommended_method"] != "RECYCLE" || result["recommendation_version"] != "pilot-policy-09" || result["caution"] == "" || len(result["source_urls"].([]any)) == 0 {
+		t.Fatalf("sharp-glass policy09 bridge mismatch %v", result)
 	}
 	status, value, _ = call(t, httpServer.URL, "POST", "/v1/ai/recommendations", token, input, nil)
 	requireStatus(t, status, 200, value)

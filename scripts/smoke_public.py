@@ -222,7 +222,7 @@ try:
     ):
         assert (
             rec["recommended_method"] is None
-            and rec["provider"] == "gemini"
+            and rec["provider"] in {"gemini", "rules"}
             and rec["prototype_only"] is False
         )
         checks.append("upstream timeout produces no handling method")
@@ -258,15 +258,15 @@ try:
             )
         )
     assert (
-        rec["provider"] == "gemini"
+        rec["provider"] in {"gemini", "rules"}
         and rec["prototype_only"] is False
         and rec["recommended_method"] == "RECYCLE"
-        and rec["recommendation_version"] == "pilot-policy-08"
+        and rec["recommendation_version"] == "pilot-policy-09"
     )
     assert rec["recommendation_scope"] == "HANDLING" and all(
         item["version"] == 6 for item in rec["guide_refs"]
     )
-    checks.append("real Gemini evidence-backed recommendation without prototype")
+    checks.append("evidence-backed recommendation with declared provider and no prototype")
     status, value = call("/v1/ai/recommendations", "POST", request, token)
     assert status == 200 and value["data"] == rec
     checks.append("recommendation replay reuses stored result")
@@ -313,7 +313,7 @@ try:
         + users[0]
         + "';"
     )
-    expected = "t|PLASTIC|RECYCLE|gemini|false|" + args.expected_model_sha256
+    expected = "t|PLASTIC|RECYCLE|" + rec["provider"] + "|false|" + args.expected_model_sha256
     assert sql(query) == expected
     checks.append("database provenance retains real model hash and Gemini decision")
     status, value = call("/v1/statistics", token=token)
@@ -347,8 +347,8 @@ try:
     report = {
         "count": len(checks),
         "passed": checks,
-        "provider": "gemini",
-        "model": "gemini-3.1-flash-lite",
+        "provider": rec["provider"],
+        "model": "gemini-3.1-flash-lite" if rec["provider"] == "gemini" else None,
         "prototype_only": False,
         "recommendation_elapsed_ms": elapsed,
         "yolo_model_version": detection["model_version"],

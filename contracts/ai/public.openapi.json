@@ -1143,7 +1143,7 @@
             "title": "Recommendation Scope"
           },
           "recommendation_version": {
-            "default": "pilot-policy-08",
+            "default": "pilot-policy-09",
             "title": "Recommendation Version",
             "type": "string"
           },
@@ -2058,7 +2058,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-hdpe-bottle",
-                            "version": 5
+                            "version": 6
                           }
                         ],
                         "missing_context": [
@@ -2072,7 +2072,7 @@
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000008",
                         "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": null,
                         "source_details": [
                           {
@@ -2114,7 +2114,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "demo-ceramic_cup",
-                            "version": 4
+                            "version": 5
                           }
                         ],
                         "missing_context": [
@@ -2128,7 +2128,7 @@
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000006",
                         "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": null,
                         "source_details": [
                           {
@@ -2164,25 +2164,27 @@
                         "confirmed_object_key": "glass_bottle",
                         "context_revision": 1,
                         "detection_id": null,
-                        "evidence_ids": [],
+                        "evidence_ids": [
+                          "glass-intact-recycle-v1"
+                        ],
                         "expires_at": "2026-10-21T08:00:00Z",
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 6
+                            "version": 7
                           }
                         ],
                         "missing_context": [],
                         "object_id": null,
                         "prototype_only": true,
-                        "provider": "fixture",
-                        "reason": "Pilihan metode untuk Botol kaca belum dapat dipastikan. Berikut arahan awal berdasarkan informasi yang tersedia.",
+                        "provider": "rules",
+                        "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
                         "reason_code": "LLM_UNAVAILABLE",
-                        "recommendation_basis": null,
+                        "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000001",
-                        "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-08",
-                        "recommended_method": null,
+                        "recommendation_scope": "HANDLING",
+                        "recommendation_version": "pilot-policy-09",
+                        "recommended_method": "RECYCLE",
                         "source_details": [
                           {
                             "checked_at": "2026-11-04",
@@ -2197,12 +2199,11 @@
                           "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                         ],
                         "special_handling": false,
-                        "status": "UNAVAILABLE",
+                        "status": "READY",
                         "steps": [
-                          "Periksa jenis kaca, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
-                          "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
-                          "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
-                          "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+                          "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
+                          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
+                          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2223,7 +2224,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 6
+                            "version": 7
                           }
                         ],
                         "missing_context": [
@@ -2237,7 +2238,7 @@
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000009",
                         "recommendation_scope": null,
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": null,
                         "source_details": [
                           {
@@ -2298,7 +2299,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "demo-ceramic_cup",
-                            "version": 4
+                            "version": 5
                           }
                         ],
                         "missing_context": [],
@@ -2310,7 +2311,7 @@
                         "recommendation_basis": "CONDITIONAL",
                         "recommendation_id": "00000000-0000-0000-0000-00000000000a",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": "REUSE",
                         "source_details": [
                           {
@@ -2366,7 +2367,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 6
+                            "version": 7
                           }
                         ],
                         "missing_context": [],
@@ -2378,7 +2379,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-00000000000b",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
@@ -2421,7 +2422,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-hdpe-bottle",
-                            "version": 5
+                            "version": 6
                           }
                         ],
                         "missing_context": [],
@@ -2433,7 +2434,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000007",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
@@ -2494,7 +2495,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 6
+                            "version": 7
                           }
                         ],
                         "missing_context": [],
@@ -2506,7 +2507,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000002",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": "RECYCLE",
                         "source_details": [
                           {
@@ -2549,7 +2550,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "pilot-glass-bottle",
-                            "version": 6
+                            "version": 7
                           }
                         ],
                         "missing_context": [],
@@ -2561,7 +2562,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000004",
                         "recommendation_scope": "PREVENTION",
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": "REDUCE",
                         "source_details": [
                           {
@@ -2602,7 +2603,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "demo-book",
-                            "version": 4
+                            "version": 5
                           }
                         ],
                         "missing_context": [],
@@ -2614,7 +2615,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000003",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": "REUSE",
                         "source_details": [
                           {
@@ -2656,7 +2657,7 @@
                         "guide_refs": [
                           {
                             "guide_id": "demo-toothbrush",
-                            "version": 4
+                            "version": 5
                           }
                         ],
                         "missing_context": [],
@@ -2668,7 +2669,7 @@
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000005",
                         "recommendation_scope": "HANDLING",
-                        "recommendation_version": "pilot-policy-08",
+                        "recommendation_version": "pilot-policy-09",
                         "recommended_method": "TRASH",
                         "source_details": [
                           {
