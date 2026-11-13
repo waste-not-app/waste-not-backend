@@ -69,6 +69,8 @@ func (h *Handler) CreateLog(c fiber.Ctx) error {
 			return response.Fail(c, fiber.StatusGone, "AI_SESSION_EXPIRED", nil)
 		case errors.Is(err, ErrAIAlreadyLinked):
 			return response.Fail(c, fiber.StatusConflict, "AI_ALREADY_LINKED", nil)
+		case errors.Is(err, ErrPhotoAlreadyLinked):
+			return response.Fail(c, fiber.StatusConflict, "PHOTO_ALREADY_LINKED", nil)
 		default:
 			return response.InternalError(c, h.log, err)
 		}
@@ -191,7 +193,7 @@ func (h *Handler) UpdateLog(c fiber.Ctx) error {
 		})
 	}
 	for key := range patch {
-		if !domain.Contains([]string{"version", "category", "method", "quantity_kind", "weight_g", "item_count", "activity_date", "notes"}, key) {
+		if !domain.Contains([]string{"version", "category", "method", "quantity_kind", "weight_g", "item_count", "activity_date", "notes", "photo_id"}, key) {
 			return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
 		}
 	}
@@ -205,6 +207,8 @@ func (h *Handler) UpdateLog(c fiber.Ctx) error {
 			return response.Fail(c, fiber.StatusNotFound, "NOT_FOUND", nil)
 		case errors.Is(err, ErrVersionConflict):
 			return response.Fail(c, fiber.StatusConflict, "VERSION_CONFLICT", nil)
+		case errors.Is(err, ErrPhotoAlreadyLinked):
+			return response.Fail(c, fiber.StatusConflict, "PHOTO_ALREADY_LINKED", nil)
 		case errors.Is(err, ErrInvalidPatchRequest):
 			return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
 		case errors.As(err, &valErr):
@@ -240,7 +244,7 @@ func (h *Handler) DeleteLog(c fiber.Ctx) error {
 	}
 
 	ident := middleware.Who(c)
-	err := h.service.DeleteLog(c.Context(), ident.User.ID, id, version)
+	err := h.service.DeleteLog(c.Context(), ident.User, id, version)
 	if errors.Is(err, ErrLogNotFound) {
 		return response.Fail(c, fiber.StatusNotFound, "NOT_FOUND", nil)
 	}

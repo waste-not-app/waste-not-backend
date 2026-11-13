@@ -20,6 +20,7 @@ type UpdateLogReq struct {
 	ItemCount    *int    `json:"item_count,omitempty"`
 	ActivityDate *string `json:"activity_date,omitempty"`
 	Notes        *string `json:"notes,omitempty"`
+	PhotoID      *string `json:"photo_id,omitempty"`
 }
 
 type ListLogsQuery struct {

@@ -1,0 +1,346 @@
+[
+  {
+    "id": "10000000-0000-4000-8000-000000000001",
+    "slug": "botol-plastik-pet",
+    "name": "Botol Minum Plastik (PET / Kode 1)",
+    "category": "PLASTIC",
+    "keywords": ["botol plastik", "pet", "air mineral", "kemasan minuman", "kode 1"],
+    "recommended_method": "RECYCLE",
+    "summary": "Botol PET sekali pakai (kode resin 1) umumnya diterima oleh bank sampah atau fasilitas daur ulang plastik jika sudah dikosongkan dan bersih dari sisa minuman.",
+    "steps": [
+      "Kosongkan seluruh sisa cairan agar tidak mengontaminasi kertas atau plastik lain.",
+      "Bilas singkat dengan air secukupnya bila sebelumnya berisi minuman manis atau susu, lalu tiriskan.",
+      "Biarkan tutup terpasang atau pisahkan sesuai ketentuan bank sampah/pengelola setempat.",
+      "Pipihkan botol bila diperlukan untuk menghemat ruang sebelum disetor ke bank sampah atau tempat pilah daur ulang."
+    ],
+    "cautions": [
+      "Jangan menggunakan ulang botol PET sekali pakai secara terus-menerus untuk pangan atau minuman bersuhu panas.",
+      "Penerimaan tutup dan label bergantung pada aturan pengelola daur ulang setempat."
+    ],
+    "source_url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000002",
+    "slug": "wadah-plastik-hdpe",
+    "name": "Botol & Jeriken HDPE (Kode 2)",
+    "category": "PLASTIC",
+    "keywords": ["hdpe", "botol susu", "jeriken", "kode 2", "kemasan plastik tebal"],
+    "recommended_method": "RECYCLE",
+    "summary": "Plastik HDPE (kode resin 2) bersifat kuat dan banyak digunakan untuk botol susu atau kemasan rumah tangga, serta dapat disetor ke fasilitas daur ulang jika bersih dan bebas kontaminasi B3.",
+    "steps": [
+      "Pastikan isi sebelumnya bukan bahan kimia berbahaya atau pestisida sebelum menyetor ke daur ulang biasa.",
+      "Kosongkan dan bilas sisa produk biasa (seperti sisa minuman atau sabun cair) hingga bersih.",
+      "Serahkan ke bank sampah atau pusat daur ulang plastik yang menerima kode resin 2 (HDPE)."
+    ],
+    "cautions": [
+      "Kemasan bekas bahan kimia berbahaya, oli, atau pelarut tidak boleh masuk aliran daur ulang rumah tangga biasa."
+    ],
+    "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000003",
+    "slug": "wadah-makanan-pp-guna-ulang",
+    "name": "Wadah Makanan PP Guna Ulang (Kode 5)",
+    "category": "PLASTIC",
+    "keywords": ["kotak makan", "wadah pp", "kode 5", "polypropylene", "reuse"],
+    "recommended_method": "REUSE",
+    "summary": "Wadah polipropilena (PP, kode 5) yang masih utuh, bersih, dan berlabel aman pangan dapat dicuci dan digunakan kembali berulang kali untuk mengurangi kemasan sekali pakai.",
+    "steps": [
+      "Periksa apakah wadah memiliki penanda aman pangan dan tidak retak, meleleh, atau berubah warna.",
+      "Cuci bersih dengan sabun dan air mengalir setelah dipakai, lalu keringkan sebelum disimpan.",
+      "Gunakan kembali untuk menyimpan bahan makanan kering atau bekal sesuai batas suhu pada label."
+    ],
+    "cautions": [
+      "Hentikan penggunaan ulang jika wadah sudah tergores dalam, retak, atau berbau menyengat.",
+      "Jangan memanaskan makanan di dalam wadah yang tidak memiliki keterangan aman untuk pemanasan."
+    ],
+    "source_url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000004",
+    "slug": "kantong-dan-bungkus-plastik",
+    "name": "Kantong Belanja & Pembungkus Plastik Tipis",
+    "category": "PLASTIC",
+    "keywords": ["kantong kresek", "plastik tipis", "film plastik", "bungkus", "reduce"],
+    "recommended_method": "REDUCE",
+    "summary": "Kantong dan lapisan film plastik sulit diproses di fasilitas daur ulang umum karena mudah tersangkut di mesin pemilah; langkah paling efektif adalah mengurangi pemakaian sejak awal.",
+    "steps": [
+      "Bawa tas belanja kain atau wadah sendiri saat berbelanja untuk menghindari kantong plastik baru.",
+      "Jika sudah terlanjur memiliki kantong bersih, gunakan ulang sebagai pelapis tempat sampah atau pembungkus.",
+      "Tanyakan apakah toko ritel atau bank sampah setempat menerima plastik film bersih secara terpisah."
+    ],
+    "cautions": [
+      "Jangan memasukkan kantong kresek atau plastik pembungkus ke wadah daur ulang campur tanpa konfirmasi pengelola.",
+      "Catat sebagai Reduce hanya ketika kamu benar-benar menghindari penggunaan kemasan baru."
+    ],
+    "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000005",
+    "slug": "kardus-karton-bersih",
+    "name": "Kardus & Karton Pengiriman",
+    "category": "PAPER",
+    "keywords": ["kardus", "karton", "kotak paket", "dus", "kertas tebal"],
+    "recommended_method": "RECYCLE",
+    "summary": "Kardus bergelombang dan karton kemasan kering dapat didaur ulang atau dipakai ulang bila tidak basah maupun berminyak berat.",
+    "steps": [
+      "Keluarkan isi, plastik pengisi, atau sisa makanan dari dalam kotak.",
+      "Lepaskan lakban plastik berlebih jika diminta pengelola, lalu lipat kardus hingga rata.",
+      "Simpan di tempat kering agar serat kertas tidak berjamur sebelum disetor ke bank sampah atau pengepul."
+    ],
+    "cautions": [
+      "Kardus yang basah kuyup atau terkontaminasi minyak/sisa makanan berat biasanya ditolak oleh pengelola daur ulang kertas."
+    ],
+    "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000006",
+    "slug": "kertas-hvs-dan-koran",
+    "name": "Kertas HVS, Buku & Koran Bekas",
+    "category": "PAPER",
+    "keywords": ["kertas", "hvs", "koran", "majalah", "buku bekas", "dokumen"],
+    "recommended_method": "RECYCLE",
+    "summary": "Kertas kantor, koran, majalah, dan buku tak terpakai menjaga nilai daur ulangnya saat dipilah terpisah dari sampah basah dan organik.",
+    "steps": [
+      "Pertimbangkan menyumbangkan buku layak baca ke sekolah, perpustakaan, atau komunitas sebelum mendaur ulang.",
+      "Pisahkan kertas kering dari sampah basah, sisa makanan, dan plastik laminasi.",
+      "Tumpuk atau ikat rapi kertas dan koran lalu serahkan ke bank sampah atau pusat daur ulang."
+    ],
+    "cautions": [
+      "Kertas berlapis plastik/laminasi, tisu bekas pakai, dan kertas struk termal umumnya tidak diterima di daur ulang kertas biasa."
+    ],
+    "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000007",
+    "slug": "botol-dan-toples-kaca-utuh",
+    "name": "Botol & Toples Kaca Utuh",
+    "category": "GLASS",
+    "keywords": ["botol kaca", "toples kaca", "beling utuh", "sirup", "selai"],
+    "recommended_method": "RECYCLE",
+    "summary": "Botol dan toples kaca yang masih utuh dapat didaur ulang berkali-kali atau dipakai ulang sebagai wadah setelah dibersihkan.",
+    "steps": [
+      "Kosongkan isi botol atau toples lalu bilas hingga bersih dari sisa makanan atau minuman.",
+      "Pisahkan tutup logam atau plastik dari botol kaca sesuai petunjuk fasilitas penerima.",
+      "Serahkan secara hati-hati ke bank sampah atau titik pengumpulan kaca agar tidak pecah saat pengangkutan."
+    ],
+    "cautions": [
+      "Kaca jendela, cermin, keramik, dan lampu pijar/neon memiliki titik leleh berbeda dan tidak boleh dicampur dengan botol kaca kemasan."
+    ],
+    "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000008",
+    "slug": "pecahan-kaca-berisiko-tajam",
+    "name": "Pecahan Kaca & Beling Tajam",
+    "category": "GLASS",
+    "keywords": ["kaca pecah", "beling", "pecahan gelas", "tajam", "residu"],
+    "recommended_method": "TRASH",
+    "summary": "Pecahan kaca tidak boleh masuk tempat daur ulang biasa karena membahayakan petugas pemilah dan merusak mesin; bungkus rapat dan buang ke jalur residu atau serahkan ke pengelola khusus bila tersedia.",
+    "steps": [
+      "Gunakan sarung tangan tebal atau sapu dan pengki; hindari memungut pecahan kecil langsung dengan tangan kosong.",
+      "Masukkan pecahan kaca ke dalam kardus tebal atau wadah kokoh lalu segel dengan lakban.",
+      "Beri label peringatan jelas seperti 'Hati-hati Pecahan Kaca' di bagian luar kemasan sebelum dibuang ke tempat sampah residu."
+    ],
+    "cautions": [
+      "Jangan membuang pecahan kaca tanpa pelindung ke dalam kantong plastik tipis.",
+      "Pecahan lampu neon/CFL mengandung merkuri dan harus masuk jalur limbah B3/khusus, bukan residu biasa."
+    ],
+    "source_url": "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/broken-glass/",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000009",
+    "slug": "kaleng-minuman-aluminium",
+    "name": "Kaleng Minuman Aluminium",
+    "category": "METAL",
+    "keywords": ["kaleng aluminium", "kaleng soda", "kaleng minuman", "logam"],
+    "recommended_method": "RECYCLE",
+    "summary": "Kaleng minuman aluminium bernilai tinggi untuk didaur ulang dan paling mudah disortir bila dalam keadaan kosong serta bersih dari sisa minuman.",
+    "steps": [
+      "Tuang habis sisa minuman dan bilas ringan agar tidak mengundang semut atau menimbulkan bau.",
+      "Biarkan bentuk kaleng tetap utuh bila pengelola menggunakan pemilahan otomatis, atau ikuti instruksi bank sampah setempat.",
+      "Kumpulkan dalam wadah kering bersama logam sejenis sebelum disetor."
+    ],
+    "cautions": [
+      "Jangan memadatkan kaleng aerosol bertekanan seperti kaleng semprot cat atau insektisida; tangani kaleng bertekanan sesuai aturan B3 rumah tangga."
+    ],
+    "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000010",
+    "slug": "kaleng-makanan-baja-timah",
+    "name": "Kaleng Makanan Logam & Aluminium Foil Bersih",
+    "category": "METAL",
+    "keywords": ["kaleng sarden", "kaleng susu", "kaleng makanan", "aluminium foil", "logam"],
+    "recommended_method": "RECYCLE",
+    "summary": "Kaleng makanan berbahan baja/timah dan aluminium foil dapat didaur ulang selama sisa makanan dan minyak sudah dibersihkan.",
+    "steps": [
+      "Keruk dan bilas sisa saus, minyak, atau makanan hingga bersih.",
+      "Hati-hati terhadap tepi kaleng yang tajam setelah dibuka; lipat tutup ke dalam bila aman dilakukan.",
+      "Kumpulkan setelah kering lalu setorkan ke bank sampah atau pengumpul logam terdekat."
+    ],
+    "cautions": [
+      "Aluminium foil yang sangat kotor oleh sisa makanan lengket tidak layak masuk daur ulang logam."
+    ],
+    "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000011",
+    "slug": "sisa-makanan-dan-kompos",
+    "name": "Sisa Makanan Nabati & Sampah Kebun (Kompos)",
+    "category": "ORGANIC",
+    "keywords": ["sampah organik", "kompos", "sisa sayur", "kulit buah", "daun kering", "ampas kopi"],
+    "recommended_method": "RECYCLE",
+    "summary": "Sisa buah, sayur, ampas kopi, cangkang telur, dan daun kering dapat diolah menjadi kompos di rumah atau disalurkan ke pengolahan organik komunitas agar tidak menghasilkan metana di TPA.",
+    "steps": [
+      "Pilah sisa sayur, kulit buah, ampas kopi, dan daun kering terpisah dari plastik atau kemasan.",
+      "Potong bahan berukuran besar menjadi potongan kecil agar proses penguraian lebih cepat.",
+      "Campurkan bahan basah (hijau) dengan 2–3 bagian bahan kering (cokelat) seperti daun kering atau cacahan kardus tak berlapis di dalam komposter tertutup.",
+      "Aduk berkala untuk sirkulasi udara dan jaga kelembapan seperti spons peras hingga menjadi kompos matang."
+    ],
+    "cautions": [
+      "Hindari memasukkan daging, tulang, produk susu, minyak berlebih, atau kotoran hewan ke komposter rumah tangga terbuka karena mengundang hama dan bau."
+    ],
+    "source_url": "https://www.epa.gov/recycle/composting-home",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000012",
+    "slug": "pencegahan-sisa-makanan",
+    "name": "Pencegahan Sisa Makanan Rumah Tangga",
+    "category": "ORGANIC",
+    "keywords": ["food waste", "sisa makanan", "reduce makanan", "perencanaan belanja"],
+    "recommended_method": "REDUCE",
+    "summary": "Mengurangi sisa makanan sejak perencanaan belanja dan penyimpanan adalah langkah paling efektif untuk mencegah sampah organik terbuang.",
+    "steps": [
+      "Rencanakan menu dan periksa stok bahan di kulkas sebelum berbelanja agar tidak membeli berlebih.",
+      "Simpan bahan mudah rusak di wadah tertutup dan terapkan urutan pemakaian bahan yang lebih dulu masuk.",
+      "Ambil porsi secukupnya dan simpan sisa makanan layak konsumsi di kulkas untuk segera diolah kembali."
+    ],
+    "cautions": [
+      "Jangan mengonsumsi makanan yang sudah berjamur, berbau asam menyimpang, atau tidak aman disimpan; buang atau kelola ke pengolahan organik yang sesuai."
+    ],
+    "source_url": "https://www.epa.gov/sustainable-management-food/sustainable-management-food-basics",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000013",
+    "slug": "baterai-rumah-tangga-bekas",
+    "name": "Baterai Rumah Tangga & Litium-Ion Bekas",
+    "category": "ELECTRONIC",
+    "keywords": ["baterai", "litium", "powerbank", "baterai koin", "aki kecil", "b3"],
+    "recommended_method": "RECYCLE",
+    "summary": "Baterai mengandung logam berat dan energi tersisa yang dapat memicu kebakaran atau kebocoran zat berbahaya; serahkan ke titik dropbox e-waste atau fasilitas B3 resmi, jangan masuk tong biasa.",
+    "steps": [
+      "Simpan baterai bekas di tempat kering dan sejuk, jauh dari jangkauan anak-anak dan benda logam.",
+      "Tutup kedua kutub/terminal baterai litium atau koin dengan selotip non-konduktif (isolasi listrik) atau masukkan ke kantong terpisah agar tidak korsleting.",
+      "Serahkan seluruh baterai utuh ke dropbox e-waste resmi, gerai ritel penerima baterai, atau titik pengumpulan B3 rumah tangga setempat."
+    ],
+    "cautions": [
+      "Dilarang keras membongkar, menusuk, meremukkan, atau membakar baterai bekas.",
+      "Jika baterai menggembung, bocor, atau rusak fisik, hubungi pengelola B3/produsen resmi untuk penanganan khusus."
+    ],
+    "source_url": "https://www.epa.gov/recycle/used-household-batteries",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000014",
+    "slug": "perangkat-elektronik-kecil-ewaste",
+    "name": "Perangkat Elektronik Kecil & Kabel (E-Waste)",
+    "category": "ELECTRONIC",
+    "keywords": ["e-waste", "ponsel bekas", "charger", "kabel", "elektronik", "dropbox"],
+    "recommended_method": "RECYCLE",
+    "summary": "Ponsel, pengisi daya, kabel, dan elektronik kecil mengandung komponen berbahaya sekaligus logam berharga yang harus disalurkan melalui pengumpul e-waste resmi.",
+    "steps": [
+      "Cadangkan data penting lalu hapus seluruh data pribadi (factory reset) sebelum menyerahkan perangkat.",
+      "Jika baterai tidak dapat dilepas oleh pengguna, biarkan perangkat tetap utuh tanpa membongkar paksa.",
+      "Serahkan ke layanan dropbox e-waste resmi pemerintah daerah, program penjemputan pengelola resmi, atau program pengembalian produsen."
+    ],
+    "cautions": [
+      "Jangan membuang e-waste bersama sampah rumah tangga biasa atau membakar kabel untuk mengambil tembaga karena melepas asap beracun."
+    ],
+    "source_url": "https://www.jakarta.go.id/e-waste",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000015",
+    "slug": "sikat-gigi-plastik-manual",
+    "name": "Sikat Gigi Plastik Manual (Campuran Bahan)",
+    "category": "OTHER",
+    "keywords": ["sikat gigi", "plastik campuran", "residu", "kamar mandi"],
+    "recommended_method": "TRASH",
+    "summary": "Sikat gigi manual memadukan gagang plastik, karet, dan bulu nilon serta jepitan logam sehingga tidak diterima fasilitas daur ulang rumah tangga biasa.",
+    "steps": [
+      "Pastikan sikat gigi yang dibuang adalah sikat manual biasa tanpa baterai atau komponen elektronik.",
+      "Jika ada program pengembalian khusus di komunitas atau ritel tertentu yang menerimanya, kamu dapat menyalurkan ke sana.",
+      "Jika tidak ada program khusus, buang ke tempat sampah residu."
+    ],
+    "cautions": [
+      "Sikat gigi elektrik yang memiliki baterai harus dikelola sebagai limbah elektronik (e-waste), bukan sampah residu biasa."
+    ],
+    "source_url": "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000016",
+    "slug": "limbah-bahan-berbahaya-rumah-tangga",
+    "name": "Sisa Cat, Pelarut & Bahan Kimia Rumah Tangga (B3)",
+    "category": "OTHER",
+    "keywords": ["limbah b3", "cat bekas", "pelarut", "pestisida", "kimia", "hhw"],
+    "recommended_method": "TRASH",
+    "summary": "Sisa produk rumah tangga yang mudah menyala, korosif, atau beracun memerlukan pengelolaan khusus melalui pengelola B3/HHW setempat agar tidak mencemari air dan tanah.",
+    "steps": [
+      "Pertahankan sisa bahan kimia di dalam wadah aslinya dengan label tetap terbaca dan tutup rapat.",
+      "Jangan menuang sisa cat, oli, pelarut, atau pestisida ke wastafel, selokan, maupun tanah.",
+      "Hubungi pengelola persampahan atau titik pengumpulan B3 rumah tangga di daerahmu untuk jadwal dan syarat penyerahan."
+    ],
+    "cautions": [
+      "Jangan pernah mencampur dua bahan kimia sisa ke dalam satu wadah karena dapat memicu reaksi berbahaya atau gas beracun.",
+      "Penanganan limbah medis/infeksius atau jarum tajam rumah tangga wajib mengikuti panduan fasilitas kesehatan dan dinas terkait."
+    ],
+    "source_url": "https://www.epa.gov/hw/household-hazardous-waste-hhw",
+    "reviewed_at": "2026-11-13",
+    "reviewer": "Draft kurasi awal — tinjau penanggung jawab konten sebelum PUBLISHED",
+    "publication_status": "DRAFT"
+  }
+]

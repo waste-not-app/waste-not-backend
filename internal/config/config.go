@@ -15,6 +15,7 @@ type Config struct {
 	AIEnabled, RecommendationEnabled, AllowPrototype                     bool
 	SwaggerEnabled                                                       bool
 	DetectionURL, RecommendationURL, DetectionToken, RecommendationToken string
+	PhotoStorageDir                                                      string
 }
 
 func Load() (Config, error) {
@@ -22,7 +23,8 @@ func Load() (Config, error) {
 		SwaggerEnabled: os.Getenv("SWAGGER_ENABLED") == "true",
 		AIEnabled:      os.Getenv("AI_ENABLED") == "true", RecommendationEnabled: env("AI_RECOMMENDATION_ENABLED", os.Getenv("AI_ENABLED")) == "true", AllowPrototype: os.Getenv("AI_ALLOW_PROTOTYPE") == "true",
 		DetectionURL: os.Getenv("AI_DETECTION_URL"), RecommendationURL: os.Getenv("AI_RECOMMENDATION_URL"),
-		DetectionToken: os.Getenv("AI_SERVICE_TOKEN"), RecommendationToken: os.Getenv("AI_RECOMMENDATION_TOKEN")}
+		DetectionToken: os.Getenv("AI_SERVICE_TOKEN"), RecommendationToken: os.Getenv("AI_RECOMMENDATION_TOKEN"),
+		PhotoStorageDir: strings.TrimSpace(os.Getenv("PHOTO_STORAGE_DIR"))}
 	var err error
 	c.Secret, err = base64.StdEncoding.DecodeString(os.Getenv("JWT_SECRET_BASE64"))
 	if err != nil || len(c.Secret) < 32 {

@@ -114,7 +114,7 @@ func (r *repository) GetDashboard(ctx context.Context, userID, today, timezone s
 	}
 	prog := domain.MakeProgress(pStats.Count, pStats.ActivityDates, today)
 
-	recentRows, err := qtx.ListRecentActiveLogs(ctx, userID)
+	recentRows, err := qtx.ListRecentActiveLogsWithPhoto(ctx, userID)
 	if err != nil {
 		return DashboardRes{}, err
 	}
@@ -130,6 +130,7 @@ func (r *repository) GetDashboard(ctx context.Context, userID, today, timezone s
 			ActivityDate:     row.ActivityDate,
 			ActivityTimezone: row.ActivityTimezone,
 			Notes:            row.Notes,
+			PhotoID:          row.PhotoID,
 			Version:          row.Version,
 			CreatedAt:        row.CreatedAt,
 			UpdatedAt:        row.UpdatedAt,

@@ -69,9 +69,9 @@ func (s *service) GetMetadata(ctx context.Context, requestID string) MetadataRes
 			KgMaxDecimalPlaces:   3,
 		},
 		Capabilities: CapabilitiesRes{
-			Achievements:     false,
+			Achievements:     true,
 			Reminders:        false,
-			Photos:           false,
+			Photos:           s.cfg.PhotoStorageDir != "",
 			RecyclingPoints:  false,
 			AIScan:           enabled,
 			AIRecommendation: enabled && s.cfg.RecommendationEnabled,

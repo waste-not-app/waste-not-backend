@@ -10,6 +10,7 @@ var (
 	ErrAIReferenceInvalid  = errors.New("invalid AI provenance reference")
 	ErrAIAlreadyLinked     = errors.New("AI recommendation already linked")
 	ErrAISessionExpired    = errors.New("AI session expired")
+	ErrPhotoAlreadyLinked  = errors.New("photo already linked to another log")
 	ErrInvalidPatchRequest = errors.New("invalid patch request")
 )
 

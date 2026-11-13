@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"github.com/google/uuid"
 )
 
 var Categories = []string{"ORGANIC", "PLASTIC", "PAPER", "GLASS", "METAL", "ELECTRONIC", "OTHER"}
@@ -45,6 +47,7 @@ type Log struct {
 	ActivityDate     string    `json:"activity_date"`
 	ActivityTimezone string    `json:"activity_timezone"`
 	Notes            string    `json:"notes"`
+	PhotoID          *string   `json:"photo_id,omitempty"`
 	Version          int       `json:"version"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
@@ -96,7 +99,9 @@ func (i *LogInput) Validate(today, oldDate string) map[string]string {
 		f["notes"] = "Catatan maksimal 500 karakter."
 	}
 	if i.PhotoID != nil {
-		f["photo_id"] = "Lampiran foto belum diaktifkan."
+		if _, err := uuid.Parse(*i.PhotoID); err != nil {
+			f["photo_id"] = "Pilih foto lampiran yang valid."
+		}
 	}
 	return f
 }

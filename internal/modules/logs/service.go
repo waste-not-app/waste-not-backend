@@ -20,7 +20,7 @@ type Service interface {
 	GetLog(ctx context.Context, userID, id string) (domain.Log, error)
 	ListLogs(ctx context.Context, userID, scope string, q ListLogsQuery) (ListLogsRes, error)
 	UpdateLog(ctx context.Context, u middleware.UserIdentity, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error)
-	DeleteLog(ctx context.Context, userID, id string, version int) error
+	DeleteLog(ctx context.Context, u middleware.UserIdentity, id string, version int) error
 	DecodeCursor(raw, scope string) (cursor.Token, error)
 }
 
@@ -52,6 +52,11 @@ func (s *service) CreateLog(ctx context.Context, u middleware.UserIdentity, in d
 	if !auth.UUID(in.ClientRequestID) {
 		return LogWithProgressRes{}, false, &ValidationError{
 			Fields: map[string]string{"client_request_id": "Gunakan UUID baru untuk draf baru."},
+		}
+	}
+	if in.PhotoID != nil && s.cfg.PhotoStorageDir == "" {
+		return LogWithProgressRes{}, false, &ValidationError{
+			Fields: map[string]string{"photo_id": "Lampiran foto belum diaktifkan."},
 		}
 	}
 	in.Notes = strings.TrimSpace(in.Notes)
@@ -94,10 +99,16 @@ func (s *service) ListLogs(ctx context.Context, userID, scope string, q ListLogs
 }
 
 func (s *service) UpdateLog(ctx context.Context, u middleware.UserIdentity, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error) {
+	if raw, ok := patch["photo_id"]; ok && string(raw) != "null" && s.cfg.PhotoStorageDir == "" {
+		return LogWithProgressRes{}, &ValidationError{
+			Fields: map[string]string{"photo_id": "Lampiran foto belum diaktifkan."},
+		}
+	}
 	today := domain.Today(s.limiter.Now(), u.Timezone)
 	return s.repo.Update(ctx, u.ID, u.Timezone, today, id, version, patch)
 }
 
-func (s *service) DeleteLog(ctx context.Context, userID, id string, version int) error {
-	return s.repo.Delete(ctx, userID, id, version)
+func (s *service) DeleteLog(ctx context.Context, u middleware.UserIdentity, id string, version int) error {
+	today := domain.Today(s.limiter.Now(), u.Timezone)
+	return s.repo.Delete(ctx, u.ID, today, id, version)
 }

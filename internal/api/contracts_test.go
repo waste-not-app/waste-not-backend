@@ -60,6 +60,9 @@ func checkCoreResponse(t *testing.T, method, path string, status int, value any)
 	if strings.HasPrefix(path, "/v1/waste-guide/") {
 		path = "/v1/waste-guide/{id}"
 	}
+	if strings.HasPrefix(path, "/v1/photos/") {
+		path = "/v1/photos/{id}"
+	}
 	var name string
 	if status >= 400 {
 		name = "Error"

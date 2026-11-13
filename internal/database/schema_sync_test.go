@@ -3,7 +3,9 @@ package database
 import (
 	"context"
 	"os"
+	"path/filepath"
 	"reflect"
+	"sort"
 	"strings"
 	"testing"
 
@@ -17,13 +19,40 @@ func TestSchemaCopiesStayInSync(t *testing.T) {
 	if url == "" {
 		t.Skip("TEST_DATABASE_URL is not set")
 	}
-	runner, err := migrations.ReadFile("001_core.sql")
+	runnerFiles, err := migrations.ReadDir(".")
 	if err != nil {
 		t.Fatal(err)
 	}
-	sqlc, err := os.ReadFile("../../sql/migrations/000001_init_core_schema.up.sql")
-	if err != nil {
-		t.Fatal(err)
+	var runnerNames []string
+	for _, f := range runnerFiles {
+		if strings.HasSuffix(f.Name(), ".sql") {
+			runnerNames = append(runnerNames, f.Name())
+		}
+	}
+	sort.Strings(runnerNames)
+	var runner []byte
+	for _, name := range runnerNames {
+		part, err := migrations.ReadFile(name)
+		if err != nil {
+			t.Fatal(err)
+		}
+		runner = append(runner, part...)
+		runner = append(runner, '\n')
+	}
+
+	sqlcFiles, err := filepath.Glob("../../sql/migrations/*.up.sql")
+	if err != nil || len(sqlcFiles) == 0 {
+		t.Fatal("missing sqlc up migrations", err)
+	}
+	sort.Strings(sqlcFiles)
+	var sqlc []byte
+	for _, path := range sqlcFiles {
+		part, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		sqlc = append(sqlc, part...)
+		sqlc = append(sqlc, '\n')
 	}
 
 	ctx := context.Background()

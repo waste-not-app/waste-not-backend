@@ -84,6 +84,7 @@ func Cleanup(ctx context.Context, p *pgxpool.Pool) error {
 	for _, q := range []string{
 		`UPDATE ai_operations SET state='FAILED_UNCERTAIN',error_code='AI_TIMEOUT',http_status=504 WHERE state='IN_PROGRESS' AND created_at<now()-interval '2 minutes'`,
 		`DELETE FROM ai_operations WHERE expires_at<now()`,
+		`UPDATE photos SET status='DELETED',deleted_at=COALESCE(deleted_at,now()) WHERE status='STAGED' AND deleted_at IS NULL AND created_at<now()-interval '24 hours'`,
 		`DELETE FROM rate_limits WHERE bucket<now()-interval '2 days'`,
 		`DELETE FROM sessions WHERE expires_at<now()-interval '7 days'`,
 	} {
