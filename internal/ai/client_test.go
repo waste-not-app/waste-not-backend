@@ -1,8 +1,11 @@
 package ai
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 )
@@ -48,4 +51,45 @@ func TestContractExamples(t *testing.T) {
 			t.Fatal("spoofed confidence accepted")
 		}
 	})
+}
+
+func TestRulesFallbackRetainsProductionGate(t *testing.T) {
+	for _, prototype := range []bool{false, true} {
+		t.Run(map[bool]string{false: "published rules accepted", true: "draft rules rejected"}[prototype], func(t *testing.T) {
+			raw, err := os.ReadFile("../../contracts/ai/examples/internal-recommendation-response.json")
+			if err != nil {
+				t.Fatal(err)
+			}
+			var envelope map[string]any
+			if err = json.Unmarshal(raw, &envelope); err != nil {
+				t.Fatal(err)
+			}
+			result := envelope["data"].(map[string]any)
+			result["provider"] = "rules"
+			result["prototype_only"] = prototype
+			result["reason_code"] = "LLM_UNAVAILABLE"
+			worker := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				_ = json.NewEncoder(w).Encode(envelope)
+			}))
+			defer worker.Close()
+			client, err := New(config.Config{RecommendationURL: worker.URL, AllowPrototype: false})
+			if err != nil {
+				t.Fatal(err)
+			}
+			value, err := client.Recommend(context.Background(), "rules-fallback-test", map[string]any{})
+			if prototype {
+				if err == nil {
+					t.Fatal("production accepted a draft rules recommendation")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			if value["provider"] != "rules" || value["reason_code"] != "LLM_UNAVAILABLE" || value["recommended_method"] != "RECYCLE" {
+				t.Fatalf("fallback provenance lost: %v", value)
+			}
+		})
+	}
 }

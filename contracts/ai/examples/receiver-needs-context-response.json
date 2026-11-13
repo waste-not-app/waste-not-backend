@@ -12,7 +12,7 @@
     "guide_refs": [
       {
         "guide_id": "pilot-glass-bottle",
-        "version": 6
+        "version": 7
       }
     ],
     "missing_context": [
@@ -26,7 +26,7 @@
     "recommendation_basis": null,
     "recommendation_id": "00000000-0000-0000-0000-000000000009",
     "recommendation_scope": null,
-    "recommendation_version": "pilot-policy-08",
+    "recommendation_version": "pilot-policy-09",
     "recommended_method": null,
     "source_details": [
       {
