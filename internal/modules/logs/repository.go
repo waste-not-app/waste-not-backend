@@ -316,6 +316,12 @@ func (r *repository) Update(ctx context.Context, userID, timezone, today, id str
 		return LogWithProgressRes{}, ErrVersionConflict
 	}
 
+	var oldPhotoID *string
+	if oldRow.PhotoID != nil {
+		v := *oldRow.PhotoID
+		oldPhotoID = &v
+	}
+
 	in := domain.LogInput{
 		Category:     oldRow.Category,
 		Method:       oldRow.Method,
@@ -325,6 +331,9 @@ func (r *repository) Update(ctx context.Context, userID, timezone, today, id str
 		ActivityDate: oldRow.ActivityDate,
 		Notes:        oldRow.Notes,
 		PhotoID:      oldRow.PhotoID,
+	}
+	if _, hasPhoto := patch["photo_id"]; hasPhoto {
+		in.PhotoID = nil
 	}
 	targets := map[string]any{
 		"category":      &in.Category,
@@ -361,15 +370,15 @@ func (r *repository) Update(ctx context.Context, userID, timezone, today, id str
 		return LogWithProgressRes{}, &ValidationError{Fields: fields}
 	}
 
-	photoChanged := (oldRow.PhotoID == nil) != (in.PhotoID == nil) || (oldRow.PhotoID != nil && in.PhotoID != nil && *oldRow.PhotoID != *in.PhotoID)
+	photoChanged := (oldPhotoID == nil) != (in.PhotoID == nil) || (oldPhotoID != nil && in.PhotoID != nil && *oldPhotoID != *in.PhotoID)
 	if photoChanged && in.PhotoID != nil {
 		if err = r.attachPhoto(ctx, qtx, userID, *in.PhotoID, oldRow.ID); err != nil {
 			return LogWithProgressRes{}, err
 		}
 	}
 	retiredKey := ""
-	if photoChanged && oldRow.PhotoID != nil {
-		retiredKey, err = r.retirePhoto(ctx, qtx, userID, *oldRow.PhotoID)
+	if photoChanged && oldPhotoID != nil {
+		retiredKey, err = r.retirePhoto(ctx, qtx, userID, *oldPhotoID)
 		if err != nil {
 			return LogWithProgressRes{}, err
 		}
