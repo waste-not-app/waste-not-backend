@@ -184,6 +184,30 @@ class BlueGreenRollback(unittest.TestCase):
                 bluegreen.reconcile(18082)
             reload.assert_not_called()
 
+    def test_photo_storage_dir_mounts_volume_and_rejects_traversal(self):
+        with tempfile.TemporaryDirectory() as directory:
+            config = Path(directory) / 'upstream.conf'
+            config.write_text('upstream wastenot_upstream { server 127.0.0.1:18081; }')
+            calls = []
+            def run(*args):
+                calls.append(args)
+                return 'sha256:test' if 'inspect' in args else ''
+            values = {'DATABASE_URL_APP': 'db', 'DATABASE_URL_MIGRATE': 'db', 'JWT_SECRET_BASE64': 'jwt',
+                      'PHOTO_STORAGE_DIR': '/var/lib/wastenot-photos'}
+            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'PENDING', Path(directory) / 'pending.json'), \
+                 patch.object(bluegreen, 'settings', return_value=values), patch.object(bluegreen, 'run', side_effect=run), \
+                 patch.object(bluegreen, 'reconcile'), patch.object(bluegreen, 'ready', return_value=True), \
+                 patch.object(bluegreen, 'reload_nginx'), patch.object(bluegreen.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0)):
+                bluegreen.deploy('wastenot-backend:' + 'a' * 40, Path('unused'))
+            start = next(args for args in calls if '-d' in args)
+            self.assertIn('--volume', start)
+            self.assertIn('/var/lib/wastenot-photos:/var/lib/wastenot-photos', start)
+            bad = dict(values, PHOTO_STORAGE_DIR='/var/lib/../etc/passwd')
+            with patch.object(bluegreen, 'UPSTREAM', config), patch.object(bluegreen, 'PENDING', Path(directory) / 'pending2.json'), \
+                 patch.object(bluegreen, 'settings', return_value=bad), patch.object(bluegreen, 'run', side_effect=run):
+                with self.assertRaises(ValueError):
+                    bluegreen.deploy('wastenot-backend:' + 'a' * 40, Path('unused'))
+
 
 class ReadinessIdentity(unittest.TestCase):
     def test_wrong_release_cannot_satisfy_readiness(self):
