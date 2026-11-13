@@ -2,6 +2,8 @@
 
 Kontrak disinkronkan dengan `pilot-policy-09`. Kedua pin mengunci 34 artifact identik dari generator AI. Adapter Go memakai schema tersebut serta snapshot kelas/checksum dari worker aktif.
 
+Rilis ini menaikkan compiler CI/Docker ke Go 1.27.4 setelah govulncheck menemukan GO-2026-6859 pada net/http Go 1.27.3. [Rilis resmi Go](https://go.dev/doc/devel/release#go1.27.4) memuat perbaikan keamanan net/http. Pemeriksaan kerentanan tetap aktif; tidak ada pengecualian untuk melewati temuan tersebut.
+
 Jika Gemini gagal tetapi evidence terbitan yang cocok tersedia, Python dapat mengembalikan READY dengan `provider=rules`, metode/sumber yang tervalidasi, dan kode kegagalan Gemini pada `reason_code`. Go menyimpan provenance tersebut tanpa menggantinya menjadi Gemini. `prototype_only=true` tetap ditolak ketika `AI_ALLOW_PROTOTYPE=false`. Demo AI memakai aturan langsung dengan 85 panduan DRAFT; perluasan itu tidak otomatis diterbitkan pada worker produksi yang hanya memiliki empat panduan PUBLISHED. Risiko dan syarat yang belum terpenuhi tetap dapat menghasilkan NEEDS_CONTEXT/UNAVAILABLE. Tidak ada aturan keputusan baru yang disalin ke Go.
 
 Pengujian `TestPythonCombinedDetectionWorker` menguji foto botol publik melalui Go, PostgreSQL, detektor v4 + COCO11s nyata dan keputusan Python dengan provider fixture. Hasil memeriksa versi gabungan, rekomendasi kaca berisiko tajam, sumber/peringatan, replay dan konfirmasi simpan. Untuk menjalankannya, isi `TEST_DATABASE_URL`, `TEST_AI_DETECTION_URL`, `TEST_AI_DETECTION_TOKEN`, `TEST_AI_RECOMMENDATION_URL`, `TEST_AI_RECOMMENDATION_TOKEN` dan `TEST_AI_IMAGE`. Worker keputusan pengujian memakai fixture/draft secara eksplisit. Test dilewati ketika worker/gambar pengujian belum disediakan.

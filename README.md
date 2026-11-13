@@ -6,7 +6,7 @@ Implementasi mencakup akun/sesi, CRUD catatan, pagination/filter, dashboard, sta
 
 ## Menjalankan lokal
 
-Prasyarat: Go 1.27.3, PostgreSQL 18; atau Docker Compose untuk seluruh layanan inti.
+Prasyarat: Go 1.27.4, PostgreSQL 18; atau Docker Compose untuk seluruh layanan inti.
 
 ```sh
 cp .env.example .env
