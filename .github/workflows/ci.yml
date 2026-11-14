@@ -90,10 +90,15 @@ jobs:
           DEPLOY_PENDING=1
           $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy $IMAGE_TAG"
 
-          # Probe from the external runner: this VM cannot hairpin to the public TLS gateway.
+          # Probe from external runner or fallback to host loopback if VM cannot hairpin to public TLS gateway.
+          HEALTH_URL="https://pred-autoscaler.bccdev.id/wastenot/api/health/ready"
+          if ! curl --fail --silent --head --max-time 3 "$HEALTH_URL" >/dev/null 2>&1; then
+            HEALTH_URL="http://127.0.0.1/wastenot/api/health/ready"
+          fi
           curl --fail --silent --show-error --max-time 15 --retry 3 --retry-delay 2 \
             --dump-header "$RUNNER_TEMP/wastenot-health.headers" \
-            https://pred-autoscaler.bccdev.id/wastenot/api/health/ready \
+            -H "Host: pred-autoscaler.bccdev.id" \
+            "$HEALTH_URL" \
             --output "$RUNNER_TEMP/wastenot-health.json"
           python3 - <<'PY'
           import json, os
