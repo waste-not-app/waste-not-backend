@@ -35,6 +35,11 @@ def release(changes=None, extra=None):
 
 
 class ReleaseBoundary(unittest.TestCase):
+    def setUp(self):
+        self.lock_patch = patch.object(deploy, 'AI_LOCK', Path('/tmp/nonexistent-ai-lock'))
+        self.lock_patch.start()
+        self.addCleanup(self.lock_patch.stop)
+
     def test_valid(self):
         commit, files = deploy.parse_release(release())
         self.assertEqual(commit, 'a' * 40)
@@ -71,6 +76,11 @@ class ReleaseBoundary(unittest.TestCase):
 
 
 class DeploymentRollback(unittest.TestCase):
+    def setUp(self):
+        self.lock_patch = patch.object(deploy, 'AI_LOCK', Path('/tmp/nonexistent-ai-lock'))
+        self.lock_patch.start()
+        self.addCleanup(self.lock_patch.stop)
+
     def test_failed_readiness_restores_previous_binary(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory)
@@ -106,10 +116,10 @@ class ReadinessScope(unittest.TestCase):
                 return Response(b'{"ready":true}')
             raise OSError('prefix unavailable')
         with patch.object(deploy.Path,'exists',return_value=True), \
+             patch.object(deploy,'AI_LOCK',Path('/tmp/nonexistent-ai-lock')), \
              patch.object(deploy.urllib.request,'urlopen',side_effect=response), \
              patch.object(deploy.time,'sleep'):
             self.assertFalse(deploy.ready())
-
 
 class AISourceBoundary(unittest.TestCase):
     def test_path_escape_in_nested_source_is_rejected(self):
