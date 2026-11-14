@@ -1,18 +1,23 @@
-name: Backend CI
+name: CI
+
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
+
 permissions:
   contents: read
+
 concurrency:
-  group: backend-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   verify:
+    name: Verify & Test
     timeout-minutes: 25
-    runs-on: [self-hosted, backend]
+    runs-on: [self-hosted, alberd-staging-backend]
     services:
       postgres:
         image: postgres:18-bookworm
@@ -28,7 +33,7 @@ jobs:
       TEST_DATABASE_URL: postgres://postgres:ci-only-password@localhost:5433/wastenot_test?sslmode=disable
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+      - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
           cache: true
@@ -38,79 +43,3 @@ jobs:
       - run: make check
       - run: make vuln
       - run: make build
-      - name: Build Docker image
-        run: docker build --tag wastenot-backend:${{ github.sha }} .
-      - name: Package Docker image artifact
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        run: |
-          mkdir -p docker-image
-          docker save wastenot-backend:${{ github.sha }} | gzip > docker-image/wastenot-backend.tar.gz
-      - name: Prepare dedicated SSH identity
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        env:
-          DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY || secrets.WASTENOT_DEPLOY_KEY }}
-          KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS || secrets.WASTENOT_KNOWN_HOSTS }}
-        run: |
-          umask 077
-          printf '%s\n' "$DEPLOY_KEY" > "$RUNNER_TEMP/wastenot-key"
-          printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/wastenot-known-hosts"
-      - name: Deploy containerized release via Blue-Green deployment
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        env:
-          DEPLOY_HOST: ${{ vars.VM_HOST || vars.WASTENOT_DEPLOY_HOST }}
-          DEPLOY_PORT: ${{ vars.VM_PORT || vars.WASTENOT_DEPLOY_PORT }}
-          DEPLOY_USER: ${{ vars.VM_USER || vars.WASTENOT_DEPLOY_USER }}
-          IMAGE_TAG: wastenot-backend:${{ github.sha }}
-        run: |
-          SSH_CMD="ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
-            -o UserKnownHostsFile=$RUNNER_TEMP/wastenot-known-hosts \
-            -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
-            -i $RUNNER_TEMP/wastenot-key -p $DEPLOY_PORT"
-
-          echo "==> Transferring and loading Docker image into VM..."
-          gzip -dc docker-image/wastenot-backend.tar.gz | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "docker load"
-
-          echo "==> Installing deployment helper on VM..."
-          STAGE=$($SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" 'mktemp -d /tmp/wastenot-backend-deploy.XXXXXXXX')
-          [[ "$STAGE" =~ ^/tmp/wastenot-backend-deploy\.[a-zA-Z0-9]+$ ]]
-          DEPLOY_PENDING=0
-          cleanup() {
-            RESULT=$?
-            trap - EXIT
-            if [[ "$DEPLOY_PENDING" == 1 ]]; then
-              $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy --rollback $IMAGE_TAG" || RESULT=1
-            fi
-            $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "rm -rf -- $STAGE" || true
-            exit "$RESULT"
-          }
-          trap cleanup EXIT
-          cat deploy/bluegreen.py | $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "cat > $STAGE/bluegreen.py && sudo -n install -m 0755 -o root -g root $STAGE/bluegreen.py /usr/local/sbin/wastenot-backend-deploy"
-
-          echo "==> Executing Blue-Green switch on VM..."
-          DEPLOY_PENDING=1
-          $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy $IMAGE_TAG"
-
-          # Probe from external runner or fallback to host loopback if VM cannot hairpin to public TLS gateway.
-          HEALTH_URL="https://pred-autoscaler.bccdev.id/wastenot/api/health/ready"
-          if ! curl --fail --silent --head --max-time 3 "$HEALTH_URL" >/dev/null 2>&1; then
-            HEALTH_URL="http://127.0.0.1/wastenot/api/health/ready"
-          fi
-          curl --fail --silent --show-error --max-time 15 --retry 3 --retry-delay 2 \
-            --dump-header "$RUNNER_TEMP/wastenot-health.headers" \
-            -H "Host: pred-autoscaler.bccdev.id" \
-            "$HEALTH_URL" \
-            --output "$RUNNER_TEMP/wastenot-health.json"
-          python3 - <<'PY'
-          import json, os
-          from pathlib import Path
-          root = Path(os.environ['RUNNER_TEMP'])
-          assert json.loads((root / 'wastenot-health.json').read_text())['ready'] is True
-          releases = [line.partition(':')[2].strip() for line in (root / 'wastenot-health.headers').read_text().splitlines()
-                      if line.partition(':')[0].lower() == 'x-wastenot-release']
-          assert releases and releases[-1] == os.environ['IMAGE_TAG'].split(':', 1)[1]
-          PY
-          $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo -n /usr/local/sbin/wastenot-backend-deploy --confirm $IMAGE_TAG"
-          DEPLOY_PENDING=0
-      - name: Remove temporary SSH files
-        if: always()
-        run: rm -f "$RUNNER_TEMP/wastenot-key" "$RUNNER_TEMP/wastenot-known-hosts"

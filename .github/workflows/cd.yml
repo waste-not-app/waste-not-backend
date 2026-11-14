@@ -1,0 +1,63 @@
+name: CD Staging
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-staging-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: [self-hosted, alberd-staging-backend]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Build Docker image
+        run: |
+          set -e
+          cp /home/dev/wastenot-backend.env .env
+          trap 'rm -f .env' EXIT
+          docker compose -p waste-not-backend build
+
+  deploy:
+    name: Deploy to Staging
+    runs-on: [self-hosted, alberd-staging-backend]
+    needs: build
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Deploy with Docker Compose
+        run: |
+          set -e
+          cp /home/dev/wastenot-backend.env .env
+          trap 'rm -f .env' EXIT
+          docker compose -p waste-not-backend up -d --remove-orphans
+          docker image prune -f
+
+      - name: Post-deployment health check
+        run: |
+          set -e
+          for i in $(seq 1 12); do
+            if curl -sf http://127.0.0.1:8080/health/ready > /dev/null 2>&1; then
+              echo "Health check passed"
+              curl -sS http://127.0.0.1:8080/health/ready
+              echo ""
+              exit 0
+            fi
+            echo "Waiting... attempt $i/12"
+            sleep 5
+          done
+          echo "Health check failed after 12 attempts"
+          docker compose -p waste-not-backend logs --tail=50 api
+          exit 1

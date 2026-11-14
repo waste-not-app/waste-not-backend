@@ -25,13 +25,18 @@ services:
         condition: service_healthy
   api:
     build: .
+    network_mode: host
     environment:
-      HTTP_ADDR: 0.0.0.0:8080
-      DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@db:5432/wastenot?sslmode=disable
+      HTTP_ADDR: 127.0.0.1:8080
+      DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@127.0.0.1:5432/wastenot?sslmode=disable
       JWT_SECRET_BASE64: ${JWT_SECRET_BASE64:?Generate a JWT signing secret in .env}
-      AI_ENABLED: 'false'
-    ports:
-      - 127.0.0.1:8080:8080
+      AI_ENABLED: ${AI_ENABLED:-false}
+      AI_RECOMMENDATION_ENABLED: ${AI_RECOMMENDATION_ENABLED:-false}
+      AI_ALLOW_PROTOTYPE: ${AI_ALLOW_PROTOTYPE:-false}
+      AI_DETECTION_URL: ${AI_DETECTION_URL:-http://127.0.0.1:8091}
+      AI_RECOMMENDATION_URL: ${AI_RECOMMENDATION_URL:-http://127.0.0.1:8093}
+      AI_SERVICE_TOKEN: ${AI_SERVICE_TOKEN:-}
+      AI_RECOMMENDATION_TOKEN: ${AI_RECOMMENDATION_TOKEN:-}
     depends_on:
       migrate:
         condition: service_completed_successfully
