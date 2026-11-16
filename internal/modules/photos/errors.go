@@ -10,4 +10,5 @@ var (
 	ErrUnsupportedMediaType    = errors.New("unsupported media type")
 	ErrInvalidImage            = errors.New("invalid image content")
 	ErrImageDimensionsExceeded = errors.New("image dimensions exceed limits")
+	ErrCleanupPending          = errors.New("private photo cleanup pending")
 )

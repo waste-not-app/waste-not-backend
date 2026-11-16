@@ -56,6 +56,7 @@ func run(log *slog.Logger) error {
 	if err != nil {
 		return err
 	}
+	defer srv.Close()
 
 	result := make(chan error, 1)
 	go func() {

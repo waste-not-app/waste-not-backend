@@ -35,12 +35,6 @@ func (l *Limiter) Now() time.Time {
 	return l.nowFn()
 }
 
-func (l *Limiter) SetNowFunc(fn func() time.Time) {
-	if fn != nil {
-		l.nowFn = fn
-	}
-}
-
 func (l *Limiter) Allow(ctx context.Context, key string, n int, window time.Duration) (bool, error) {
 	bucket := l.nowFn().UTC().Truncate(window)
 	hits, err := l.q.IncrementRateLimit(ctx, db.IncrementRateLimitParams{

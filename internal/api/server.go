@@ -1,8 +1,10 @@
 package api
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
+	"sync"
 	"time"
 
 	swaggo "github.com/gofiber/contrib/v3/swaggo"
@@ -37,11 +39,20 @@ type Server struct {
 	Signer  auth.Signer
 	AI      *ai.Client
 	Limiter *ratelimit.Limiter
-	Now     func() time.Time
 	Log     *slog.Logger
+	cancel  context.CancelFunc
+	workers sync.WaitGroup
 }
 
 func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
+	mailer, err := authMod.NewSMTPMailer(c)
+	if err != nil {
+		return nil, err
+	}
+	return newServer(db, c, log, mailer)
+}
+
+func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer authMod.ResetMailer) (*Server, error) {
 	aiClient, err := ai.New(c)
 	if err != nil {
 		return nil, err
@@ -91,8 +102,8 @@ func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
 	sysRepo := system.NewRepository(db)
 	sysService := system.NewService(sysRepo, c, aiClient)
 
-	authRepo := authMod.NewRepository(db)
-	authService := authMod.NewService(authRepo, signer, limiter, dummyHash)
+	authRepo := authMod.NewRepository(db, photoStorage)
+	authService := authMod.NewService(authRepo, signer, limiter, dummyHash, mailer)
 
 	logsRepo := logs.NewRepository(db, photoStorage)
 	logsService := logs.NewService(logsRepo, c, limiter, cursorCodec)
@@ -134,13 +145,41 @@ func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
 		Signer:  signer,
 		AI:      aiClient,
 		Limiter: limiter,
-		Now:     time.Now,
 		Log:     log,
 	}
+	ctx, cancel := context.WithCancel(context.Background())
+	s.cancel = cancel
+	s.workers.Add(2)
+	go func() {
+		defer s.workers.Done()
+		authService.RunResetMail(ctx, log)
+	}()
+	go func() {
+		defer s.workers.Done()
+		ticker := time.NewTicker(time.Minute)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				cleanup, stop := context.WithTimeout(ctx, 20*time.Second)
+				err := photos.DrainCleanup(cleanup, db, photoStorage, "", 100)
+				stop()
+				if err != nil && ctx.Err() == nil && log != nil {
+					log.Warn("private photo cleanup pending; storage or queue unavailable")
+				}
+			}
+		}
+	}()
 	return s, nil
 }
 
 func (s *Server) Handler() http.Handler {
-	s.Limiter.SetNowFunc(s.Now)
 	return adaptor.FiberApp(s.App)
+}
+
+func (s *Server) Close() {
+	s.cancel()
+	s.workers.Wait()
 }

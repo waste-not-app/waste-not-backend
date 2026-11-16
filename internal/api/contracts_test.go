@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 	"testing"
@@ -77,10 +77,7 @@ func checkCoreResponse(t *testing.T, method, path string, status int, value any)
 			return
 		}
 		responses := op["responses"].(map[string]any)
-		key := "200"
-		if status == http.StatusCreated {
-			key = "201"
-		}
+		key := strconv.Itoa(status)
 		response := responses[key].(map[string]any)
 		schema := response["content"].(map[string]any)["application/json"].(map[string]any)["schema"].(map[string]any)
 		if ref, ok := schema["$ref"].(string); ok {

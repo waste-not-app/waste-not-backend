@@ -2,7 +2,11 @@ package auth
 
 import (
 	"context"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/sha256"
 	"errors"
+	"log/slog"
 
 	"github.com/google/uuid"
 	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
@@ -17,6 +21,10 @@ type Service interface {
 	RefreshToken(ctx context.Context, refreshToken string) (coreauth.Tokens, error)
 	Logout(ctx context.Context, sessionID, userID string) error
 	GetMe(ctx context.Context, u middleware.UserIdentity) (UserRes, error)
+	RequestPasswordReset(ctx context.Context, email string) error
+	ConfirmPasswordReset(ctx context.Context, token, password string) error
+	DeleteMe(ctx context.Context, userID, password string) error
+	RunResetMail(ctx context.Context, log *slog.Logger)
 }
 
 type service struct {
@@ -24,14 +32,23 @@ type service struct {
 	signer    coreauth.Signer
 	limiter   *ratelimit.Limiter
 	dummyHash string
+	mailer    ResetMailer
+	mailKey   cipher.AEAD
 }
 
-func NewService(repo Repository, signer coreauth.Signer, limiter *ratelimit.Limiter, dummyHash string) Service {
+func NewService(repo Repository, signer coreauth.Signer, limiter *ratelimit.Limiter, dummyHash string, mailer ResetMailer) Service {
+	keyHash := sha256.New()
+	keyHash.Write([]byte("wastenot-password-reset-mail-v1\x00"))
+	keyHash.Write(signer.Secret)
+	block, _ := aes.NewCipher(keyHash.Sum(nil))
+	mailKey, _ := cipher.NewGCMWithRandomNonce(block)
 	return &service{
 		repo:      repo,
 		signer:    signer,
 		limiter:   limiter,
 		dummyHash: dummyHash,
+		mailer:    mailer,
+		mailKey:   mailKey,
 	}
 }
 
@@ -61,7 +78,7 @@ func (s *service) Login(ctx context.Context, normalizedEmail, password string) (
 	if !coreauth.Verify(password, rec.PasswordHash) {
 		return coreauth.Tokens{}, ErrUnauthenticated
 	}
-	return s.repo.CreateSessionForUser(ctx, rec.UserRes, s.signer, s.limiter.Now())
+	return s.repo.CreateSessionForUser(ctx, rec.UserRes, rec.PasswordHash, s.signer, s.limiter.Now())
 }
 
 func (s *service) RefreshToken(ctx context.Context, refreshToken string) (coreauth.Tokens, error) {

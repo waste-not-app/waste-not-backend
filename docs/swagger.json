@@ -55,6 +55,43 @@
                 }
             }
         },
+        "/v1/achievements": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve achievement definitions and derived unlock/progress state for the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Achievements"
+                ],
+                "summary": "List User Achievements",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/ai/detections": {
             "post": {
                 "security": [
@@ -442,6 +479,140 @@
                 }
             }
         },
+        "/v1/auth/password-reset": {
+            "post": {
+                "description": "Accept a conditional recovery request. A code is emailed only for an existing account, never returned here.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Request password reset",
+                "parameters": [
+                    {
+                        "description": "Account email",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_auth.PasswordResetReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_PasswordResetRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/password-reset/confirm": {
+            "post": {
+                "description": "Consume a single-use recovery code, replace the password and revoke every session atomically.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Confirm password reset",
+                "parameters": [
+                    {
+                        "description": "Recovery code and new password",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_auth.PasswordResetConfirmReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/auth/refresh": {
             "post": {
                 "description": "Rotate refresh token and issue a new access/refresh token pair",
@@ -636,6 +807,85 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Verify the current password, cascade owned data and remove private photo files. Storage failures return 503 with durable cleanup pending, never a confirmed purge.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Delete current account",
+                "parameters": [
+                    {
+                        "description": "Current password",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_auth.DeleteMeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/v1/metadata": {
@@ -662,6 +912,181 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/photos": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload a validated JPEG, PNG, or WebP image (max 5 MiB) for attaching to a waste log",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Photos"
+                ],
+                "summary": "Upload Private Photo Attachment",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Image file (image/jpeg, image/png, image/webp)",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_photos_PhotoRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/photos/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Download an authenticated user's private photo attachment",
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "Photos"
+                ],
+                "summary": "Download Private Photo Attachment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Photo UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a staged photo attachment owned by the authenticated user",
+                "tags": [
+                    "Photos"
+                ],
+                "summary": "Delete Unused Photo Attachment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Photo UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
                         "schema": {
                             "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
                         }
@@ -1255,6 +1680,9 @@
                 "notes": {
                     "type": "string"
                 },
+                "photo_id": {
+                    "type": "string"
+                },
                 "quantity_kind": {
                     "type": "string"
                 },
@@ -1452,6 +1880,23 @@
                 }
             }
         },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_modules_achievements.AchievementRes"
+                    }
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log": {
             "type": "object",
             "properties": {
@@ -1550,6 +1995,20 @@
                 }
             }
         },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_PasswordResetRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_auth.PasswordResetRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes": {
             "type": "object",
             "properties": {
@@ -1592,6 +2051,20 @@
                 }
             }
         },
+        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_photos_PhotoRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_photos.PhotoRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes": {
             "type": "object",
             "properties": {
@@ -1602,6 +2075,38 @@
                     "$ref": "#/definitions/internal_modules_system.MetadataRes"
                 },
                 "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_achievements.AchievementRes": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "current_value": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_unlocked": {
+                    "type": "boolean"
+                },
+                "requirement_type": {
+                    "type": "string"
+                },
+                "target_value": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "unlocked_at": {
                     "type": "string"
                 }
             }
@@ -1859,6 +2364,14 @@
                 }
             }
         },
+        "internal_modules_auth.DeleteMeReq": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_modules_auth.LoginReq": {
             "type": "object",
             "properties": {
@@ -1866,6 +2379,33 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.PasswordResetConfirmReq": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.PasswordResetReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.PasswordResetRes": {
+            "type": "object",
+            "properties": {
+                "message": {
                     "type": "string"
                 }
             }
@@ -1995,6 +2535,9 @@
                 "notes": {
                     "type": "string"
                 },
+                "photo_id": {
+                    "type": "string"
+                },
                 "progress": {
                     "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Progress"
                 },
@@ -2030,6 +2573,9 @@
                 "notes": {
                     "type": "string"
                 },
+                "photo_id": {
+                    "type": "string"
+                },
                 "quantity_kind": {
                     "type": "string"
                 },
@@ -2038,6 +2584,29 @@
                 },
                 "weight_g": {
                     "type": "integer"
+                }
+            }
+        },
+        "internal_modules_photos.PhotoRes": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "preview_url": {
+                    "type": "string"
+                },
+                "size_bytes": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },

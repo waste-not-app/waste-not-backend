@@ -41,6 +41,23 @@ type RefreshTokenReq struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
+type PasswordResetReq struct {
+	Email string `json:"email"`
+}
+
+type PasswordResetConfirmReq struct {
+	Token    string `json:"token"`
+	Password string `json:"password"`
+}
+
+type DeleteMeReq struct {
+	Password string `json:"password"`
+}
+
+type PasswordResetRes struct {
+	Message string `json:"message"`
+}
+
 type AuthTokensRes struct {
 	AccessToken      string   `json:"access_token"`
 	AccessExpiresAt  string   `json:"access_expires_at"`

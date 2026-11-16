@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -16,6 +17,8 @@ type Config struct {
 	SwaggerEnabled                                                       bool
 	DetectionURL, RecommendationURL, DetectionToken, RecommendationToken string
 	PhotoStorageDir                                                      string
+	SMTPHost, SMTPUsername, SMTPPassword, SMTPFrom                       string
+	SMTPPort                                                             int
 }
 
 func Load() (Config, error) {
@@ -26,6 +29,14 @@ func Load() (Config, error) {
 		DetectionToken: os.Getenv("AI_SERVICE_TOKEN"), RecommendationToken: os.Getenv("AI_RECOMMENDATION_TOKEN"),
 		PhotoStorageDir: strings.TrimSpace(os.Getenv("PHOTO_STORAGE_DIR"))}
 	var err error
+	c.SMTPHost = strings.TrimSpace(os.Getenv("SMTP_HOST"))
+	c.SMTPUsername = os.Getenv("SMTP_USERNAME")
+	c.SMTPPassword = os.Getenv("SMTP_PASSWORD")
+	c.SMTPFrom = strings.TrimSpace(os.Getenv("SMTP_FROM"))
+	c.SMTPPort, err = strconv.Atoi(env("SMTP_PORT", "587"))
+	if err != nil || c.SMTPPort < 1 || c.SMTPPort > 65535 {
+		return c, errors.New("SMTP_PORT must be between 1 and 65535")
+	}
 	c.Secret, err = base64.StdEncoding.DecodeString(os.Getenv("JWT_SECRET_BASE64"))
 	if err != nil || len(c.Secret) < 32 {
 		return c, errors.New("JWT_SECRET_BASE64 requires at least 32 random bytes encoded as base64")

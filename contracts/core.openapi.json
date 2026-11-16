@@ -21,6 +21,42 @@
     }
   ],
   "paths": {
+    "/v1/auth/password-reset": {
+      "post": {
+        "summary": "Request conditional password recovery",
+        "description": "Same acknowledgement for known and unknown emails. Missing SMTP configuration or uniform TLS availability probe failure returns 503. Only existing accounts receive mail through the durable encrypted outbox.",
+        "operationId": "post_v1_auth_password_reset",
+        "security": [],
+        "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PasswordResetRequest"}}}},
+        "responses": {
+          "202": {"description": "Request accepted, not a claim of completed email delivery", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PasswordResetResponse"}}}},
+          "400": {"description": "Invalid JSON", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "413": {"description": "Body too large", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "415": {"description": "JSON required", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "422": {"description": "Invalid email", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "429": {"description": "IP or email rate limit", "headers": {"Retry-After": {"schema": {"type": "integer", "minimum": 1}}}, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "503": {"description": "SMTP or database unavailable", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+        }
+      }
+    },
+    "/v1/auth/password-reset/confirm": {
+      "post": {
+        "summary": "Replace password and revoke every session",
+        "description": "Pasted opaque recovery token. Valid 15 minutes, single-use, replaced by a new request. Expired, replaced and replayed tokens return 422 INVALID_RESET_TOKEN with field token.",
+        "operationId": "post_v1_auth_password_reset_confirm",
+        "security": [],
+        "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PasswordResetConfirm"}}}},
+        "responses": {
+          "204": {"description": "Password changed and all access/refresh sessions revoked"},
+          "400": {"description": "Invalid JSON", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "413": {"description": "Body too large", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "415": {"description": "JSON required", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "422": {"description": "VALIDATION_ERROR or INVALID_RESET_TOKEN", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "429": {"description": "IP or hashed-token attempt limit", "headers": {"Retry-After": {"schema": {"type": "integer", "minimum": 1}}}, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "503": {"description": "Unavailable", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+        }
+      }
+    },
     "/v1/auth/register": {
       "post": {
         "summary": "Register account and session",
@@ -556,6 +592,23 @@
       }
     },
     "/v1/me": {
+      "delete": {
+        "summary": "Delete authenticated account and owned data",
+        "description": "Verify current password. 403 WRONG_PASSWORD has field password, not session expiry. Owner data cascades and photo removal/upload intents are durably tracked. 204 confirms physical cleanup including interrupted-upload temporary files. Deferred or locked owner cleanup returns 503 ACCOUNT_DELETION_PENDING after committed account/session removal: clear owner-local state and sign out without reporting a completed purge.",
+        "operationId": "delete_v1_me",
+        "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/DeleteMe"}}}},
+        "responses": {
+          "204": {"description": "Account, owned database data and queued private photos removed"},
+          "400": {"description": "Invalid JSON", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "401": {"description": "Invalid or expired session", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "403": {"description": "WRONG_PASSWORD; fields.password explains rejection", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "413": {"description": "Body too large", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "415": {"description": "JSON required", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "422": {"description": "VALIDATION_ERROR", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "429": {"description": "Rate limited", "headers": {"Retry-After": {"schema": {"type": "integer", "minimum": 1}}}, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "503": {"description": "UNAVAILABLE before commit; ACCOUNT_DELETION_PENDING after committed owner removal with physical cleanup pending", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+        }
+      },
       "get": {
         "summary": "Profile and live derived progress",
         "operationId": "get_v1_me",
@@ -2432,6 +2485,33 @@
       }
     },
     "schemas": {
+      "PasswordResetRequest": {
+        "type": "object", "required": ["email"],
+        "properties": {"email": {"type": "string", "format": "email", "maxLength": 254}},
+        "additionalProperties": false
+      },
+      "PasswordResetConfirm": {
+        "type": "object", "required": ["token", "password"],
+        "properties": {
+          "token": {"type": "string", "minLength": 43, "maxLength": 43, "pattern": "^[A-Za-z0-9_-]{43}$"},
+          "password": {"type": "string", "minLength": 12, "maxLength": 128}
+        },
+        "additionalProperties": false
+      },
+      "DeleteMe": {
+        "type": "object", "required": ["password"],
+        "properties": {"password": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "additionalProperties": false
+      },
+      "PasswordResetResponse": {
+        "type": "object", "required": ["data", "request_id", "api_version"],
+        "properties": {
+          "data": {"type": "object", "required": ["message"], "properties": {"message": {"type": "string"}}, "additionalProperties": false},
+          "request_id": {"type": "string", "format": "uuid"},
+          "api_version": {"const": "1.0.0"}
+        },
+        "additionalProperties": false
+      },
       "Category": {
         "type": "string",
         "enum": [

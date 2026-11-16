@@ -3,6 +3,7 @@ package photos
 import (
 	"context"
 	"errors"
+	"path"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -21,7 +22,7 @@ type Record struct {
 }
 
 type Repository interface {
-	Create(ctx context.Context, id, userID, objectKey, mimeType string, sizeBytes int) (Record, error)
+	Create(ctx context.Context, id, userID, objectKey, mimeType string, sizeBytes int, put func() error) (Record, error)
 	GetActive(ctx context.Context, id, userID string) (Record, error)
 	DeleteIfUnused(ctx context.Context, id, userID string) (string, error)
 }
@@ -38,8 +39,43 @@ func NewRepository(dbPool *pgxpool.Pool) Repository {
 	}
 }
 
-func (r *repository) Create(ctx context.Context, id, userID, objectKey, mimeType string, sizeBytes int) (Record, error) {
-	row, err := r.q.CreatePhoto(ctx, db.CreatePhotoParams{
+func (r *repository) Create(ctx context.Context, id, userID, objectKey, mimeType string, sizeBytes int, put func() error) (Record, error) {
+	if path.Dir(objectKey) != userID || path.Clean(objectKey) != objectKey {
+		return Record{}, errors.New("photo object key does not belong to owner")
+	}
+	intent, err := r.dbPool.Begin(ctx)
+	if err != nil {
+		return Record{}, err
+	}
+	defer intent.Rollback(ctx)
+	intentQueries := r.q.WithTx(intent)
+	if _, err := intentQueries.LockAccount(ctx, userID); err != nil {
+		return Record{}, err
+	}
+	if err := intentQueries.QueuePhotoUploadIntent(ctx, objectKey); err != nil {
+		return Record{}, err
+	}
+	if err := intent.Commit(ctx); err != nil {
+		return Record{}, err
+	}
+
+	tx, err := r.dbPool.Begin(ctx)
+	if err != nil {
+		return Record{}, err
+	}
+	defer tx.Rollback(ctx)
+	q := r.q.WithTx(tx)
+	// Deletion takes this account lock; cleanup takes the intent lock. Both cover the file write.
+	if _, err := q.LockAccount(ctx, userID); err != nil {
+		return Record{}, err
+	}
+	if _, err := q.LockPhotoUploadIntent(ctx, objectKey); err != nil {
+		return Record{}, err
+	}
+	if err := put(); err != nil {
+		return Record{}, err
+	}
+	row, err := q.CreatePhoto(ctx, db.CreatePhotoParams{
 		ID:        id,
 		UserID:    userID,
 		ObjectKey: objectKey,
@@ -47,6 +83,12 @@ func (r *repository) Create(ctx context.Context, id, userID, objectKey, mimeType
 		SizeBytes: sizeBytes,
 	})
 	if err != nil {
+		return Record{}, err
+	}
+	if err := q.DeletePhotoCleanupJob(ctx, objectKey); err != nil {
+		return Record{}, err
+	}
+	if err := tx.Commit(ctx); err != nil {
 		return Record{}, err
 	}
 	return Record{

@@ -37,6 +37,18 @@ services:
       AI_RECOMMENDATION_URL: ${AI_RECOMMENDATION_URL:-http://127.0.0.1:8093}
       AI_SERVICE_TOKEN: ${AI_SERVICE_TOKEN:-}
       AI_RECOMMENDATION_TOKEN: ${AI_RECOMMENDATION_TOKEN:-}
+      PHOTO_STORAGE_DIR: /var/lib/wastenot-photos
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+    volumes:
+      - type: bind
+        source: ${PHOTO_STORAGE_HOST_DIR:-/var/lib/wastenot-photos}
+        target: /var/lib/wastenot-photos
+        bind:
+          create_host_path: false
     depends_on:
       migrate:
         condition: service_completed_successfully
