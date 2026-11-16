@@ -1,12 +1,12 @@
 # WasteNot Curated Guides (`B11`)
 
-`core-guides-v1.json` berisi **16 artikel draf** yang mencakup seluruh 7 kategori (`PLASTIC`, `ORGANIC`, `PAPER`, `GLASS`, `METAL`, `ELECTRONIC`, `OTHER`). Penelusuran sumber primer pada 16 November 2026 memperbaiki isi dan provenance, **bukan persetujuan publikasi manusia**.
+`core-guides-v1.json` berisi **16 artikel** yang mencakup seluruh 7 kategori (`PLASTIC`, `ORGANIC`, `PAPER`, `GLASS`, `METAL`, `ELECTRONIC`, `OTHER`). Penelusuran sumber primer memperbaiki isi dan provenance. Pada 16 November 2026, peninjau **Alberd** menyatakan sudah membaca seluruh 16 draf beserta sumber dan menyetujui publikasinya.
 
 ## Aturan Publikasi (`PRD.md` §12 & `API.md` §7)
 
-Seluruh artikel pada file ini disetel ke `publication_status: "DRAFT"` agar tidak tayang ke produksi sebelum ditinjau langsung oleh penanggung jawab konten.
+Seluruh artikel saat ini berstatus `PUBLISHED`, dengan `reviewer: "Alberd"` dan `reviewed_at: "2026-11-16"`, berdasarkan persetujuan eksplisit tersebut. Perubahan isi berikutnya harus ditinjau kembali; jangan mempertahankan metadata review lama untuk isi yang belum disetujui.
 
-Untuk mempublikasikan ke database:
+CD menjalankan importer transaksional setelah migrasi dan startup API. Upsert memakai ID artikel, sehingga redeploy tidak menggandakan katalog. Untuk menjalankan importer secara manual:
 
 1. Tinjau kesesuaian isi langkah dan batasan lokal di Indonesia untuk setiap artikel.
 2. Ganti `reviewer` dengan nama peninjau sebenarnya, perbarui `reviewed_at`, dan ubah `publication_status` ke `"PUBLISHED"`.
@@ -17,17 +17,17 @@ set -a; . ./.env; set +a
 go run ./cmd/guides guides/core-guides-v1.json
 ```
 
-Atau dengan binary container `/guides`:
+Pada VM aktif, image sudah berisi `/guides`. Dari checkout deployment dengan konfigurasi `.env` yang sama, jalankan:
 
 ```sh
-docker run --rm --env-file /etc/wastenot/migrate.env -v "$PWD/guides:/guides:ro" --entrypoint /guides wastenot-backend:<tag> /guides/core-guides-v1.json
+docker compose -p waste-not-backend run --rm --no-deps -T --entrypoint /guides -v "$PWD/guides:/reviewed-guides:ro" api /reviewed-guides/core-guides-v1.json
 ```
 
 ## Hasil penelusuran sumber, 16 November 2026
 
-Seluruh URL di bawah dibuka dan isi sumber dibandingkan dengan draf. `reviewed_at` pada bundle mencatat tanggal pemeriksaan sumber otomatis ini. `reviewer` sengaja menyatakan persetujuan penanggung jawab konten belum tersedia, bukan nama manusia rekaan. Tidak ada artikel yang diubah menjadi `PUBLISHED`, tidak ada import produksi yang dijalankan, dan pemeriksaan ini bukan peninjauan hukum, inspeksi fasilitas, atau bukti penerimaan material di Indonesia.
+Seluruh URL di bawah dibuka dan isi sumber dibandingkan dengan draf. Pemeriksaan sumber otomatis bukan persetujuan manusia. Persetujuan publikasi seluruh artikel diberikan terpisah oleh Alberd pada 16 November 2026; tanggal yang sama kini merupakan tanggal review yang disetujui pada bundle.
 
-**Prasyarat publikasi yang belum terpenuhi:** penanggung jawab konten yang nyata dan berwenang harus memeriksa setiap artikel terhadap sumber serta kesesuaian lokal, menyetujui isi, lalu mencatat nama dan tanggal persetujuan sebenarnya. PRD §12 melarang seed produksi sebelum langkah ini. Akses alat dapat menyediakan sumber, tetapi tidak dapat menghasilkan persetujuan manusia tersebut. Jangan mengganti label provenance otomatis dengan nama pemilik repositori tanpa persetujuannya.
+Persetujuan ini bukan peninjauan hukum, inspeksi fasilitas, atau jaminan penerimaan material. Batas penerapan lokal dan peringatan keselamatan tetap menjadi bagian artikel.
 
 ### Sumber primer
 

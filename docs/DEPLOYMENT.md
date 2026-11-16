@@ -12,8 +12,10 @@ Workflow `ci.yml` memeriksa source pada pull request. Setelah merge ke `main`,
 menyalakan API dengan `docker compose -p waste-not-backend up -d --remove-orphans`.
 Health check memanggil `http://127.0.0.1:8080/health/ready`.
 
-Konfigurasi runtime berasal dari `/home/dev/wastenot-backend.env`; workflow
-menyalinnya sementara sebagai `.env` dan menghapus salinan tersebut saat selesai.
+Konfigurasi runtime utama berasal dari `/home/dev/wastenot-backend.env`. Jika ada,
+workflow menambahkan `/home/dev/wastenot-smtp.env` setelahnya, sehingga nilai SMTP
+pada file terpisah menjadi prioritas. `.env` sementara memakai umask 077 dan
+dihapus lewat trap, termasuk jika build atau import gagal.
 Jangan memasukkan credential ke Git, log, argumen proses atau artifact CI.
 PostgreSQL memakai volume `postgres-data`, dan API memakai host networking untuk
 mengakses database serta worker AI melalui loopback. API tetap nonroot,
@@ -39,12 +41,26 @@ Jangan mengubah kepemilikan direktori yang sudah berisi data tanpa pemeriksaan.
 
 ## Pemulihan password
 
-Isi `SMTP_HOST`, `SMTP_PORT` (default 587), `SMTP_USERNAME`, `SMTP_PASSWORD` dan
-`SMTP_FROM` memakai akun pengirim yang benar-benar tersedia. Transport memakai
-STARTTLS dengan pemeriksaan sertifikat. Tidak ada fallback pengiriman palsu atau
-token reset dalam respons HTTP/log. Tanpa konfigurasi SMTP, permintaan pemulihan
-menjelaskan layanan belum tersedia; keberhasilan build tidak membuktikan email
-sampai ke kotak masuk.
+File privat `/home/dev/wastenot-smtp.env` sudah disiapkan dengan mode 0600:
+
+```dotenv
+SMTP_HOST=''
+SMTP_PORT=587
+SMTP_USERNAME=''
+SMTP_PASSWORD=''
+SMTP_FROM=''
+```
+
+Isi host, username, password dan alamat pengirim sesuai layanan SMTP yang nyata.
+Gunakan tanda kutip tunggal agar `$` dan `#` pada nilai tidak diinterpolasi Compose;
+ikuti aturan escape Compose jika nilai mengandung kutip tunggal. Jangan
+mengirim credential lewat chat atau memasukkannya ke repository.
+
+Transport memakai STARTTLS dengan pemeriksaan sertifikat, bukan implicit TLS
+port 465. Setelah seluruh nilai terisi, jalankan CD Staging kembali agar
+container menerima konfigurasi baru. Tidak ada fallback pengiriman palsu atau
+token reset dalam respons HTTP/log. Selama nilai kosong, reset email tetap
+belum tersedia; keberhasilan build tidak membuktikan email sampai ke kotak masuk.
 
 ## Verifikasi setelah deploy
 
@@ -71,6 +87,7 @@ sekitar 650 ms yang sebelumnya menunda pembersihan foto baru dan retry email.
 Clock limiter tetap immutable setelah constructor; worker tidak berlomba dengan
 inisialisasi handler.
 
-Ini bukan bukti email produksi sudah terkirim. Konfigurasi SMTP belum tersedia
-di runtime maupun nama secret/variable repository saat pemeriksaan. Enam belas
-artikel Panduan tetap DRAFT sampai penanggung jawab konten benar-benar menyetujui.
+Konfigurasi SMTP privat sudah disiapkan, tetapi kredensial pengirim belum
+tersedia sehingga email nyata belum dapat diverifikasi. Enam belas Panduan
+disetujui Alberd pada 16 November 2026 dan diimpor secara transaksional oleh CD
+setelah migrasi. Lihat `guides/README.md` untuk provenance dan aturan review ulang.
