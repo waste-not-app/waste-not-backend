@@ -24,8 +24,13 @@ jobs:
       - name: Build Docker image
         run: |
           set -e
-          cp /home/dev/wastenot-backend.env .env
+          umask 077
           trap 'rm -f .env' EXIT
+          cp /home/dev/wastenot-backend.env .env
+          if [ -f /home/dev/wastenot-smtp.env ]; then
+            printf '\n' >> .env
+            cat /home/dev/wastenot-smtp.env >> .env
+          fi
           docker compose -p waste-not-backend build
 
   deploy:
@@ -40,9 +45,16 @@ jobs:
       - name: Deploy with Docker Compose
         run: |
           set -e
-          cp /home/dev/wastenot-backend.env .env
+          umask 077
           trap 'rm -f .env' EXIT
+          cp /home/dev/wastenot-backend.env .env
+          if [ -f /home/dev/wastenot-smtp.env ]; then
+            printf '\n' >> .env
+            cat /home/dev/wastenot-smtp.env >> .env
+          fi
           docker compose -p waste-not-backend up -d --remove-orphans
+          docker compose -p waste-not-backend run --rm --no-deps -T --entrypoint /guides \
+            -v "$PWD/guides:/reviewed-guides:ro" api /reviewed-guides/core-guides-v1.json
           docker image prune -f
 
       - name: Post-deployment health check
