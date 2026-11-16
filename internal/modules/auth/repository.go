@@ -11,27 +11,34 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 type Repository interface {
 	CreateUserWithSession(ctx context.Context, u UserRes, passwordHash string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error)
 	GetUserByEmail(ctx context.Context, email string) (UserRecord, error)
-	CreateSessionForUser(ctx context.Context, u UserRes, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error)
+	CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error)
 	RotateRefreshToken(ctx context.Context, refreshToken string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error)
 	RevokeSession(ctx context.Context, sessionID, userID string) error
 	GetUserProgress(ctx context.Context, userID, today string) (domain.Progress, error)
+	RequestPasswordReset(ctx context.Context, email, tokenHash string, encrypted []byte, now time.Time) error
+	ConfirmPasswordReset(ctx context.Context, tokenHash, passwordHash string, now time.Time) error
+	DeleteMe(ctx context.Context, userID, password string) error
+	DeliverResetMail(ctx context.Context, deliver func(context.Context, string, []byte) error) (bool, error)
 }
 
 type repository struct {
-	dbPool *pgxpool.Pool
-	q      *db.Queries
+	dbPool  *pgxpool.Pool
+	q       *db.Queries
+	storage photos.Storage
 }
 
-func NewRepository(dbPool *pgxpool.Pool) Repository {
+func NewRepository(dbPool *pgxpool.Pool, storage photos.Storage) Repository {
 	return &repository{
-		dbPool: dbPool,
-		q:      db.New(dbPool),
+		dbPool:  dbPool,
+		q:       db.New(dbPool),
+		storage: storage,
 	}
 }
 
@@ -110,7 +117,7 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (UserReco
 	}, nil
 }
 
-func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error) {
+func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error) {
 	tx, err := r.dbPool.Begin(ctx)
 	if err != nil {
 		return coreauth.Tokens{}, err
@@ -118,6 +125,14 @@ func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, signer
 	defer tx.Rollback(ctx)
 
 	qtx := r.q.WithTx(tx)
+	// Serialize with password replacement so a pre-reset password check cannot create a new session afterward.
+	currentHash, err := qtx.LockAccount(ctx, u.ID)
+	if errors.Is(err, pgx.ErrNoRows) || (err == nil && currentHash != passwordHash) {
+		return coreauth.Tokens{}, ErrUnauthenticated
+	}
+	if err != nil {
+		return coreauth.Tokens{}, err
+	}
 	tokens, err := r.insertSession(ctx, qtx, u, signer, now)
 	if err == nil {
 		err = tx.Commit(ctx)

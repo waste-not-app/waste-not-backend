@@ -41,12 +41,10 @@ func (s *service) Upload(ctx context.Context, userID, declaredMIME string, raw [
 	}
 	id := uuid.NewString()
 	objectKey := fmt.Sprintf("%s/%s.%s", userID, id, ext)
-	if err := s.storage.Put(objectKey, clean); err != nil {
-		return PhotoRes{}, err
-	}
-	rec, err := s.repo.Create(ctx, id, userID, objectKey, outMIME, len(clean))
+	rec, err := s.repo.Create(ctx, id, userID, objectKey, outMIME, len(clean), func() error {
+		return s.storage.Put(objectKey, clean)
+	})
 	if err != nil {
-		_ = s.storage.Delete(objectKey)
 		return PhotoRes{}, err
 	}
 	return PhotoRes{

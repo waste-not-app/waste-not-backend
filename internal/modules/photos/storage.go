@@ -53,11 +53,11 @@ func (s *LocalStorage) Put(objectKey string, data []byte) error {
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return err
 	}
-	tmp, err := os.CreateTemp(dir, ".photo-*")
+	tmpPath := target + ".upload"
+	tmp, err := os.OpenFile(tmpPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
 	if err != nil {
 		return err
 	}
-	tmpPath := tmp.Name()
 	cleanup := true
 	defer func() {
 		if cleanup {
@@ -99,9 +99,11 @@ func (s *LocalStorage) Delete(objectKey string) error {
 	if err != nil {
 		return err
 	}
-	err = os.Remove(target)
-	if errors.Is(err, os.ErrNotExist) {
-		return nil
+	var failures []error
+	for _, file := range []string{target, target + ".upload"} {
+		if err := os.Remove(file); err != nil && !errors.Is(err, os.ErrNotExist) {
+			failures = append(failures, err)
+		}
 	}
-	return err
+	return errors.Join(failures...)
 }

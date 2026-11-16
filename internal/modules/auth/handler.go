@@ -31,8 +31,11 @@ func RegisterHTTPRoutes(app *fiber.App, service Service, limiter *ratelimit.Limi
 	v1Auth.Post("/login", handler.Login)
 	v1Auth.Post("/refresh", handler.RefreshToken)
 	v1Auth.Post("/logout", authMw, handler.Logout)
+	v1Auth.Post("/password-reset", handler.RequestPasswordReset)
+	v1Auth.Post("/password-reset/confirm", handler.ConfirmPasswordReset)
 
 	app.Get("/v1/me", authMw, handler.GetMe)
+	app.Delete("/v1/me", authMw, handler.DeleteMe)
 }
 
 func (h *Handler) checkAuthRateLimit(c fiber.Ctx, key string) bool {

@@ -20,9 +20,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/database"
+	authMod "github.com/waste-not-app/waste-not-backend/internal/modules/auth"
 )
 
-func setup(t *testing.T, change func(*config.Config)) (*Server, *httptest.Server) {
+func setup(t *testing.T, change func(*config.Config), mailers ...authMod.ResetMailer) (*Server, *httptest.Server) {
 	t.Helper()
 	dsn := os.Getenv("TEST_DATABASE_URL")
 	if dsn == "" {
@@ -63,10 +64,17 @@ func setup(t *testing.T, change func(*config.Config)) (*Server, *httptest.Server
 	if change != nil {
 		change(&c)
 	}
-	s, e := New(db, c, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	log := slog.New(slog.NewTextHandler(io.Discard, nil))
+	var s *Server
+	if len(mailers) > 0 {
+		s, e = newServer(db, c, log, mailers[0])
+	} else {
+		s, e = New(db, c, log)
+	}
 	if e != nil {
 		t.Fatal(e)
 	}
+	t.Cleanup(s.Close)
 	server := httptest.NewServer(s.Handler())
 	t.Cleanup(server.Close)
 	return s, server
