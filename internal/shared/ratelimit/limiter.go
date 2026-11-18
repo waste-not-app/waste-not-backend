@@ -17,6 +17,7 @@ type Limiter struct {
 	nowFn      func() time.Time
 	hashSlots  chan struct{}
 	imageSlots chan struct{}
+	photoSlots chan struct{}
 }
 
 func NewLimiter(dbPool *pgxpool.Pool, nowFn func() time.Time) *Limiter {
@@ -28,6 +29,7 @@ func NewLimiter(dbPool *pgxpool.Pool, nowFn func() time.Time) *Limiter {
 		nowFn:      nowFn,
 		hashSlots:  make(chan struct{}, 4),
 		imageSlots: make(chan struct{}, 2),
+		photoSlots: make(chan struct{}, 2),
 	}
 }
 
@@ -90,4 +92,19 @@ func (l *Limiter) AcquireImageSlot(c fiber.Ctx) bool {
 
 func (l *Limiter) ReleaseImageSlot() {
 	<-l.imageSlots
+}
+
+func (l *Limiter) AcquirePhotoSlot(c fiber.Ctx) bool {
+	select {
+	case l.photoSlots <- struct{}{}:
+		return true
+	default:
+		c.Set("Retry-After", "1")
+		_ = response.Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
+		return false
+	}
+}
+
+func (l *Limiter) ReleasePhotoSlot() {
+	<-l.photoSlots
 }
