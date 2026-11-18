@@ -46,3 +46,17 @@ func TestProgressAndTimezone(t *testing.T) {
 		}
 	}
 }
+
+func TestTodayFallsBackToUTCForUnknownZone(t *testing.T) {
+	now := time.Date(2026, 11, 19, 23, 30, 0, 0, time.UTC)
+	if got := Today(now, "Mars/Olympus"); got != "2026-11-19" {
+		t.Fatalf("unknown zone should use UTC, got %s", got)
+	}
+	if got := Today(now, "Asia/Jakarta"); got != "2026-11-20" {
+		t.Fatalf("Asia/Jakarta should roll over, got %s", got)
+	}
+	first, second := Location("Asia/Jakarta"), Location("Asia/Jakarta")
+	if first != second {
+		t.Fatal("location should be cached")
+	}
+}

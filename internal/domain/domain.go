@@ -3,6 +3,7 @@ package domain
 import (
 	"net/mail"
 	"strings"
+	"sync"
 	"time"
 	"unicode/utf8"
 
@@ -32,9 +33,23 @@ func ValidTimezone(s string) bool {
 	_, e := time.LoadLocation(s)
 	return e == nil
 }
+
+var locations sync.Map
+
+func Location(zone string) *time.Location {
+	if cached, ok := locations.Load(zone); ok {
+		return cached.(*time.Location)
+	}
+	loc, err := time.LoadLocation(zone)
+	if err != nil || loc == nil || zone == "" || zone == "Local" {
+		return time.UTC
+	}
+	locations.Store(zone, loc)
+	return loc
+}
+
 func Today(now time.Time, zone string) string {
-	loc, _ := time.LoadLocation(zone)
-	return now.In(loc).Format(time.DateOnly)
+	return now.In(Location(zone)).Format(time.DateOnly)
 }
 
 type Log struct {
