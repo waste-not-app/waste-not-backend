@@ -79,12 +79,3 @@ type UserRecord struct {
 	UserRes
 	PasswordHash string
 }
-
-type SessionState struct {
-	SessionID  string
-	UserID     string
-	Generation int
-	ExpiresAt  any
-	Used       bool
-	Revoked    bool
-}
