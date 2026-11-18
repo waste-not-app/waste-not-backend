@@ -2,6 +2,7 @@ package ai
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"image"
@@ -12,6 +13,7 @@ import (
 	"mime"
 	"mime/multipart"
 	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v3"
 	coreai "github.com/waste-not-app/waste-not-backend/internal/ai"
@@ -21,6 +23,8 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
+
+const persistTimeout = 5 * time.Second
 
 type Handler struct {
 	service Service
@@ -71,6 +75,12 @@ func (h *Handler) mapOperationError(c fiber.Ctx, err error) error {
 	default:
 		return response.InternalError(c, h.log, err)
 	}
+}
+
+func (h *Handler) complete(c fiber.Ctx, userID string, o Operation, result, snapshot any, execErr error) (int, error) {
+	ctx, cancel := context.WithTimeout(context.WithoutCancel(c.Context()), persistTimeout)
+	defer cancel()
+	return h.service.CompleteOperation(ctx, userID, o, result, snapshot, execErr)
 }
 
 func (h *Handler) handleReplay(c fiber.Ctx, userID string, o Operation) error {
@@ -197,7 +207,7 @@ func (h *Handler) CreateDetection(c fiber.Ctx) error {
 	}
 
 	result, snapshot, execErr := h.service.ExecuteDetection(c.Context(), response.RequestID(c), o, imageBytes)
-	status, compErr := h.service.CompleteOperation(c.Context(), ident.User.ID, o, result, snapshot, execErr)
+	status, compErr := h.complete(c, ident.User.ID, o, result, snapshot, execErr)
 	if compErr != nil {
 		return h.mapOperationError(c, compErr)
 	}
@@ -257,7 +267,7 @@ func (h *Handler) CreateRecommendation(c fiber.Ctx) error {
 	}
 
 	result, snapshot, execErr := h.service.ExecuteRecommendation(c.Context(), response.RequestID(c), o, in, selection)
-	status, compErr := h.service.CompleteOperation(c.Context(), ident.User.ID, o, result, snapshot, execErr)
+	status, compErr := h.complete(c, ident.User.ID, o, result, snapshot, execErr)
 	if compErr != nil {
 		return h.mapOperationError(c, compErr)
 	}
