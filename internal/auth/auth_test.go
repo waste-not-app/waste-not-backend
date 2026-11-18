@@ -1,11 +1,12 @@
 package auth
 
 import (
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 func TestPassword(t *testing.T) {

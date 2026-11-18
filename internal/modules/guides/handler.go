@@ -7,6 +7,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/gofiber/fiber/v3"
+
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"

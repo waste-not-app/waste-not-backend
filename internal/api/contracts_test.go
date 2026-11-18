@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/santhosh-tekuri/jsonschema/v6"
+
 	"github.com/waste-not-app/waste-not-backend/contracts"
 )
 

@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/santhosh-tekuri/jsonschema/v6"
+
 	"github.com/waste-not-app/waste-not-backend/contracts"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 )

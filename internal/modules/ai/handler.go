@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v3"
+
 	coreai "github.com/waste-not-app/waste-not-backend/internal/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"

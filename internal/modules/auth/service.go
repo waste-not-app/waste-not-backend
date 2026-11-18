@@ -9,6 +9,7 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
+
 	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"

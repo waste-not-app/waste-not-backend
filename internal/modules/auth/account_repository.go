@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
+
 	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"

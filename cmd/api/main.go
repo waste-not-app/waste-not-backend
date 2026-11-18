@@ -10,6 +10,7 @@ import (
 	_ "time/tzdata"
 
 	"github.com/gofiber/fiber/v3"
+
 	"github.com/waste-not-app/waste-not-backend/internal/api"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/database"
