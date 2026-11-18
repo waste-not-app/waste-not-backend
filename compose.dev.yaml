@@ -1,0 +1,73 @@
+name: wastenot-dev
+
+services:
+  db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_USER: wastenot
+      POSTGRES_DB: wastenot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run make env to create .env}
+    ports:
+      - 127.0.0.1:${DB_HOST_PORT:-5432}:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U wastenot -d wastenot]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    build: .
+    image: wastenot-api:dev
+    entrypoint: [/migrate]
+    environment:
+      DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@db:5432/wastenot?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+
+  guides:
+    image: wastenot-api:dev
+    pull_policy: never
+    entrypoint: [/guides, /reviewed-guides/core-guides-v1.json]
+    environment:
+      DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@db:5432/wastenot?sslmode=disable
+    volumes:
+      - ./guides:/reviewed-guides:ro
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  api:
+    image: wastenot-api:dev
+    pull_policy: never
+    environment:
+      HTTP_ADDR: 0.0.0.0:8080
+      DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@db:5432/wastenot?sslmode=disable
+      JWT_SECRET_BASE64: ${JWT_SECRET_BASE64:?Run make env to create .env}
+      AI_ENABLED: ${AI_ENABLED:-false}
+      AI_RECOMMENDATION_ENABLED: ${AI_RECOMMENDATION_ENABLED:-false}
+      AI_ALLOW_PROTOTYPE: ${AI_ALLOW_PROTOTYPE:-false}
+      AI_DETECTION_URL: ${AI_DETECTION_URL:-http://host.docker.internal:8091}
+      AI_RECOMMENDATION_URL: ${AI_RECOMMENDATION_URL:-http://host.docker.internal:8093}
+      AI_SERVICE_TOKEN: ${AI_SERVICE_TOKEN:-}
+      AI_RECOMMENDATION_TOKEN: ${AI_RECOMMENDATION_TOKEN:-}
+      PHOTO_STORAGE_DIR: /var/lib/wastenot-photos
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
+    ports:
+      - 127.0.0.1:${API_HOST_PORT:-8080}:8080
+    volumes:
+      - photo-data:/var/lib/wastenot-photos
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    depends_on:
+      guides:
+        condition: service_completed_successfully
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+volumes:
+  postgres-data:
+  photo-data:
