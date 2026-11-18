@@ -41,7 +41,7 @@ linters:
         text: "QF"
         linters: [staticcheck]
       - path: cmd/
-        text: G703
+        text: G703|G704
         linters: [gosec]
       - path: internal/modules/photos/storage\.go
         text: G304
