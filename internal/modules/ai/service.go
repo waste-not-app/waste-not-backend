@@ -147,8 +147,9 @@ func (s *service) ClaimOrReplay(ctx context.Context, userID, kind, clientID, has
 func (s *service) WaitReplay(ctx context.Context, userID string, o Operation) (Operation, error) {
 	timer := time.NewTimer(27 * time.Second)
 	defer timer.Stop()
-	ticker := time.NewTicker(100 * time.Millisecond)
-	defer ticker.Stop()
+	delay := 100 * time.Millisecond
+	poll := time.NewTimer(delay)
+	defer poll.Stop()
 
 	for o.State == "IN_PROGRESS" {
 		select {
@@ -156,7 +157,9 @@ func (s *service) WaitReplay(ctx context.Context, userID string, o Operation) (O
 			return o, &coreai.Error{Status: 504, Code: "AI_TIMEOUT"}
 		case <-timer.C:
 			return o, &coreai.Error{Status: 503, Code: "AI_BUSY", RetryAfter: 2}
-		case <-ticker.C:
+		case <-poll.C:
+			delay = min(delay*2, time.Second)
+			poll.Reset(delay)
 			var err error
 			o, err = s.repo.GetOperation(ctx, userID, o.ID, "", s.limiter.Now())
 			if err != nil {
