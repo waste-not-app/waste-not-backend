@@ -125,7 +125,7 @@ func RateLimited(c fiber.Ctx, seconds int) error {
 
 func InternalError(c fiber.Ctx, log *slog.Logger, err error) error {
 	if log != nil {
-		log.Error("database operation failed", "request_id", RequestID(c), "detail", err)
+		log.Error("request failed", "request_id", RequestID(c), "detail", err)
 	}
 	return Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
 }
