@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"embed"
+	"errors"
 	"fmt"
 	"sort"
 	"time"
@@ -73,7 +74,7 @@ func Migrate(ctx context.Context, p *pgxpool.Pool) error {
 			}
 			continue
 		}
-		if err != pgx.ErrNoRows {
+		if !errors.Is(err, pgx.ErrNoRows) {
 			return err
 		}
 		if _, err = tx.Exec(ctx, string(raw)); err != nil {

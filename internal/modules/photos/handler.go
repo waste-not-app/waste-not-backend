@@ -71,7 +71,7 @@ func (h *Handler) UploadPhoto(c fiber.Ctx) error {
 
 	for {
 		part, e := reader.NextPart()
-		if e == io.EOF {
+		if errors.Is(e, io.EOF) {
 			break
 		}
 		if e != nil {
