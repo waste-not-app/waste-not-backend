@@ -173,10 +173,14 @@ type catalogSnapshot struct {
 }
 
 func (c *Client) Catalog(ctx context.Context, id string) (map[string]any, error) {
-	if cached := c.catalogCache.Load(); cached != nil && time.Now().Before(cached.until) {
+	cached := c.catalogCache.Load()
+	if cached != nil && time.Now().Before(cached.until) {
 		return cached.value, nil
 	}
 	if !c.catalogMu.TryLock() {
+		if cached != nil {
+			return cached.value, nil
+		}
 		return nil, &Error{503, "AI_BUSY", 1}
 	}
 	defer c.catalogMu.Unlock()

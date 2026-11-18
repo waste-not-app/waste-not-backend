@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestContractExamples(t *testing.T) {
@@ -91,5 +92,23 @@ func TestRulesFallbackRetainsProductionGate(t *testing.T) {
 				t.Fatalf("fallback provenance lost: %v", value)
 			}
 		})
+	}
+}
+
+func TestCatalogServesStaleSnapshotDuringRefresh(t *testing.T) {
+	client, err := New(config.Config{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = client.Catalog(context.Background(), "cold"); err == nil {
+		t.Fatal("cold catalog without upstream must fail")
+	}
+	stale := map[string]any{"catalog_version": "stale"}
+	client.catalogCache.Store(&catalogSnapshot{value: stale, until: time.Now().Add(-time.Second)})
+	client.catalogMu.Lock()
+	defer client.catalogMu.Unlock()
+	got, err := client.Catalog(context.Background(), "concurrent")
+	if err != nil || got["catalog_version"] != "stale" {
+		t.Fatalf("expected stale catalog during refresh, got %v %v", got, err)
 	}
 }
