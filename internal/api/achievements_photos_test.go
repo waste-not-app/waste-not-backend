@@ -144,14 +144,12 @@ func TestAchievementsLifecycleAndRelock(t *testing.T) {
 	}
 	firstUnlockedAt := first["unlocked_at"].(string)
 
-	// User B remains isolated at 0/1.
 	st, v, _ = call(t, sv.URL, "GET", "/v1/achievements", other, nil, nil)
 	requireStatus(t, st, 200, v)
 	if otherFirst := findAchievement(v["data"].([]any), "FIRST_STEP"); otherFirst["is_unlocked"] != false || otherFirst["current_value"] != float64(0) {
 		t.Fatalf("account isolation failed: %v", otherFirst)
 	}
 
-	// Edit one RECYCLE log to TRASH -> SORT_TO_RECYCLE relocks while FIRST_STEP preserves unlocked_at.
 	st, v, _ = call(t, sv.URL, "PATCH", "/v1/waste-logs/"+logIDs[0], token, map[string]any{"version": 1, "method": "TRASH"}, nil)
 	requireStatus(t, st, 200, v)
 
@@ -167,7 +165,6 @@ func TestAchievementsLifecycleAndRelock(t *testing.T) {
 		t.Fatalf("SORT_TO_RECYCLE did not relock: %v", recycle)
 	}
 
-	// Delete all logs -> FIRST_STEP relocks too.
 	for i, id := range logIDs {
 		ver := 1
 		if i == 0 {
@@ -200,13 +197,11 @@ func TestPhotosLifecycleAndIsolation(t *testing.T) {
 		t.Fatal("photos capability should be true")
 	}
 
-	// Reject unsupported MIME and corrupt image.
 	st, v = uploadPhoto(t, sv.URL, token, "text/plain", []byte("not-an-image"))
 	requireStatus(t, st, 415, v)
 	st, v = uploadPhoto(t, sv.URL, token, "image/jpeg", []byte("not-a-jpeg"))
 	requireStatus(t, st, 422, v)
 
-	// Upload valid JPEG.
 	st, v = uploadPhoto(t, sv.URL, token, "image/jpeg", testJPEG(24, 24))
 	requireStatus(t, st, 201, v)
 	pData := v["data"].(map[string]any)
@@ -215,7 +210,6 @@ func TestPhotosLifecycleAndIsolation(t *testing.T) {
 		t.Fatalf("unexpected photo payload: %v", pData)
 	}
 
-	// Owner download succeeds with private cache headers; cross-account download/delete returns 404.
 	st, bytes1, hdr := downloadPhoto(t, sv.URL, token, photo1)
 	if st != 200 || len(bytes1) == 0 || hdr.Get("Cache-Control") != "private, no-store" || hdr.Get("X-Content-Type-Options") != "nosniff" {
 		t.Fatalf("owner download failed: status=%d len=%d hdr=%v", st, len(bytes1), hdr)
@@ -225,13 +219,11 @@ func TestPhotosLifecycleAndIsolation(t *testing.T) {
 	st, v, _ = call(t, sv.URL, "DELETE", "/v1/photos/"+photo1, other, nil, nil)
 	requireStatus(t, st, 404, v)
 
-	// Cross-account user cannot attach user A's photo.
 	otherIn := logInput(today)
 	otherIn["photo_id"] = photo1
 	st, v, _ = call(t, sv.URL, "POST", "/v1/waste-logs", other, otherIn, nil)
 	requireStatus(t, st, 422, v)
 
-	// Create log with photo1 + verify idempotent replay.
 	in := logInput(today)
 	in["photo_id"] = photo1
 	st, v, _ = call(t, sv.URL, "POST", "/v1/waste-logs", token, in, nil)
@@ -243,17 +235,14 @@ func TestPhotosLifecycleAndIsolation(t *testing.T) {
 	st, v, _ = call(t, sv.URL, "POST", "/v1/waste-logs", token, in, nil)
 	requireStatus(t, st, 200, v)
 
-	// Second log cannot reuse already-attached photo1.
 	in2 := logInput(today)
 	in2["photo_id"] = photo1
 	st, v, _ = call(t, sv.URL, "POST", "/v1/waste-logs", token, in2, nil)
 	requireStatus(t, st, 409, v)
 
-	// Cannot delete photo1 while attached.
 	st, v, _ = call(t, sv.URL, "DELETE", "/v1/photos/"+photo1, token, nil, nil)
 	requireStatus(t, st, 409, v)
 
-	// Replace photo1 with photo2 via PATCH -> photo1 immediately returns 404.
 	st, v = uploadPhoto(t, sv.URL, token, "image/jpeg", testJPEG(20, 20))
 	requireStatus(t, st, 201, v)
 	photo2 := v["data"].(map[string]any)["id"].(string)
@@ -266,13 +255,11 @@ func TestPhotosLifecycleAndIsolation(t *testing.T) {
 	st, _, _ = downloadPhoto(t, sv.URL, token, photo1)
 	requireStatus(t, st, 404, nil)
 
-	// Soft-deleting the log immediately revokes access to photo2.
 	st, v, _ = call(t, sv.URL, "DELETE", "/v1/waste-logs/"+logID, token, nil, map[string]string{"If-Match": `"2"`})
 	requireStatus(t, st, 204, v)
 	st, _, _ = downloadPhoto(t, sv.URL, token, photo2)
 	requireStatus(t, st, 404, nil)
 
-	// Staged photo delete is 204 and idempotent.
 	st, v = uploadPhoto(t, sv.URL, token, "image/jpeg", testJPEG(18, 18))
 	requireStatus(t, st, 201, v)
 	photo3 := v["data"].(map[string]any)["id"].(string)
@@ -283,7 +270,6 @@ func TestPhotosLifecycleAndIsolation(t *testing.T) {
 	st, _, _ = downloadPhoto(t, sv.URL, token, photo3)
 	requireStatus(t, st, 404, nil)
 
-	// Orphan staged photo (>24h) is revoked by database.Cleanup.
 	st, v = uploadPhoto(t, sv.URL, token, "image/jpeg", testJPEG(16, 16))
 	requireStatus(t, st, 201, v)
 	photo4 := v["data"].(map[string]any)["id"].(string)
