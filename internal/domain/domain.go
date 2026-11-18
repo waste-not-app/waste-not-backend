@@ -94,15 +94,16 @@ func (i *LogInput) Validate(today, oldDate string) map[string]string {
 	if !Contains(Methods, i.Method) {
 		f["method"] = "Pilih metode yang tersedia."
 	}
-	if i.QuantityKind == "WEIGHT" {
+	switch i.QuantityKind {
+	case "WEIGHT":
 		if i.WeightG == nil || *i.WeightG < 1 || *i.WeightG > 100000 || i.ItemCount != nil {
 			f["weight_g"] = "Gunakan 1–100000 gram tanpa jumlah benda."
 		}
-	} else if i.QuantityKind == "COUNT" {
+	case "COUNT":
 		if i.ItemCount == nil || *i.ItemCount < 1 || *i.ItemCount > 10000 || i.WeightG != nil {
 			f["item_count"] = "Gunakan 1–10000 benda tanpa berat."
 		}
-	} else {
+	default:
 		f["quantity_kind"] = "Pilih WEIGHT atau COUNT."
 	}
 	d, e := time.Parse(time.DateOnly, i.ActivityDate)

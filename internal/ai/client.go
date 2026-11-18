@@ -149,7 +149,7 @@ func (c *Client) rpc(ctx context.Context, requestID, origin, path, token, mime s
 	if json.Unmarshal(raw, &envelope) != nil {
 		return nil, ErrInvalid
 	}
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		status := resp.StatusCode
 		code := envelope.Error.Code
 		allowed := map[string]int{"AI_BUSY": 503, "AI_UNAVAILABLE": 503, "INVALID_AI_RESPONSE": 503, "AI_TIMEOUT": 504, "INVALID_CONTEXT": 422, "INVALID_AI_REFERENCE": 422, "OBJECT_REQUIRES_MANUAL": 422, "VALIDATION_ERROR": 422, "INVALID_IMAGE": 422, "IMAGE_DIMENSIONS_EXCEEDED": 422, "FILE_TOO_LARGE": 413, "UNSUPPORTED_MEDIA_TYPE": 415, "RATE_LIMITED": 429}
