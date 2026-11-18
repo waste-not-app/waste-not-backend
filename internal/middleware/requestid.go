@@ -7,12 +7,16 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
+	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
 
 func RequestID(log *slog.Logger) fiber.Handler {
 	return func(c fiber.Ctx) error {
-		id := uuid.NewString()
+		id := c.Get("X-Request-ID")
+		if !auth.UUID(id) {
+			id = uuid.NewString()
+		}
 		c.Locals("request_id", id)
 		c.Set("X-Request-ID", id)
 		c.Set("Cache-Control", "no-store")
