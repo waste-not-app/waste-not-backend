@@ -1,6 +1,11 @@
 package ai
 
-func validDetection(v map[string]any) bool {
+func validDetection(v map[string]any) (valid bool) {
+	defer func() {
+		if recover() != nil {
+			valid = false
+		}
+	}()
 	model := v["model"].(map[string]any)
 	if model["model_version"] != v["model_version"] {
 		return false
