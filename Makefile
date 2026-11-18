@@ -112,6 +112,16 @@ db-test-down: ## Stop the disposable test database
 docker-build: ## Build the production image
 	docker build -t $(IMAGE):$(TAG) .
 
+.PHONY: env
+env: ## Create .env from .env.example with fresh local secrets
+	@test ! -f .env || (echo '.env already exists'; exit 1)
+	@jwt=$$(openssl rand -base64 32); pw=$$(openssl rand -hex 16); \
+	awk -v jwt="$$jwt" -v pw="$$pw" '{ \
+		if ($$0 ~ /^JWT_SECRET_BASE64=/) print "JWT_SECRET_BASE64=" jwt; \
+		else if ($$0 ~ /^POSTGRES_PASSWORD=/) print "POSTGRES_PASSWORD=" pw; \
+		else { gsub(/replace-local-db-password/, pw); print } }' .env.example > .env
+	@echo 'Created .env with random local secrets'
+
 .PHONY: up
 up: ## Start the local stack (db, migrate, guides, api)
 	$(DEV_COMPOSE) up -d --build
