@@ -1,75 +1,148 @@
 # WasteNot Backend
 
-Backend Go untuk aplikasi [WasteNot Android](https://github.com/waste-not-app/waste-not-android). API HTTP `/v1` menggunakan PostgreSQL, mengikuti kontrak Android dan memakai worker Python yang sudah tersedia untuk YOLO/Gemini.
+REST API Go untuk aplikasi [WasteNot Android](https://github.com/waste-not-app/waste-not-android). Layanan ini mengelola akun dan sesi, catatan sampah, dashboard, statistik, XP/level/streak, achievement, foto privat, panduan pengelolaan sampah, serta adapter ke worker AI ([waste-not-ai](https://github.com/waste-not-app/waste-not-ai)) untuk deteksi objek dan rekomendasi.
 
-Implementasi mencakup akun/sesi, CRUD catatan, pagination/filter, dashboard, statistik, XP/level/streak, pencarian panduan, dan adapter AI dengan ownership, idempotensi lintas proses, TTL serta provenance saat simpan. Tidak membuat akun demo, panduan terbitan palsu, atau hasil AI pengganti. AI memiliki feature gate deteksi/rekomendasi terpisah; mode fixture/draf memerlukan pengaktifan eksplisit untuk pengujian.
+| Komponen | Teknologi |
+|---|---|
+| Bahasa | Go 1.27 |
+| HTTP | Fiber v3 |
+| Database | PostgreSQL 18, pgx v5, query type-safe via sqlc |
+| Auth | JWT HS256 (access 15 menit) + refresh token rotasi dengan deteksi reuse, Argon2id |
+| Dokumentasi API | OpenAPI (`contracts/`), Swagger opsional |
+| Container | Distroless static, nonroot, read-only |
 
-## Menjalankan lokal
+## Daftar isi
 
-Prasyarat: Go 1.27.4, PostgreSQL 18; atau Docker Compose untuk seluruh layanan inti.
+- [Mulai cepat dengan Docker](#mulai-cepat-dengan-docker)
+- [Menjalankan tanpa Docker](#menjalankan-tanpa-docker)
+- [Konfigurasi](#konfigurasi)
+- [Perintah Make](#perintah-make)
+- [Kualitas dan keamanan](#kualitas-dan-keamanan)
+- [Struktur proyek](#struktur-proyek)
+- [Database dan migrasi](#database-dan-migrasi)
+- [Deployment](#deployment)
+- [Dokumentasi lanjutan](#dokumentasi-lanjutan)
+
+## Mulai cepat dengan Docker
+
+Prasyarat: Docker dengan Compose v2, `make`, dan `openssl`.
 
 ```sh
-cp .env.example .env
-# Isi JWT_SECRET_BASE64 dengan hasil: openssl rand -base64 32
-# Isi POSTGRES_PASSWORD dengan password lokal acak (huruf/angka).
-docker compose up --build -d
+make env    # membuat .env dengan secret lokal acak
+make up     # db + migrate + import guides + api
 curl http://127.0.0.1:8080/health/ready
+make logs
+make down
 ```
 
-Database memakai volume persisten. Migrasi dijalankan sebagai layanan satu kali sebelum API. Port hanya terbuka pada loopback; Compose tidak mengaktifkan AI. Jangan memakai contoh konfigurasi lokal sebagai deployment internet.
+Stack lokal (`compose.dev.yaml`) membuka API di `127.0.0.1:8080`, PostgreSQL di `127.0.0.1:5432`, mengaktifkan lampiran foto pada volume Docker, dan Swagger UI di `http://127.0.0.1:8080/swagger/index.html`. AI nonaktif secara default; untuk menyambungkannya, jalankan worker dari repo AI di host lalu set `AI_ENABLED=true` beserta token di `.env`.
 
-Untuk menjalankan tanpa Docker, isi `DATABASE_URL` dan `JWT_SECRET_BASE64` di `.env`. Muat hanya file `.env` milik sendiri:
+`compose.yaml` adalah konfigurasi staging (host network, bind mount foto) yang dipakai workflow CD, bukan untuk pengembangan lokal.
+
+## Menjalankan tanpa Docker
+
+Prasyarat: Go 1.27.4 dan PostgreSQL 18.
 
 ```sh
-set -a
-. ./.env
-set +a
+make env                 # lalu sesuaikan DATABASE_URL dengan PostgreSQL lokal
 make migrate
+make guides
 make run
 ```
 
-`DATABASE_URL` pada contoh `.env` memakai password placeholder. Sesuaikan dengan PostgreSQL sendiri; URL-encode password bila mengandung karakter khusus. Binary tidak membaca `.env` otomatis. `make build` menghasilkan `bin/api`, `bin/migrate`, dan `bin/guides`.
+Binary tidak membaca `.env` sendiri; target `make` memuatnya. `make build` menghasilkan `bin/api`, `bin/migrate`, dan `bin/guides`. Binary API juga menyediakan `api healthcheck` untuk probe container.
 
-### Struktur kode, sqlc, dan Swagger
+## Konfigurasi
 
-- Modul fitur ada di `internal/modules/<fitur>/{dto,errors,repository,service,handler}.go`; kode bersama di `internal/shared/`.
-- Query SQL ada di `sql/queries/*.sql`; kode Go-nya digenerate ke `internal/shared/db` dengan `make sqlc` (jangan edit manual).
-- **Skema ada di dua tempat:** `internal/database/001_core.sql` (dipakai runner `cmd/migrate`, checksum-nya sudah tercatat di database produksi, jangan diubah) dan `sql/migrations/*.up.sql` (hanya dibaca `sqlc`). Test `TestSchemaCopiesStayInSync` (butuh `TEST_DATABASE_URL`) memastikan keduanya menghasilkan skema yang sama. Perubahan skema berikutnya: tambahkan file migrasi baru di kedua tempat.
-- Dokumentasi endpoint: `make swag` menggenerate `docs/`. Swagger UI di `/swagger/index.html` hanya aktif bila `SWAGGER_ENABLED=true` (untuk lokal; biarkan `false` di VM).
-- Nginx di VM harus meneruskan `X-Real-IP` (lihat `deploy/nginx-location.conf`); pasang ulang dengan `sudo python3 deploy/install-routing.py deploy/nginx-location.conf` sebelum rilis ini, bila tidak rate limit login dihitung dari IP loopback yang sama untuk semua pengguna.
+Semua konfigurasi lewat environment variable. Contoh lengkap ada di [`.env.example`](.env.example).
 
-## API dan integrasi
+| Variabel | Wajib | Default | Keterangan |
+|---|---|---|---|
+| `DATABASE_URL` | ya | | URL PostgreSQL |
+| `JWT_SECRET_BASE64` | ya | | Minimal 32 byte acak, base64 (`openssl rand -base64 32`) |
+| `HTTP_ADDR` | | `127.0.0.1:8080` | Alamat listen |
+| `WASTENOT_RELEASE` | | | Dikirim di header `X-WasteNot-Release` pada `/health/ready` |
+| `AI_ENABLED` | | `false` | Mengaktifkan deteksi AI |
+| `AI_RECOMMENDATION_ENABLED` | | ikut `AI_ENABLED` | Mengaktifkan rekomendasi AI |
+| `AI_ALLOW_PROTOTYPE` | | `false` | Menerima hasil fixture/draf (hanya untuk pengujian) |
+| `AI_DETECTION_URL`, `AI_RECOMMENDATION_URL` | bila AI aktif | | Origin worker privat |
+| `AI_SERVICE_TOKEN`, `AI_RECOMMENDATION_TOKEN` | bila AI aktif | | Berbeda satu sama lain, minimal 24 karakter |
+| `PHOTO_STORAGE_DIR` | | | Direktori privat untuk lampiran foto; kosong berarti fitur foto nonaktif |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM` | untuk reset password | port `587` | SMTP dengan STARTTLS atau TLS implisit (465) |
+| `SWAGGER_ENABLED` | | `false` | Swagger UI di `/swagger/index.html`; jangan aktifkan di server publik |
 
-- [Panduan Integrasi Lengkap (Android & AI)](docs/INTEGRATION.md): alur end-to-end Android ↔ Go ↔ Python AI, `achievements`, `photos`, `waste-guide`, dan `pilot-policy-09`.
-- [Panduan API](docs/API.md): envelope, endpoint, retry, konflik, dan contoh request.
-- [OpenAPI core](contracts/core.openapi.json) dan [OpenAPI AI publik](contracts/ai/public.openapi.json).
-- [Integrasi Android](docs/ANDROID.md): konfigurasi base URL dan adapter Android yang masih harus dihubungkan.
-- [Integrasi AI](docs/AI.md): menjalankan worker, feature gate, quota dan batas pengujian.
-- [Kurasi Panduan Awal](guides/README.md): 16 artikel kurasi di `guides/core-guides-v1.json` untuk impor via `cmd/guides`.
-- [Operasional](docs/OPERATIONS.md): migrasi, backup, TLS, secret, scaling dan pemulihan.
-- [Bukti pengujian](docs/VERIFICATION.md).
-- [Laporan review CI/CD 7 November](docs/CI_CD_REVIEW_2026-11-07.md): temuan, perbaikan, smoke publik dan batas yang masih terbuka.
-Kontrak diturunkan dari Android commit [`c125859`](https://github.com/waste-not-app/waste-not-android/commit/c1258596cb71bc7b95dc9a4f140f55f759815c4e). Fixture Android dan kontrak AI asli disalin tanpa perubahan ke [`contracts/`](contracts/README.md). Worker Python tetap menjadi pemilik tunggal keputusan AI. Go tidak memanggil Gemini langsung dan tidak memuat model YOLO.
+## Perintah Make
 
-## Pengujian
+Jalankan `make help` untuk daftar lengkap. Yang paling sering dipakai:
 
-```sh
-make test
-# Database khusus pengujian; setiap suite membuat schema terisolasi dan menghapusnya.
-export TEST_DATABASE_URL='postgres://postgres:password@127.0.0.1:5432/wastenot_test?sslmode=disable'
-make check
-make vuln
+| Target | Fungsi |
+|---|---|
+| `make up` / `make down` / `make logs` | Stack Docker lokal |
+| `make run` | Menjalankan API dari source |
+| `make fmt` | Format kode (gofmt + goimports) |
+| `make lint` | golangci-lint, termasuk gosec, errorlint, staticcheck |
+| `make vuln` | govulncheck untuk dependency dan call graph |
+| `make sec` | `lint` + `vuln` |
+| `make test` | Unit test (integration test dilewati tanpa database) |
+| `make test-integration` | Semua test terhadap PostgreSQL sementara di Docker |
+| `make cover` | Laporan coverage |
+| `make check` | Gate lokal: format, vet, lint, test |
+| `make ci` | Gate CI: format, vet, lint, vuln, race test, build |
+| `make sqlc` / `make swag` | Generate ulang query dan dokumentasi Swagger |
+| `make docker-build` | Build image produksi |
+
+Versi tool dipin di Makefile dan dijalankan lewat `go run`, jadi tidak perlu instalasi global.
+
+## Kualitas dan keamanan
+
+- **CI** (`.github/workflows/ci.yml`): verifikasi modul, cek kontrak AI, test deploy Python, `make ci` dengan PostgreSQL 18 dan race detector, lalu build image.
+- **CD** (`.github/workflows/cd.yml`): deploy staging hanya setelah CI di `main` sukses.
+- **Dependabot** memperbarui modul Go, GitHub Actions, dan base image setiap minggu.
+- **Runtime**: image distroless nonroot dengan filesystem read-only, `cap_drop: ALL`, dan healthcheck. Rate limit dan idempotensi disimpan di PostgreSQL sehingga berlaku antar instance. Slot hashing, decode foto, dan scan AI dibatasi per proses.
+- **Kebijakan data**: tidak ada akun demo, panduan palsu, atau hasil AI pengganti. Hasil fixture AI ditolak kecuali `AI_ALLOW_PROTOTYPE=true`.
+
+## Struktur proyek
+
+```
+cmd/
+  api/        entrypoint HTTP + subcommand healthcheck
+  migrate/    runner migrasi
+  guides/     import panduan yang sudah ditinjau
+internal/
+  api/        wiring server dan integration test
+  modules/    fitur: auth, logs, analytics, achievements, photos, guides, ai, system
+              tiap modul: dto, errors, repository, service, handler
+  shared/     db (sqlc), cursor, ratelimit, response
+  ai/         klien worker AI dan validasi kontrak
+  database/   koneksi, migrasi tertanam, cleanup
+contracts/    kontrak OpenAPI core, AI, dan fixture Android
+sql/          migrasi dan query sumber sqlc
+deploy/       skrip blue-green, nginx, systemd, hardening DB
+docs/         dokumentasi lanjutan dan Swagger hasil generate
+guides/       konten panduan yang sudah ditinjau
 ```
 
-Tanpa `TEST_DATABASE_URL`, integration test dilewati dan tidak membuktikan alur database. CI mewajibkan PostgreSQL, race detector, vet, build binary, pemeriksaan dependensi dan build container. Tidak ada migrasi otomatis pada startup API; jalankan migrasi sebagai langkah deployment terpisah.
+## Database dan migrasi
 
-## Keputusan implementasi
+- Migrasi tidak dijalankan otomatis saat API start. Jalankan `cmd/migrate` sebagai langkah deploy terpisah (Compose melakukannya lewat service `migrate`).
+- `/health/ready` baru melaporkan siap setelah migrasi terbaru yang tertanam di binary sudah diterapkan.
+- Skema ada di dua tempat: `internal/database/*.sql` (dibaca runner, checksum tercatat di database produksi, jangan diubah) dan `sql/migrations/*.up.sql` (sumber sqlc). Setiap perubahan skema ditambahkan sebagai file baru di keduanya. `TestSchemaCopiesStayInSync` memastikan hasilnya identik.
+- Query SQL ditulis di `sql/queries/*.sql` lalu di-generate ke `internal/shared/db` dengan `make sqlc`. Jangan edit hasil generate secara manual.
 
-Satu layanan Go, router `net/http`, SQL terparameterisasi melalui pgx, pool maksimal 10 koneksi, indeks riwayat aktif, pagination berbasis posisi, dan agregasi SQL. Tidak ada ORM, Redis atau antrean tambahan untuk kebutuhan inti. Dua slot decode gambar dan empat slot hashing membatasi pekerjaan berat per proses. Rate limit dan idempotensi memakai PostgreSQL sehingga berlaku antar instance.
+## Deployment
 
-Panduan inti `/v1/waste-guide` kosong sampai artikel yang ditinjau diimpor (`guides/core-guides-v1.json`); panduan policy AI dikelola terpisah. Endpoint `GET /v1/achievements` aktif (`capabilities.achievements=true`) dengan 4 definisi baseline yang otomatis sinkron & relock saat edit/hapus catatan. Lampiran foto privat (`POST/GET/DELETE /v1/photos`) aktif saat `PHOTO_STORAGE_DIR` dikonfigurasi (`capabilities.photos=true`), terpisah dari upload ephemeral scan AI. Pengingat dan titik daur ulang memiliki capability `false`. API sudah dideploy ke VM cp-bcc melalui GitHub Actions dan dapat dicapai di [base URL HTTPS](https://pred-autoscaler.bccdev.id/wastenot/api/v1/).
-Deployment VM dan CI/CD: [panduan cp-bcc](docs/DEPLOYMENT.md).
+Staging berjalan di VM cp-bcc melalui GitHub Actions dengan runner self-hosted. Nginx harus meneruskan `X-Real-IP` (lihat `deploy/nginx-location.conf`) agar rate limit login dihitung per klien. Rincian blue-green, systemd, backup, dan rollback ada di [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) dan [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
-Runtime YOLO CPU, provenance model dan source Python berada di [repo AI](https://github.com/waste-not-app/waste-not-ai); petunjuk layanan privat ada pada [panduan AI](docs/AI.md).
+Base URL staging: <https://pred-autoscaler.bccdev.id/wastenot/api/v1/>
 
-YOLO11n baseline COCO dan Gemini 3.1 Flash-Lite sudah berjalan di cp-bcc. Alur HTTPS foto → deteksi nyata → rekomendasi Gemini → simpan → statistik/XP lulus 17 pemeriksaan. Metadata melaporkan `ai_scan=true`, `ai_recommendation=true`; empat panduan pilot memakai pemeriksaan sumber otomatis yang ditandai jelas. Ini pilot backend, belum validasi akurasi khusus sampah/material atau penerimaan Android. [Bukti dan batas pengujian](docs/VERIFICATION.md).
+## Dokumentasi lanjutan
+
+- [Panduan integrasi Android dan AI](docs/INTEGRATION.md)
+- [Panduan API](docs/API.md): envelope, endpoint, retry, dan konflik
+- [OpenAPI core](contracts/core.openapi.json) dan [OpenAPI AI publik](contracts/ai/public.openapi.json)
+- [Integrasi Android](docs/ANDROID.md)
+- [Integrasi AI](docs/AI.md)
+- [Kurasi panduan](guides/README.md)
+- [Operasional](docs/OPERATIONS.md)
+- [Bukti pengujian](docs/VERIFICATION.md)
+- [Panduan kontribusi](CONTRIBUTING.md)
