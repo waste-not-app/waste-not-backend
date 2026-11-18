@@ -86,10 +86,15 @@ func (s *service) PrepareDetectionSelection(ctx context.Context, userID string, 
 		return nil, nil, coreai.ErrInvalid
 	}
 	objectID := in["object_id"]
+	objects, _ := snapshot["objects"].([]any)
+	model, modelOK := snapshot["model"].(map[string]any)
+	if !modelOK {
+		return nil, nil, coreai.ErrInvalid
+	}
 	var object map[string]any
-	for _, entry := range snapshot["objects"].([]any) {
-		candidate := entry.(map[string]any)
-		if candidate["object_id"] == objectID {
+	for _, entry := range objects {
+		candidate, ok := entry.(map[string]any)
+		if ok && candidate["object_id"] == objectID {
 			object = candidate
 			break
 		}
@@ -104,7 +109,6 @@ func (s *service) PrepareDetectionSelection(ctx context.Context, userID string, 
 	for _, key := range []string{"class_id", "raw_class", "confidence", "bbox"} {
 		rawObject[key] = object[key]
 	}
-	model := snapshot["model"].(map[string]any)
 	selection := map[string]any{
 		"model_version":   model["model_version"],
 		"model_sha256":    model["sha256"],

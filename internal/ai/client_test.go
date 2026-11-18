@@ -112,3 +112,15 @@ func TestCatalogServesStaleSnapshotDuringRefresh(t *testing.T) {
 		t.Fatalf("expected stale catalog during refresh, got %v %v", got, err)
 	}
 }
+
+func TestValidDetectionRejectsMalformedShapes(t *testing.T) {
+	for _, v := range []map[string]any{
+		{},
+		{"model": "not-an-object"},
+		{"model": map[string]any{"model_version": "x", "class_names": "bad"}, "model_version": "x"},
+	} {
+		if validDetection(v) {
+			t.Fatalf("malformed detection accepted: %v", v)
+		}
+	}
+}

@@ -207,7 +207,11 @@ func (c *Client) Catalog(ctx context.Context, id string) (map[string]any, error)
 			catalog[key] = v
 		}
 	}
-	catalog["model_version"] = cap["model"].(map[string]any)["model_version"]
+	model, ok := cap["model"].(map[string]any)
+	if !ok {
+		return nil, ErrInvalid
+	}
+	catalog["model_version"] = model["model_version"]
 	if e = c.Validate("ObjectCatalog", catalog); e != nil {
 		return nil, e
 	}
