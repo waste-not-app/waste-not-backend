@@ -107,3 +107,16 @@ func openSchemaPool(ctx context.Context, dsn, schema string) (*pgxpool.Pool, err
 	u.RawQuery = q.Encode()
 	return Open(ctx, u.String())
 }
+
+func TestLatestMigrationIsNewestFile(t *testing.T) {
+	files, _ := migrations.ReadDir(".")
+	got := LatestMigration()
+	for _, f := range files {
+		if f.Name() > got {
+			t.Fatalf("latest migration %q is older than %q", got, f.Name())
+		}
+	}
+	if got == "" {
+		t.Fatal("no embedded migrations")
+	}
+}
