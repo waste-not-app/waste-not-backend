@@ -61,7 +61,7 @@ func (h *Handler) ConfirmPasswordReset(c fiber.Ctx) error {
 	if len(req.Token) != 43 {
 		fields["token"] = "Kode pemulihan tidak valid atau sudah kedaluwarsa."
 	}
-	if n := utf8.RuneCountInString(req.Password); n < 12 || n > 128 {
+	if n := utf8.RuneCountInString(req.Password); n < domain.MinPasswordLength || n > domain.MaxPasswordLength {
 		fields["password"] = "Gunakan kata sandi 12–128 karakter."
 	}
 	if len(fields) > 0 {
@@ -99,7 +99,7 @@ func (h *Handler) DeleteMe(c fiber.Ctx) error {
 	if !h.checkAuthRateLimit(c, "delete-me:"+ident.User.ID) {
 		return nil
 	}
-	if n := utf8.RuneCountInString(req.Password); n < 1 || n > 128 {
+	if n := utf8.RuneCountInString(req.Password); n < 1 || n > domain.MaxPasswordLength {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"password": "Masukkan kata sandi saat ini."})
 	}
 	if !h.limiter.AcquireHashSlot(c) {

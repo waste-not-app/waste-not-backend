@@ -10,6 +10,21 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	MinWeightG           = 1
+	MaxWeightG           = 100000
+	MinItemCount         = 1
+	MaxItemCount         = 10000
+	MinNameLength        = 2
+	MaxNameLength        = 60
+	MaxEmailLength       = 254
+	MinPasswordLength    = 12
+	MaxPasswordLength    = 128
+	MaxNotesLength       = 500
+	ActivityDatePastDays = 30
+	KgMaxDecimalPlaces   = 3
+)
+
 var Categories = []string{"ORGANIC", "PLASTIC", "PAPER", "GLASS", "METAL", "ELECTRONIC", "OTHER"}
 var Methods = []string{"REDUCE", "REUSE", "RECYCLE", "TRASH"}
 
@@ -24,7 +39,7 @@ func Contains(values []string, s string) bool {
 func Email(s string) (string, bool) {
 	s = strings.ToLower(strings.TrimSpace(s))
 	a, e := mail.ParseAddress(s)
-	return s, e == nil && a.Address == s && len(s) <= 254 && strings.Contains(s, "@") && !strings.ContainsAny(s, "\r\n ")
+	return s, e == nil && a.Address == s && len(s) <= MaxEmailLength && strings.Contains(s, "@") && !strings.ContainsAny(s, "\r\n ")
 }
 func ValidTimezone(s string) bool {
 	if s == "" || s == "Local" {
@@ -96,11 +111,11 @@ func (i *LogInput) Validate(today, oldDate string) map[string]string {
 	}
 	switch i.QuantityKind {
 	case "WEIGHT":
-		if i.WeightG == nil || *i.WeightG < 1 || *i.WeightG > 100000 || i.ItemCount != nil {
+		if i.WeightG == nil || *i.WeightG < MinWeightG || *i.WeightG > MaxWeightG || i.ItemCount != nil {
 			f["weight_g"] = "Gunakan 1–100000 gram tanpa jumlah benda."
 		}
 	case "COUNT":
-		if i.ItemCount == nil || *i.ItemCount < 1 || *i.ItemCount > 10000 || i.WeightG != nil {
+		if i.ItemCount == nil || *i.ItemCount < MinItemCount || *i.ItemCount > MaxItemCount || i.WeightG != nil {
 			f["item_count"] = "Gunakan 1–10000 benda tanpa berat."
 		}
 	default:
@@ -108,10 +123,10 @@ func (i *LogInput) Validate(today, oldDate string) map[string]string {
 	}
 	d, e := time.Parse(time.DateOnly, i.ActivityDate)
 	t, _ := time.Parse(time.DateOnly, today)
-	if e != nil || (i.ActivityDate != oldDate && (d.After(t) || d.Before(t.AddDate(0, 0, -30)))) {
+	if e != nil || (i.ActivityDate != oldDate && (d.After(t) || d.Before(t.AddDate(0, 0, -ActivityDatePastDays)))) {
 		f["activity_date"] = "Pilih tanggal dalam 30 hari terakhir."
 	}
-	if utf8.RuneCountInString(i.Notes) > 500 {
+	if utf8.RuneCountInString(i.Notes) > MaxNotesLength {
 		f["notes"] = "Catatan maksimal 500 karakter."
 	}
 	if i.PhotoID != nil {
