@@ -16,7 +16,6 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 )
 
-// Check performs the same authenticated TLS availability probe for known and unknown accounts.
 type ResetMailer interface {
 	Check(ctx context.Context) error
 	Send(ctx context.Context, email, token string) error

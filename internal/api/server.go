@@ -98,7 +98,6 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer authM
 		}
 	}
 
-	// Initialize repositories & services per module
 	sysRepo := system.NewRepository(db)
 	sysService := system.NewService(sysRepo, c, aiClient)
 
@@ -123,12 +122,10 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer authM
 	aiRepo := aiMod.NewRepository(db)
 	aiService := aiMod.NewService(aiRepo, c, aiClient, limiter)
 
-	// Swagger UI is opt-in (SWAGGER_ENABLED=true) so it is never exposed through the public proxy by accident.
 	if c.SwaggerEnabled {
 		app.Get("/swagger/*", swaggo.HandlerDefault)
 	}
 
-	// Register HTTP routes per module
 	system.RegisterHTTPRoutes(app, sysService, authMw)
 	authMod.RegisterHTTPRoutes(app, authService, limiter, log, authMw)
 	logs.RegisterHTTPRoutes(app, logsService, log, authMw)

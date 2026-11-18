@@ -10,7 +10,6 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
-// DrainCleanup defers failed objects durably and keeps processing other eligible work.
 func DrainCleanup(ctx context.Context, pool *pgxpool.Pool, storage Storage, ownerID string, limit int) error {
 	prefix := ""
 	if ownerID != "" {

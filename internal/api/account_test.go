@@ -129,7 +129,6 @@ func TestPasswordResetExpiryAndUnavailableTransport(t *testing.T) {
 	st, v, _ := call(t, sv.URL, "POST", "/v1/auth/password-reset", "", map[string]string{"email": "expiry@example.com"}, nil)
 	requireStatus(t, st, 202, v)
 	message := mailer.next(t)
-	// Expiry is persisted independently of delivery and must reject the token at the boundary.
 	_, err := s.DB.Exec(context.Background(), "UPDATE password_reset_tokens SET expires_at=now()-interval '1 second'")
 	if err != nil {
 		t.Fatal(err)
@@ -418,7 +417,6 @@ retry:
 		case <-deadline.C:
 			t.Fatal("durable retry was not delivered")
 		case <-tick.C:
-			// Advance durable retry eligibility rather than waiting the production backoff.
 			if _, err := s.DB.Exec(context.Background(), "UPDATE password_reset_mail SET available_at=now()"); err != nil {
 				t.Fatal(err)
 			}

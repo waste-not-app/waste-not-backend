@@ -12,8 +12,6 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-// TestSchemaCopiesStayInSync guards the two copies of the core schema: the embedded runner file
-// and the sqlc source under sql/migrations. Both must produce the same tables, columns, constraints and indexes.
 func TestSchemaCopiesStayInSync(t *testing.T) {
 	url := os.Getenv("TEST_DATABASE_URL")
 	if url == "" {
@@ -87,7 +85,6 @@ func TestSchemaCopiesStayInSync(t *testing.T) {
 				if err := rows.Scan(&line); err != nil {
 					t.Fatal(err)
 				}
-				// schema_migrations is created by the runner itself (database.Migrate), not by 001_core.sql.
 				if strings.Contains(line, "schema_migrations") {
 					continue
 				}
