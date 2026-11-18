@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
-	"github.com/waste-not-app/waste-not-backend/internal/database"
 	"log"
 	"os"
 	"time"
+
+	"github.com/waste-not-app/waste-not-backend/internal/database"
 )
 
 func main() {

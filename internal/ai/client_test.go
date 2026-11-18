@@ -3,12 +3,13 @@ package ai
 import (
 	"context"
 	"encoding/json"
-	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/waste-not-app/waste-not-backend/internal/config"
 )
 
 func TestContractExamples(t *testing.T) {

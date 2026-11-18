@@ -4,6 +4,7 @@ import (
 	"log/slog"
 
 	"github.com/gofiber/fiber/v3"
+
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )

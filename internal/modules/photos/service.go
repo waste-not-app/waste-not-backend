@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+
 	"github.com/waste-not-app/waste-not-backend/internal/auth"
 )
 

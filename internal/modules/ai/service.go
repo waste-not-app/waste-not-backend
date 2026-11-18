@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/disintegration/imaging"
+
 	coreai "github.com/waste-not-app/waste-not-backend/internal/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/config"

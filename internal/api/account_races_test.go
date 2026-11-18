@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 )

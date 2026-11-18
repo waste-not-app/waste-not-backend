@@ -18,6 +18,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/database"
 	authMod "github.com/waste-not-app/waste-not-backend/internal/modules/auth"

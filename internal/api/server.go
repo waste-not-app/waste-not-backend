@@ -14,6 +14,7 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/recover"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
+
 	_ "github.com/waste-not-app/waste-not-backend/docs"
 	"github.com/waste-not-app/waste-not-backend/internal/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/auth"

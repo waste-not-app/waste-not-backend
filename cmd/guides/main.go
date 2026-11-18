@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"github.com/waste-not-app/waste-not-backend/internal/database"
 	"io"
 	"log"
 	"os"
 	"time"
+
+	"github.com/waste-not-app/waste-not-backend/internal/database"
 )
 
 func main() {
