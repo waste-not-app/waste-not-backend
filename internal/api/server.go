@@ -72,7 +72,7 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer authM
 
 	app := fiber.New(fiber.Config{
 		AppName:      "WasteNot API v1",
-		BodyLimit:    10 * 1024 * 1024,
+		BodyLimit:    6 * 1024 * 1024,
 		ErrorHandler: response.ErrorHandler(log),
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 40 * time.Second,
