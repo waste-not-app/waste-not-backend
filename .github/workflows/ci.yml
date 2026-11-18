@@ -33,13 +33,13 @@ jobs:
       TEST_DATABASE_URL: postgres://postgres:ci-only-password@localhost:5433/wastenot_test?sslmode=disable
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
           go-version-file: go.mod
           cache: true
       - run: go mod verify
       - run: python3 scripts/check_contracts.py contracts/ai contracts/ai.lock.json
       - run: python3 -m unittest discover -s deploy -v
-      - run: make check
-      - run: make vuln
-      - run: make build
+      - run: make ci
+      - name: Build container image
+        run: docker build -t wastenot-api:ci .
