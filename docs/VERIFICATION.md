@@ -11,7 +11,7 @@ Validasi lokal terhadap perubahan:
 - 239 tes AI lulus dengan dependency CI hash-locked, termasuk 13 kasus paket/deploy/pin. Ruff lulus; pip-audit CPU lock melaporkan tidak ada advisory yang diketahui.
 - 34 artifact kontrak dihasilkan secara deterministik dengan `--check`; bundle AI/Go cocok byte-for-byte dengan kedua pin.
 - Bobot YOLO resmi diunduh/diverifikasi sebagai SHA-256 `0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1`; ini bukan hanya validasi format hash.
-- Go/PostgreSQL18 lulus `make check` (vet/race/integration/format), `make vuln`, dan build binary.
+- Go/PostgreSQL18 lulus `make ci` (format, vet, golangci-lint, govulncheck, race + integration, build binary).
 - 27 tes helper deployment lulus: 15 untuk blue-green baru termasuk interrupted switch, Nginx/reload/public failure, identitas rilis, proteksi credential dan drain; 12 adalah regresi helper native lama.
 - Kedua workflow lulus actionlint1.7.12 dan pemeriksaan YAML/syntax shell. Test Client menghasilkan satu peringatan deprecation httpx dari Starlette; tidak ada kegagalan tes. Versi runtime tidak diubah hanya untuk menghilangkan peringatan.
 
