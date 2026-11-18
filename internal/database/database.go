@@ -15,6 +15,17 @@ import (
 //go:embed *.sql
 var migrations embed.FS
 
+func LatestMigration() string {
+	files, _ := migrations.ReadDir(".")
+	latest := ""
+	for _, f := range files {
+		if name := f.Name(); name > latest {
+			latest = name
+		}
+	}
+	return latest
+}
+
 func Open(ctx context.Context, url string) (*pgxpool.Pool, error) {
 	c, err := pgxpool.ParseConfig(url)
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/waste-not-app/waste-not-backend/internal/database"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
@@ -20,5 +21,5 @@ func NewRepository(dbPool *pgxpool.Pool) Repository {
 }
 
 func (r *repository) IsSchemaMigrated(ctx context.Context) (bool, error) {
-	return r.q.IsSchemaMigrated(ctx)
+	return r.q.IsSchemaMigrated(ctx, database.LatestMigration())
 }
