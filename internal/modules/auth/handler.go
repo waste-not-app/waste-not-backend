@@ -75,8 +75,9 @@ func (h *Handler) Register(c fiber.Ctx) error {
 	if !h.limiter.AcquireHashSlot(c) {
 		return nil
 	}
+	defer h.limiter.ReleaseHashSlot()
+
 	tokens, err := h.service.Register(c.Context(), req, email)
-	h.limiter.ReleaseHashSlot()
 
 	if errors.Is(err, ErrEmailExists) {
 		return response.Fail(c, fiber.StatusConflict, "EMAIL_EXISTS", map[string]string{"email": "Email sudah digunakan."})
