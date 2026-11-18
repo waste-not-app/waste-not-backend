@@ -20,10 +20,10 @@ func (r *RegisterReq) Validate(emailValid bool) map[string]string {
 	if !emailValid {
 		f["email"] = "Periksa format email."
 	}
-	if n := utf8.RuneCountInString(r.Name); n < 2 || n > 60 {
+	if n := utf8.RuneCountInString(r.Name); n < domain.MinNameLength || n > domain.MaxNameLength {
 		f["name"] = "Isi nama sepanjang 2–60 karakter."
 	}
-	if n := utf8.RuneCountInString(r.Password); n < 12 || n > 128 {
+	if n := utf8.RuneCountInString(r.Password); n < domain.MinPasswordLength || n > domain.MaxPasswordLength {
 		f["password"] = "Gunakan kata sandi 12–128 karakter."
 	}
 	if !domain.ValidTimezone(r.Timezone) {

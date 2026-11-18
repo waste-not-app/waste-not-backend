@@ -107,7 +107,7 @@ func (h *Handler) Login(c fiber.Ctx) error {
 	if !h.checkAuthRateLimit(c, email) {
 		return nil
 	}
-	if !validEmail || utf8.RuneCountInString(req.Password) > 128 {
+	if !validEmail || utf8.RuneCountInString(req.Password) > domain.MaxPasswordLength {
 		return response.Fail(c, fiber.StatusUnauthorized, "UNAUTHENTICATED", nil)
 	}
 	if !h.limiter.AcquireHashSlot(c) {
