@@ -130,10 +130,10 @@ func (h *Handler) GetObjects(c fiber.Ctx) error {
 // @Failure 400,401,409,413,415,422,429,502,503 {object} response.ErrorResponse
 // @Router /v1/ai/detections [post]
 func (h *Handler) CreateDetection(c fiber.Ctx) error {
-	if !h.limiter.AcquireImageSlot(c) {
-		return nil
+	if !h.limiter.ImageSlots.TryAcquire() {
+		return response.Busy(c, "AI_BUSY")
 	}
-	defer h.limiter.ReleaseImageSlot()
+	defer h.limiter.ImageSlots.Release()
 
 	if !h.service.IsAIEnabled() {
 		return response.Fail(c, fiber.StatusServiceUnavailable, "AI_DISABLED", nil)

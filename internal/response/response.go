@@ -123,6 +123,11 @@ func RateLimited(c fiber.Ctx, seconds int) error {
 	return Fail(c, fiber.StatusTooManyRequests, "RATE_LIMITED", nil)
 }
 
+func Busy(c fiber.Ctx, code string) error {
+	c.Set(fiber.HeaderRetryAfter, "1")
+	return Fail(c, fiber.StatusServiceUnavailable, code, nil)
+}
+
 func InternalError(c fiber.Ctx, log *slog.Logger, err error) error {
 	if log != nil {
 		log.Error("request failed", "request_id", RequestID(c), "detail", err)

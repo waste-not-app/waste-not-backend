@@ -73,10 +73,10 @@ func (h *Handler) Register(c fiber.Ctx) error {
 	if fields := req.Validate(validEmail); len(fields) > 0 {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", fields)
 	}
-	if !h.limiter.AcquireHashSlot(c) {
-		return nil
+	if !h.limiter.HashSlots.TryAcquire() {
+		return response.Busy(c, "UNAVAILABLE")
 	}
-	defer h.limiter.ReleaseHashSlot()
+	defer h.limiter.HashSlots.Release()
 
 	tokens, err := h.service.Register(c.Context(), req, email)
 
@@ -110,10 +110,10 @@ func (h *Handler) Login(c fiber.Ctx) error {
 	if !validEmail || utf8.RuneCountInString(req.Password) > domain.MaxPasswordLength {
 		return response.Fail(c, fiber.StatusUnauthorized, "UNAUTHENTICATED", nil)
 	}
-	if !h.limiter.AcquireHashSlot(c) {
-		return nil
+	if !h.limiter.HashSlots.TryAcquire() {
+		return response.Busy(c, "UNAVAILABLE")
 	}
-	defer h.limiter.ReleaseHashSlot()
+	defer h.limiter.HashSlots.Release()
 
 	tokens, err := h.service.Login(c.Context(), email, req.Password)
 	if errors.Is(err, ErrUnauthenticated) {

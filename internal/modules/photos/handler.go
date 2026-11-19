@@ -46,10 +46,10 @@ func RegisterHTTPRoutes(app *fiber.App, service Service, limiter *ratelimit.Limi
 // @Failure 400,401,413,415,422,503 {object} response.ErrorResponse
 // @Router /v1/photos [post]
 func (h *Handler) UploadPhoto(c fiber.Ctx) error {
-	if !h.limiter.AcquirePhotoSlot(c) {
-		return nil
+	if !h.limiter.PhotoSlots.TryAcquire() {
+		return response.Busy(c, "UNAVAILABLE")
 	}
-	defer h.limiter.ReleasePhotoSlot()
+	defer h.limiter.PhotoSlots.Release()
 
 	if !h.service.Enabled() {
 		return response.Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
