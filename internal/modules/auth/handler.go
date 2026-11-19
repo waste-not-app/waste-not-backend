@@ -81,7 +81,7 @@ func (h *Handler) Register(c fiber.Ctx) error {
 	tokens, err := h.service.Register(c.Context(), req, email)
 
 	if errors.Is(err, ErrEmailExists) {
-		return response.Fail(c, fiber.StatusConflict, "EMAIL_EXISTS", map[string]string{"email": "Email sudah digunakan."})
+		return response.Fail(c, fiber.StatusConflict, "EMAIL_EXISTS", map[string]string{"email": "This email is already in use."})
 	}
 	if err != nil {
 		return response.InternalError(c, h.log, err)

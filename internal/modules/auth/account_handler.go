@@ -31,14 +31,14 @@ func (h *Handler) RequestPasswordReset(c fiber.Ctx) error {
 		return nil
 	}
 	if !valid {
-		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"email": "Periksa format email."})
+		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"email": "Check the email format."})
 	}
 	if err := h.service.RequestPasswordReset(c.Context(), email); errors.Is(err, ErrMailUnavailable) {
 		return response.Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
 	} else if err != nil {
 		return response.InternalError(c, h.log, err)
 	}
-	return response.Data(c, fiber.StatusAccepted, PasswordResetRes{Message: "Jika email terdaftar, permintaan pengaturan ulang kata sandi akan diproses. Periksa email untuk kode pemulihan."})
+	return response.Data(c, fiber.StatusAccepted, PasswordResetRes{Message: "If this email is registered, we'll process the password reset. Check your inbox for a recovery code."})
 }
 
 // @Summary Confirm password reset
@@ -59,10 +59,10 @@ func (h *Handler) ConfirmPasswordReset(c fiber.Ctx) error {
 	}
 	fields := map[string]string{}
 	if len(req.Token) != 43 {
-		fields["token"] = "Kode pemulihan tidak valid atau sudah kedaluwarsa."
+		fields["token"] = "This recovery code is invalid or has expired."
 	}
 	if n := utf8.RuneCountInString(req.Password); n < domain.MinPasswordLength || n > domain.MaxPasswordLength {
-		fields["password"] = "Gunakan kata sandi 12–128 karakter."
+		fields["password"] = "Use a password of 12 to 128 characters."
 	}
 	if len(fields) > 0 {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", fields)
@@ -73,7 +73,7 @@ func (h *Handler) ConfirmPasswordReset(c fiber.Ctx) error {
 	defer h.limiter.HashSlots.Release()
 	err := h.service.ConfirmPasswordReset(c.Context(), req.Token, req.Password)
 	if errors.Is(err, ErrInvalidResetToken) {
-		return response.Fail(c, fiber.StatusUnprocessableEntity, "INVALID_RESET_TOKEN", map[string]string{"token": "Kode pemulihan tidak valid atau sudah kedaluwarsa."})
+		return response.Fail(c, fiber.StatusUnprocessableEntity, "INVALID_RESET_TOKEN", map[string]string{"token": "This recovery code is invalid or has expired."})
 	}
 	if err != nil {
 		return response.InternalError(c, h.log, err)
@@ -100,7 +100,7 @@ func (h *Handler) DeleteMe(c fiber.Ctx) error {
 		return nil
 	}
 	if n := utf8.RuneCountInString(req.Password); n < 1 || n > domain.MaxPasswordLength {
-		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"password": "Masukkan kata sandi saat ini."})
+		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"password": "Enter your current password."})
 	}
 	if !h.limiter.HashSlots.TryAcquire() {
 		return response.Busy(c, "UNAVAILABLE")
@@ -108,7 +108,7 @@ func (h *Handler) DeleteMe(c fiber.Ctx) error {
 	defer h.limiter.HashSlots.Release()
 	err := h.service.DeleteMe(c.Context(), ident.User.ID, req.Password)
 	if errors.Is(err, ErrWrongPassword) {
-		return response.Fail(c, fiber.StatusForbidden, "WRONG_PASSWORD", map[string]string{"password": "Kata sandi saat ini tidak sesuai."})
+		return response.Fail(c, fiber.StatusForbidden, "WRONG_PASSWORD", map[string]string{"password": "Your current password is incorrect."})
 	}
 	if errors.Is(err, ErrSessionExpired) {
 		return response.Fail(c, fiber.StatusUnauthorized, "SESSION_EXPIRED", nil)

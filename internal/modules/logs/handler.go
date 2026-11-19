@@ -163,7 +163,7 @@ func (h *Handler) UpdateLog(c fiber.Ctx) error {
 	version := 0
 	if e := json.Unmarshal(patch["version"], &version); e != nil || version < 1 {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{
-			"version": "Muat versi catatan terlebih dahulu.",
+			"version": "Load the latest version of this log first.",
 		})
 	}
 	for key := range patch {

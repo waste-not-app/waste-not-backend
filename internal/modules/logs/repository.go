@@ -106,13 +106,13 @@ func (r *repository) attachPhoto(ctx context.Context, qtx *db.Queries, userID, p
 		UserID: userID,
 	})
 	if errors.Is(err, pgx.ErrNoRows) {
-		return &ValidationError{Fields: map[string]string{"photo_id": "Foto lampiran tidak ditemukan."}}
+		return &ValidationError{Fields: map[string]string{"photo_id": "Photo attachment not found."}}
 	}
 	if err != nil {
 		return err
 	}
 	if row.Deleted || row.Status == "DELETED" {
-		return &ValidationError{Fields: map[string]string{"photo_id": "Foto lampiran tidak ditemukan."}}
+		return &ValidationError{Fields: map[string]string{"photo_id": "Photo attachment not found."}}
 	}
 	inUse, err := qtx.IsPhotoAttachedToOtherActiveLog(ctx, db.IsPhotoAttachedToOtherActiveLogParams{
 		PhotoID: &photoID,
@@ -357,7 +357,7 @@ func (r *repository) Update(ctx context.Context, userID, timezone, today, id str
 					continue
 				case "weight_g", "item_count":
 				default:
-					return LogWithProgressRes{}, &ValidationError{Fields: map[string]string{key: "Isian wajib diisi."}}
+					return LogWithProgressRes{}, &ValidationError{Fields: map[string]string{key: "This field is required."}}
 				}
 			}
 			if err = json.Unmarshal(raw, target); err != nil {

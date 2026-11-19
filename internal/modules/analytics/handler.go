@@ -40,7 +40,7 @@ func (h *Handler) GetStatistics(c fiber.Ctx) error {
 	res, err := h.service.GetStatistics(c.Context(), ident.User, c.Query("from"), c.Query("to"))
 	if errors.Is(err, ErrInvalidDateRange) {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{
-			"from": "Gunakan rentang tanggal hingga 366 hari tanpa tanggal mendatang.",
+			"from": "Use a date range of up to 366 days with no future dates.",
 		})
 	}
 	if err != nil {

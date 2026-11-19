@@ -18,16 +18,16 @@ func (r *RegisterReq) Validate(emailValid bool) map[string]string {
 	r.Name = strings.TrimSpace(r.Name)
 	f := map[string]string{}
 	if !emailValid {
-		f["email"] = "Periksa format email."
+		f["email"] = "Check the email format."
 	}
 	if n := utf8.RuneCountInString(r.Name); n < domain.MinNameLength || n > domain.MaxNameLength {
-		f["name"] = "Isi nama sepanjang 2–60 karakter."
+		f["name"] = "Enter a name of 2 to 60 characters."
 	}
 	if n := utf8.RuneCountInString(r.Password); n < domain.MinPasswordLength || n > domain.MaxPasswordLength {
-		f["password"] = "Gunakan kata sandi 12–128 karakter."
+		f["password"] = "Use a password of 12 to 128 characters."
 	}
 	if !domain.ValidTimezone(r.Timezone) {
-		f["timezone"] = "Pilih zona waktu IANA."
+		f["timezone"] = "Choose an IANA time zone."
 	}
 	return f
 }

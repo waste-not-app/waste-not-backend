@@ -48,34 +48,34 @@ func (i *LogInput) Validate(today, oldDate string) map[string]string {
 	i.Notes = strings.TrimSpace(i.Notes)
 	f := map[string]string{}
 	if !slices.Contains(Categories, i.Category) {
-		f["category"] = "Pilih kategori yang tersedia."
+		f["category"] = "Choose one of the available categories."
 	}
 	if !slices.Contains(Methods, i.Method) {
-		f["method"] = "Pilih metode yang tersedia."
+		f["method"] = "Choose one of the available methods."
 	}
 	switch i.QuantityKind {
 	case "WEIGHT":
 		if i.WeightG == nil || *i.WeightG < MinWeightG || *i.WeightG > MaxWeightG || i.ItemCount != nil {
-			f["weight_g"] = "Gunakan 1–100000 gram tanpa jumlah benda."
+			f["weight_g"] = "Enter 1 to 100000 grams, without an item count."
 		}
 	case "COUNT":
 		if i.ItemCount == nil || *i.ItemCount < MinItemCount || *i.ItemCount > MaxItemCount || i.WeightG != nil {
-			f["item_count"] = "Gunakan 1–10000 benda tanpa berat."
+			f["item_count"] = "Enter 1 to 10000 items, without a weight."
 		}
 	default:
-		f["quantity_kind"] = "Pilih WEIGHT atau COUNT."
+		f["quantity_kind"] = "Choose WEIGHT or COUNT."
 	}
 	d, e := time.Parse(time.DateOnly, i.ActivityDate)
 	t, _ := time.Parse(time.DateOnly, today)
 	if e != nil || (i.ActivityDate != oldDate && (d.After(t) || d.Before(t.AddDate(0, 0, -ActivityDatePastDays)))) {
-		f["activity_date"] = "Pilih tanggal dalam 30 hari terakhir."
+		f["activity_date"] = "Choose a date within the last 30 days."
 	}
 	if utf8.RuneCountInString(i.Notes) > MaxNotesLength {
-		f["notes"] = "Catatan maksimal 500 karakter."
+		f["notes"] = "Notes can be up to 500 characters."
 	}
 	if i.PhotoID != nil {
 		if _, err := uuid.Parse(*i.PhotoID); err != nil {
-			f["photo_id"] = "Pilih foto lampiran yang valid."
+			f["photo_id"] = "Choose a valid photo attachment."
 		}
 	}
 	return f
