@@ -12,6 +12,7 @@ var (
 	ErrAISessionExpired    = errors.New("AI session expired")
 	ErrPhotoAlreadyLinked  = errors.New("photo already linked to another log")
 	ErrInvalidPatchRequest = errors.New("invalid patch request")
+	ErrInvalidCursor       = errors.New("invalid cursor")
 )
 
 type ValidationError struct {

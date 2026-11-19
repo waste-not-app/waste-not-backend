@@ -74,22 +74,15 @@ func (h *Handler) ListGuides(c fiber.Ctx) error {
 
 	ident := middleware.Who(c)
 	sc := cursor.BuildScope("guides", ident.User.ID, string(c.Request().URI().QueryString()))
-	namePos, idPos := "", ""
-	if raw := c.Query("cursor"); raw != "" {
-		tok, e := h.service.DecodeCursor(raw, sc)
-		if e != nil {
-			return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
-		}
-		namePos, idPos = tok.Position, tok.ID
-	}
-
 	res, err := h.service.ListGuides(c.Context(), sc, ListGuidesQuery{
 		Query:    query,
 		Category: category,
 		Limit:    n,
-		NamePos:  namePos,
-		IDPos:    idPos,
+		Cursor:   c.Query("cursor"),
 	})
+	if errors.Is(err, ErrInvalidCursor) {
+		return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
+	}
 	if err != nil {
 		return response.InternalError(c, h.log, err)
 	}

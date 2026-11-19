@@ -6,6 +6,7 @@ type ListGuidesQuery struct {
 	Query    string
 	Category string
 	Limit    int
+	Cursor   string
 	NamePos  string
 	IDPos    string
 }

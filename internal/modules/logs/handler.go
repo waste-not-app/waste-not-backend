@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gofiber/fiber/v3"
 
@@ -119,48 +118,22 @@ func (h *Handler) GetLog(c fiber.Ctx) error {
 // @Router /v1/waste-logs [get]
 func (h *Handler) ListLogs(c fiber.Ctx) error {
 	ident := middleware.Who(c)
-	category := c.Query("category")
-	method := c.Query("method")
-	from := c.Query("from")
-	to := c.Query("to")
-	today := domain.Today(h.service.Now(), ident.User.Timezone)
-
-	if !ValidateFilters(category, method, from, to, today) {
-		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{
-			"filters": "Periksa kategori, metode, dan rentang tanggal.",
-		})
-	}
-
-	n, ok := cursor.ParseLimit(c.Query("limit"))
-	if !ok {
-		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{
-			"limit": "Gunakan 1–100.",
-		})
-	}
-
 	sc := cursor.BuildScope("logs", ident.User.ID, string(c.Request().URI().QueryString()))
-	datePos, idPos := "", ""
-	if raw := c.Query("cursor"); raw != "" {
-		tok, e := h.service.DecodeCursor(raw, sc)
-		if e != nil {
-			return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
-		}
-		if _, e = time.Parse(time.DateOnly, tok.Position); e != nil {
-			return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
-		}
-		datePos, idPos = tok.Position, tok.ID
-	}
-
-	res, err := h.service.ListLogs(c.Context(), ident.User.ID, sc, ListLogsQuery{
-		Category: category,
-		Method:   method,
-		From:     from,
-		To:       to,
-		Limit:    n,
-		DatePos:  datePos,
-		IDPos:    idPos,
+	res, err := h.service.ListLogs(c.Context(), ident.User, sc, ListLogsParams{
+		Category: c.Query("category"),
+		Method:   c.Query("method"),
+		From:     c.Query("from"),
+		To:       c.Query("to"),
+		Limit:    c.Query("limit"),
+		Cursor:   c.Query("cursor"),
 	})
-	if err != nil {
+	var valErr *ValidationError
+	switch {
+	case errors.As(err, &valErr):
+		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", valErr.Fields)
+	case errors.Is(err, ErrInvalidCursor):
+		return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
+	case err != nil:
 		return response.InternalError(c, h.log, err)
 	}
 	return response.Paginated(c, res.Items, res.HasMore, res.NextCursor)
