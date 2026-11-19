@@ -1,16 +1,36 @@
-# Kontrak integrasi
+# Contracts
 
-`core.openapi.json` dimiliki backend Go. `android/*.json` berasal dari fixture Android `c1258596cb71bc7b95dc9a4f140f55f759815c4e` dan tetap menjadi acuan transport core awal.
+Machine-readable contracts shared by the backend, the Android app, and the AI workers.
 
-`ai/` adalah snapshot kontrak yang disepakati dengan [waste-not-ai](https://github.com/waste-not-app/waste-not-ai/tree/main/contracts/v1), termasuk tiga OpenAPI, daftar error dan contoh JSON. Generator Python memiliki definisi AI; Go memakai snapshot schema untuk memvalidasi request publik dan respons worker. Kontrak lama yang berasal dari Android diperbarui pada audit 7 November agar cocok dengan runtime terkunci dan metadata sumber saat ini.
+| Path | Owner | Purpose |
+|---|---|---|
+| `core.openapi.json` | Backend | Core REST API consumed by Android |
+| `android/*.json` | Android | Transport fixtures the core API must keep compatible with |
+| `ai/` | AI repository | Snapshot of the agreed AI contract: three OpenAPI documents, the error catalog, and JSON examples |
+| `ai.lock.json` | Backend | SHA-256 checksums for every artifact in `ai/` |
+| `embed.go` | Backend | Embeds the AI schemas so the API can validate requests and worker responses at runtime |
 
-[ai.lock.json](ai.lock.json) memuat checksum seluruh 34 artifact dan cocok dengan `contracts/backend-pin.json` di repo AI. CI Go memeriksa bundle terhadap pin. CI AI memeriksa hasil generator dengan `--check`, lalu bundle terhadap pin; CI tidak menulis ulang kontrak agar tes lolos. Pemeriksaan lintas checkout dilakukan sebelum perubahan pasangan diterbitkan:
+## AI contract pinning
+
+The AI repository generates the AI contract. The backend keeps a reviewed snapshot in `ai/`, and its checksums in `ai.lock.json` must match `contracts/backend-pin.json` in the AI repository.
+
+CI in each repository verifies its own copy against the pin. Neither CI job rewrites contracts to make a build pass. Before you publish a paired change, verify both checkouts against each other:
 
 ```sh
 python3 scripts/check_contracts.py contracts/ai contracts/ai.lock.json \
   --peer ../waste-not-ai/contracts/v1
 ```
 
-CI tiap repo tidak mengunduh repo privat lain secara langsung. Pin mengunci bundle yang sudah ditinjau; perubahan API wajib memperbarui source generator, kedua snapshot/pin, contoh, tes Go dan DTO/tes Android yang terpengaruh. Jangan menaikkan pin hanya untuk membungkam kegagalan.
+A change to the AI API must update all of the following together:
 
-Contoh `provider=fixture`/`prototype_only=true` merupakan bahan pengujian; tidak menjadi hasil produksi. [Integrasi Android](../docs/ANDROID.md) menjelaskan perbedaan status transport, hasil AI, dan aktivitas tersimpan.
+- the generator source in the AI repository;
+- both snapshots and pins;
+- the examples;
+- the Go tests;
+- any affected Android DTOs and tests.
+
+Never bump the pin only to silence a failing check.
+
+## Fixtures
+
+Examples with `provider=fixture` or `prototype_only=true` are test material and are never valid production output. The API rejects them unless `AI_ALLOW_PROTOTYPE=true`.
