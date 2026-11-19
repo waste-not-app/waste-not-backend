@@ -5,7 +5,7 @@ import (
 
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
+	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 )
 
 type Service interface {

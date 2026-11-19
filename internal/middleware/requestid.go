@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
+	"github.com/waste-not-app/waste-not-backend/internal/response"
 )
 
 func RequestID(log *slog.Logger) fiber.Handler {
