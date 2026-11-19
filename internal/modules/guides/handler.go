@@ -3,6 +3,7 @@ package guides
 import (
 	"errors"
 	"log/slog"
+	"slices"
 	"strings"
 	"unicode/utf8"
 
@@ -66,7 +67,7 @@ func (h *Handler) ListGuides(c fiber.Ctx) error {
 	query := strings.TrimSpace(c.Query("q"))
 	category := c.Query("category")
 	n, ok := cursor.ParseLimit(c.Query("limit"))
-	if !ok || utf8.RuneCountInString(query) > 100 || (category != "" && !domain.Contains(domain.Categories, category)) {
+	if !ok || utf8.RuneCountInString(query) > 100 || (category != "" && !slices.Contains(domain.Categories, category)) {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{
 			"q": "Periksa pencarian, kategori, dan batas halaman.",
 		})
