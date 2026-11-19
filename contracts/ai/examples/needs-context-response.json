@@ -2,7 +2,7 @@
   "api_version": "1.0.0",
   "data": {
     "category": "OTHER",
-    "caution": "Ada risiko khusus. Ikuti petunjuk pengemasan dan pengelola yang sesuai; jangan membuang benda berbahaya sembarangan. Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+    "caution": "There is a special risk. Follow the packaging instructions and use a suitable handler. Never dump hazardous items. Wash it before using it again. Normal washing doesn't deal with chemical or biological contamination. Don't reuse cracked or broken glass or ceramics.",
     "conditions_to_verify": [],
     "confirmed_object_key": "ceramic_cup",
     "context_revision": 1,
@@ -21,7 +21,7 @@
     "object_id": null,
     "prototype_only": true,
     "provider": "fixture",
-    "reason": "Risiko khusus dicentang, tetapi jenisnya belum dijelaskan. Pilih jenis risiko agar kotor biasa tidak disamakan dengan kontaminasi berbahaya.",
+    "reason": "You marked a special risk but didn't say which kind. Choose the risk type so ordinary dirt isn't treated as hazardous contamination.",
     "reason_code": "RISK_DETAILS_REQUIRED",
     "recommendation_basis": null,
     "recommendation_id": "00000000-0000-0000-0000-000000000006",
@@ -32,8 +32,8 @@
       {
         "checked_at": "2026-11-04",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Jangan mencampur atau membuang limbah kimia sembarangan; ikuti label dan tanyakan pengelola setempat.",
+        "region": "United States",
+        "scope_note": "Don't mix or dump chemical waste. Follow the label and ask your local handler.",
         "title": "Household Hazardous Waste: safe management",
         "url": "https://www.epa.gov/hw/household-hazardous-waste-hhw"
       }
@@ -44,9 +44,9 @@
     "special_handling": true,
     "status": "NEEDS_CONTEXT",
     "steps": [
-      "Periksa label dan jenis risiko tanpa membongkar, mencampur isi, atau mencoba mengolah barang.",
-      "Jangan gunakan ulang atau campurkan barang berisiko dengan aliran sampah umum sebelum jenis bahayanya jelas.",
-      "Hubungi pengelola sampah atau DLH setempat dengan menjelaskan jenis barang serta risiko yang diketahui."
+      "Check the label and the type of risk without opening the item, mixing contents, or trying to treat it.",
+      "Don't reuse a risky item or mix it with general waste until you know what the hazard is.",
+      "Contact your local waste handler or environment agency and describe the item and any known risks."
     ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"

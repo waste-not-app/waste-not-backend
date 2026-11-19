@@ -2,7 +2,7 @@
   "api_version": "1.0.0",
   "data": {
     "category": "PAPER",
-    "caution": "Jangan sertakan dokumen berisi data pribadi tanpa pengelolaan yang sesuai.",
+    "caution": "Don't include documents with personal data unless you handle them properly first.",
     "conditions_to_verify": [],
     "confirmed_object_key": "book",
     "context_revision": 1,
@@ -21,7 +21,7 @@
     "object_id": null,
     "prototype_only": true,
     "provider": "fixture",
-    "reason": "Buku yang masih bersih dan layak dapat digunakan kembali atau didonasikan.",
+    "reason": "A book that's still clean and in good shape can be reused or donated.",
     "reason_code": null,
     "recommendation_basis": "CONFIRMED",
     "recommendation_id": "00000000-0000-0000-0000-000000000003",
@@ -32,8 +32,8 @@
       {
         "checked_at": "2026-11-04",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+        "region": "United States",
+        "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
         "title": "How Do I Recycle Common Recyclables",
         "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
       }
@@ -44,8 +44,8 @@
     "special_handling": false,
     "status": "READY",
     "steps": [
-      "Pertimbangkan penggunaan ulang atau donasi jika buku masih layak.",
-      "Untuk daur ulang, periksa aturan penerimaan buku dan sampul pada fasilitas setempat."
+      "If the book is still in good shape, consider reusing or donating it.",
+      "Before recycling, check whether your local facility accepts books and their covers."
     ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"

@@ -2,7 +2,7 @@
   "api_version": "1.0.0",
   "data": {
     "category": "GLASS",
-    "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+    "caution": "Broken glass needs special handling.",
     "conditions_to_verify": [],
     "confirmed_object_key": "glass_bottle",
     "context_revision": 1,
@@ -21,7 +21,7 @@
     "object_id": null,
     "prototype_only": true,
     "provider": "fixture",
-    "reason": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+    "reason": "To avoid the next piece of waste, skip purchases you don't need and choose durable products or less packaging. This is advice for next time, not for getting rid of the item you have now.",
     "reason_code": null,
     "recommendation_basis": "CONFIRMED",
     "recommendation_id": "00000000-0000-0000-0000-000000000004",
@@ -32,8 +32,8 @@
       {
         "checked_at": "2026-11-04",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Pencegahan pembelian/penggunaan berikutnya. Tidak membuktikan jumlah Reduce yang telah dilakukan.",
+        "region": "United States",
+        "scope_note": "About preventing the next purchase or use. It doesn't prove how much the user has already reduced.",
         "title": "Waste prevention, reuse and recycling",
         "url": "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
       }
@@ -44,7 +44,7 @@
     "special_handling": false,
     "status": "READY",
     "steps": [
-      "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+      "Next time you shop, buy only what you need and look for durable products or less packaging."
     ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"

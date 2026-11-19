@@ -1339,7 +1339,7 @@
     }
   },
   "info": {
-    "title": "WasteNot PUBLIC CONTRACT MOCK — not production Go",
+    "title": "WasteNot public contract mock (not the production Go API)",
     "version": "1.0.0",
     "x-api-version": "1.0.0",
     "x-implementation-status": "public contract mock; Go not implemented here"
@@ -2048,7 +2048,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "PLASTIC",
-                        "caution": "Kode 2 dan bentuk botol bukan bukti aman untuk dipakai ulang atau kontak pangan. Isi sebelumnya yang tidak diketahui atau bahan kimia tidak memakai aturan botol pangan ini.",
+                        "caution": "Resin code 2 and a bottle shape don't prove it's safe to reuse or to hold food. Bottles with unknown or chemical contents can't follow this food bottle guide.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "hdpe_bottle",
                         "context_revision": 1,
@@ -2067,7 +2067,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Belum cukup informasi untuk memilih penanganan benda saat ini. Lengkapi kondisi yang diketahui; sistem tidak menggantinya dengan saran Reduce.",
+                        "reason": "There isn't enough information to choose how to handle this item yet. Fill in what you know about its condition. We won't swap in Reduce advice instead.",
                         "reason_code": "CONTEXT_REQUIRED",
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000008",
@@ -2078,8 +2078,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "region": "United States",
+                            "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           }
@@ -2090,10 +2090,10 @@
                         "special_handling": false,
                         "status": "NEEDS_CONTEXT",
                         "steps": [
-                          "Periksa jenis plastik, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
-                          "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
-                          "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
-                          "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+                          "Check the plastik type, its condition, and what it held. If you don't know, don't guess from the photo.",
+                          "Consider reusing it only once you've confirmed it works, is clean, and is safe.",
+                          "Ask your local collector whether they accept this item in its condition, then follow their sorting and hand-over instructions.",
+                          "If there are signs of a battery or electrics, sharp edges, chemicals, or biological contamination, mark the risk type to get specialist advice."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2104,7 +2104,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "OTHER",
-                        "caution": "Ada risiko khusus. Ikuti petunjuk pengemasan dan pengelola yang sesuai; jangan membuang benda berbahaya sembarangan. Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+                        "caution": "There is a special risk. Follow the packaging instructions and use a suitable handler. Never dump hazardous items. Wash it before using it again. Normal washing doesn't deal with chemical or biological contamination. Don't reuse cracked or broken glass or ceramics.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "ceramic_cup",
                         "context_revision": 1,
@@ -2123,7 +2123,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Risiko khusus dicentang, tetapi jenisnya belum dijelaskan. Pilih jenis risiko agar kotor biasa tidak disamakan dengan kontaminasi berbahaya.",
+                        "reason": "You marked a special risk but didn't say which kind. Choose the risk type so ordinary dirt isn't treated as hazardous contamination.",
                         "reason_code": "RISK_DETAILS_REQUIRED",
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000006",
@@ -2134,8 +2134,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Jangan mencampur atau membuang limbah kimia sembarangan; ikuti label dan tanyakan pengelola setempat.",
+                            "region": "United States",
+                            "scope_note": "Don't mix or dump chemical waste. Follow the label and ask your local handler.",
                             "title": "Household Hazardous Waste: safe management",
                             "url": "https://www.epa.gov/hw/household-hazardous-waste-hhw"
                           }
@@ -2146,9 +2146,9 @@
                         "special_handling": true,
                         "status": "NEEDS_CONTEXT",
                         "steps": [
-                          "Periksa label dan jenis risiko tanpa membongkar, mencampur isi, atau mencoba mengolah barang.",
-                          "Jangan gunakan ulang atau campurkan barang berisiko dengan aliran sampah umum sebelum jenis bahayanya jelas.",
-                          "Hubungi pengelola sampah atau DLH setempat dengan menjelaskan jenis barang serta risiko yang diketahui."
+                          "Check the label and the type of risk without opening the item, mixing contents, or trying to treat it.",
+                          "Don't reuse a risky item or mix it with general waste until you know what the hazard is.",
+                          "Contact your local waste handler or environment agency and describe the item and any known risks."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2159,7 +2159,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "GLASS",
-                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "caution": "Broken glass needs special handling.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "glass_bottle",
                         "context_revision": 1,
@@ -2178,7 +2178,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "rules",
-                        "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+                        "reason": "You confirmed that your collector accepts clean glass bottles in this condition, so this one can go to Recycle. Follow the collector's requirements. A YOLO score doesn't prove that a facility will accept it.",
                         "reason_code": "LLM_UNAVAILABLE",
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000001",
@@ -2189,8 +2189,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "region": "United States",
+                            "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           }
@@ -2201,9 +2201,9 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
-                          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
-                          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+                          "Make sure the bottle really is glass and that your collector accepts it in this condition.",
+                          "Empty it and rinse out ordinary residue as the collector asks. Stop if you suspect hazardous contamination.",
+                          "Sort it by type and hand it over the way the collector asks. Don't cut or crush it unless they ask you to."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2214,7 +2214,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "GLASS",
-                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "caution": "Broken glass needs special handling.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "glass_bottle",
                         "context_revision": 1,
@@ -2233,7 +2233,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Belum cukup informasi untuk memilih penanganan benda saat ini. Lengkapi kondisi yang diketahui; sistem tidak menggantinya dengan saran Reduce.",
+                        "reason": "There isn't enough information to choose how to handle this item yet. Fill in what you know about its condition. We won't swap in Reduce advice instead.",
                         "reason_code": "CONTEXT_REQUIRED",
                         "recommendation_basis": null,
                         "recommendation_id": "00000000-0000-0000-0000-000000000009",
@@ -2244,8 +2244,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "region": "United States",
+                            "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           }
@@ -2256,10 +2256,10 @@
                         "special_handling": false,
                         "status": "NEEDS_CONTEXT",
                         "steps": [
-                          "Periksa jenis kaca, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
-                          "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
-                          "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
-                          "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+                          "Check the kaca type, its condition, and what it held. If you don't know, don't guess from the photo.",
+                          "Consider reusing it only once you've confirmed it works, is clean, and is safe.",
+                          "Ask your local collector whether they accept this item in its condition, then follow their sorting and hand-over instructions.",
+                          "If there are signs of a battery or electrics, sharp edges, chemicals, or biological contamination, mark the risk type to get specialist advice."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2282,7 +2282,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "OTHER",
-                        "caution": "Saran bersyarat; informasi yang kosong tidak dianggap sudah terkonfirmasi. Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+                        "caution": "Conditional advice. Anything left blank is not treated as confirmed. Wash it before using it again. Normal washing doesn't deal with chemical or biological contamination. Don't reuse cracked or broken glass or ceramics.",
                         "conditions_to_verify": [
                           "condition.cleanliness",
                           "condition.integrity",
@@ -2306,7 +2306,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Saran sementara: Reuse untuk Cangkir keramik. Informasi yang diperlukan belum lengkap. Gunakan kembali hanya setelah kebersihan, keutuhan, kelayakan dan niat pakai ulang dipastikan.",
+                        "reason": "Provisional advice: Reuse for this ceramic mug. Some information is still missing. Reuse it only after you've confirmed it's clean, intact, usable, and something you want to keep using.",
                         "reason_code": null,
                         "recommendation_basis": "CONDITIONAL",
                         "recommendation_id": "00000000-0000-0000-0000-00000000000a",
@@ -2317,17 +2317,17 @@
                           {
                             "checked_at": "2026-10-20",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Prinsip penggunaan ulang peralatan makan/minum yang dirancang untuk digunakan berulang. Bukan sertifikasi keamanan objek dari foto.",
+                            "region": "United States",
+                            "scope_note": "Principles for reusing tableware designed for repeated use. Not a safety certification of an item from a photo.",
                             "title": "Reusable food service ware: collection, washing and return",
                             "url": "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware"
                           },
                           {
                             "checked_at": "2026-10-20",
-                            "publisher": "Pemerintah Kabupaten Banjarnegara",
+                            "publisher": "Banjarnegara Regency Government",
                             "region": "Banjarnegara, Indonesia",
-                            "scope_note": "Contoh kebijakan lokal yang mendorong peralatan guna ulang. Tidak menjadi aturan penerimaan fasilitas seluruh Indonesia.",
-                            "title": "Guna ulang peralatan makan-minum dan pemilahan dari sumber",
+                            "scope_note": "An example of a local policy that encourages reusable tableware. It isn't an acceptance rule for facilities across Indonesia.",
+                            "title": "Reusable tableware and sorting at the source",
                             "url": "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
                           }
                         ],
@@ -2338,13 +2338,13 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Periksa kebersihan; jalur ini memerlukan benda yang bersih.",
-                          "Periksa retak dan kerusakan; gunakan jalur ini hanya bila benda utuh.",
-                          "Pastikan benda masih layak digunakan sesuai fungsinya.",
-                          "Lanjutkan penggunaan ulang hanya jika kamu ingin memakainya lagi.",
-                          "Ikuti langkah berikut hanya setelah syarat di atas terpenuhi.",
-                          "Periksa kembali kebersihan serta tidak adanya retak atau tepi tajam.",
-                          "Gunakan kembali sesuai fungsi dan petunjuk bahan/produk; jangan menambah sampah dengan mengganti peralatan yang masih layak."
+                          "Check that it's clean. This route needs a clean item.",
+                          "Check for cracks and damage. Use this route only if the item is intact.",
+                          "Make sure the item still works for its purpose.",
+                          "Go ahead with reuse only if you want to keep using it.",
+                          "Follow these steps only after the conditions above are met.",
+                          "Check again that it's clean and has no cracks or sharp edges.",
+                          "Use it for its intended purpose and follow the material or product instructions. Keeping usable tableware in service avoids extra waste."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2355,7 +2355,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "GLASS",
-                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "caution": "Broken glass needs special handling.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "glass_bottle",
                         "context_revision": 1,
@@ -2374,7 +2374,7 @@
                         "object_id": "object-1",
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+                        "reason": "You confirmed that your collector accepts clean glass bottles in this condition, so this one can go to Recycle. Follow the collector's requirements. A YOLO score doesn't prove that a facility will accept it.",
                         "reason_code": null,
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-00000000000b",
@@ -2385,8 +2385,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "region": "United States",
+                            "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           }
@@ -2397,9 +2397,9 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
-                          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
-                          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+                          "Make sure the bottle really is glass and that your collector accepts it in this condition.",
+                          "Empty it and rinse out ordinary residue as the collector asks. Stop if you suspect hazardous contamination.",
+                          "Sort it by type and hand it over the way the collector asks. Don't cut or crush it unless they ask you to."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2410,7 +2410,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "PLASTIC",
-                        "caution": "Kode 2 dan bentuk botol bukan bukti aman untuk dipakai ulang atau kontak pangan. Isi sebelumnya yang tidak diketahui atau bahan kimia tidak memakai aturan botol pangan ini.",
+                        "caution": "Resin code 2 and a bottle shape don't prove it's safe to reuse or to hold food. Bottles with unknown or chemical contents can't follow this food bottle guide.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "hdpe_bottle",
                         "context_revision": 1,
@@ -2429,7 +2429,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Botol HDPE bekas pangan/minuman yang bersih dapat diarahkan ke Recycle karena isi sebelumnya dan penerimaan pengelola telah kamu konfirmasi. Kode resin 2 tidak menjamin aman dipakai ulang atau diterima semua fasilitas.",
+                        "reason": "You confirmed what this clean HDPE bottle held and that your collector accepts it, so it can go to Recycle. Resin code 2 doesn't guarantee it's safe to reuse or that every facility accepts it.",
                         "reason_code": null,
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000007",
@@ -2440,25 +2440,25 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "region": "United States",
+                            "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           },
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Edukasi PET resin 1 dan HDPE resin 2; bukan daftar penerima lokal atau identifikasi material dari foto.",
+                            "region": "United States",
+                            "scope_note": "Education on PET resin 1 and HDPE resin 2. Not a list of local collectors or a way to identify materials from a photo.",
                             "title": "Recycle City: Materials Recovery Center",
                             "url": "https://www3.epa.gov/recyclecity/recovery.htm"
                           },
                           {
                             "checked_at": "2026-11-04",
-                            "publisher": "Balai POM di Tasikmalaya",
+                            "publisher": "BPOM Office in Tasikmalaya",
                             "region": "Indonesia",
-                            "scope_note": "Kode resin mengenali bahan; tidak membuktikan keamanan kontak pangan, kelayakan penggunaan ulang atau penerimaan daur ulang.",
-                            "title": "Cerdas Memilih Kemasan: pengenalan kode plastik",
+                            "scope_note": "Resin codes identify the material. They don't prove food-contact safety, fitness for reuse, or recycling acceptance.",
+                            "title": "Choosing Packaging Wisely: understanding plastic codes",
                             "url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
                           }
                         ],
@@ -2470,9 +2470,9 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Konfirmasi bahan HDPE/kode 2 dan riwayat bekas pangan/minuman; jangan memakai aturan ini untuk bekas kimia atau isi yang tidak diketahui.",
-                          "Kosongkan dan bersihkan sisa pangan sesuai petunjuk penerima; pisahkan sesuai jenis.",
-                          "Serahkan kepada pengelola yang dikonfirmasi menerima HDPE dengan kondisi tersebut. Jangan menganggap botol bekas otomatis aman diisi ulang."
+                          "Confirm that it's HDPE (code 2) and that it held food or drink. Don't use this guide for bottles that held chemicals or unknown contents.",
+                          "Empty it, rinse out food residue as the collector asks, and sort it by type.",
+                          "Hand it to a collector you confirmed accepts HDPE in this condition. Don't assume a used bottle is safe to refill."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2483,7 +2483,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "GLASS",
-                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "caution": "Broken glass needs special handling.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "glass_bottle",
                         "context_revision": 1,
@@ -2502,7 +2502,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+                        "reason": "You confirmed that your collector accepts clean glass bottles in this condition, so this one can go to Recycle. Follow the collector's requirements. A YOLO score doesn't prove that a facility will accept it.",
                         "reason_code": null,
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000002",
@@ -2513,8 +2513,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "region": "United States",
+                            "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           }
@@ -2525,9 +2525,9 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
-                          "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
-                          "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+                          "Make sure the bottle really is glass and that your collector accepts it in this condition.",
+                          "Empty it and rinse out ordinary residue as the collector asks. Stop if you suspect hazardous contamination.",
+                          "Sort it by type and hand it over the way the collector asks. Don't cut or crush it unless they ask you to."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2538,7 +2538,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "GLASS",
-                        "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+                        "caution": "Broken glass needs special handling.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "glass_bottle",
                         "context_revision": 1,
@@ -2557,7 +2557,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Untuk mencegah sampah berikutnya, kurangi pembelian yang tidak diperlukan dan pilih produk tahan lama atau kemasan lebih sedikit. Ini saran pencegahan, bukan pembuangan benda saat ini.",
+                        "reason": "To avoid the next piece of waste, skip purchases you don't need and choose durable products or less packaging. This is advice for next time, not for getting rid of the item you have now.",
                         "reason_code": null,
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000004",
@@ -2568,8 +2568,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Pencegahan pembelian/penggunaan berikutnya. Tidak membuktikan jumlah Reduce yang telah dilakukan.",
+                            "region": "United States",
+                            "scope_note": "About preventing the next purchase or use. It doesn't prove how much the user has already reduced.",
                             "title": "Waste prevention, reuse and recycling",
                             "url": "https://www.epa.gov/climate-change/what-you-can-do-about-climate-change-waste"
                           }
@@ -2580,7 +2580,7 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Pada pembelian berikutnya, beli sesuai kebutuhan dan pertimbangkan produk tahan lama atau kemasan lebih sedikit."
+                          "Next time you shop, buy only what you need and look for durable products or less packaging."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2591,7 +2591,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "PAPER",
-                        "caution": "Jangan sertakan dokumen berisi data pribadi tanpa pengelolaan yang sesuai.",
+                        "caution": "Don't include documents with personal data unless you handle them properly first.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "book",
                         "context_revision": 1,
@@ -2610,7 +2610,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Buku yang masih bersih dan layak dapat digunakan kembali atau didonasikan.",
+                        "reason": "A book that's still clean and in good shape can be reused or donated.",
                         "reason_code": null,
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000003",
@@ -2621,8 +2621,8 @@
                           {
                             "checked_at": "2026-11-04",
                             "publisher": "US EPA",
-                            "region": "Amerika Serikat",
-                            "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+                            "region": "United States",
+                            "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
                             "title": "How Do I Recycle Common Recyclables",
                             "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
                           }
@@ -2633,8 +2633,8 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Pertimbangkan penggunaan ulang atau donasi jika buku masih layak.",
-                          "Untuk daur ulang, periksa aturan penerimaan buku dan sampul pada fasilitas setempat."
+                          "If the book is still in good shape, consider reusing or donating it.",
+                          "Before recycling, check whether your local facility accepts books and their covers."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2645,7 +2645,7 @@
                       "api_version": "1.0.0",
                       "data": {
                         "category": "OTHER",
-                        "caution": "Referensi Cornwall, Inggris; bukan aturan penerimaan Indonesia. Sikat gigi elektrik/baterai memerlukan penanganan elektronik khusus.",
+                        "caution": "Cornwall, UK reference. These are not Indonesian acceptance rules. Electric or battery toothbrushes need specialist electronics handling.",
                         "conditions_to_verify": [],
                         "confirmed_object_key": "toothbrush",
                         "context_revision": 1,
@@ -2664,7 +2664,7 @@
                         "object_id": null,
                         "prototype_only": true,
                         "provider": "fixture",
-                        "reason": "Sikat gigi plastik manual yang tidak layak dipakai dan tidak memiliki akses daur ulang khusus dapat diarahkan ke residu sesuai aturan lokal. Referensi Cornwall tidak memasukkannya dalam pengumpulan daur ulang biasa.",
+                        "reason": "A worn-out manual plastic toothbrush with no specialist recycling option can go to residual waste under local rules. Cornwall does not include toothbrushes in regular recycling collections.",
                         "reason_code": null,
                         "recommendation_basis": "CONFIRMED",
                         "recommendation_id": "00000000-0000-0000-0000-000000000005",
@@ -2675,8 +2675,8 @@
                           {
                             "checked_at": "2026-10-20",
                             "publisher": "Cornwall Council",
-                            "region": "Cornwall, Inggris",
-                            "scope_note": "Hanya sikat plastik manual; tidak digeneralisasi ke sikat elektrik, baterai, atau semua plastik.",
+                            "region": "Cornwall, UK",
+                            "scope_note": "Manual plastic toothbrushes only. Doesn't extend to electric toothbrushes, batteries, or all plastics.",
                             "title": "Plastic toothbrushes and toothbrush heads",
                             "url": "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/"
                           }
@@ -2687,8 +2687,8 @@
                         "special_handling": false,
                         "status": "READY",
                         "steps": [
-                          "Pastikan ini sikat gigi plastik manual tanpa baterai, bukan limbah medis atau berbahaya.",
-                          "Jika tidak ada program daur ulang khusus, gunakan jalur residu sesuai ketentuan petugas setempat."
+                          "Make sure it's a manual plastic toothbrush without a battery, and not medical or hazardous waste.",
+                          "If there's no specialist recycling program, use the residual waste route your local collector sets."
                         ]
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2782,7 +2782,7 @@
                       "error": {
                         "code": "RATE_LIMITED",
                         "fields": {},
-                        "message": "Batas permintaan tercapai; tunggu sebelum mencoba lagi.",
+                        "message": "Too many requests. Wait before trying again.",
                         "retryable": true
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"
@@ -2834,7 +2834,7 @@
                       "error": {
                         "code": "AI_TIMEOUT",
                         "fields": {},
-                        "message": "Layanan AI melewati batas waktu.",
+                        "message": "The AI service timed out.",
                         "retryable": true
                       },
                       "request_id": "00000000-0000-0000-0000-000000000063"

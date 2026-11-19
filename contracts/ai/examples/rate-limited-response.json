@@ -3,7 +3,7 @@
   "error": {
     "code": "RATE_LIMITED",
     "fields": {},
-    "message": "Batas permintaan tercapai; tunggu sebelum mencoba lagi.",
+    "message": "Too many requests. Wait before trying again.",
     "retryable": true
   },
   "request_id": "00000000-0000-0000-0000-000000000063"

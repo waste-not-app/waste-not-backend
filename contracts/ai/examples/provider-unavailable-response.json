@@ -2,7 +2,7 @@
   "api_version": "1.0.0",
   "data": {
     "category": "GLASS",
-    "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+    "caution": "Broken glass needs special handling.",
     "conditions_to_verify": [],
     "confirmed_object_key": "glass_bottle",
     "context_revision": 1,
@@ -21,7 +21,7 @@
     "object_id": null,
     "prototype_only": true,
     "provider": "rules",
-    "reason": "Botol kaca yang bersih dapat diarahkan ke Recycle karena kamu sudah mengonfirmasi pengelola yang menerima jenis dan kondisinya. Ikuti persyaratan penerima; skor YOLO tidak membuktikan penerimaan fasilitas.",
+    "reason": "You confirmed that your collector accepts clean glass bottles in this condition, so this one can go to Recycle. Follow the collector's requirements. A YOLO score doesn't prove that a facility will accept it.",
     "reason_code": "LLM_UNAVAILABLE",
     "recommendation_basis": "CONFIRMED",
     "recommendation_id": "00000000-0000-0000-0000-000000000001",
@@ -32,8 +32,8 @@
       {
         "checked_at": "2026-11-04",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+        "region": "United States",
+        "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
         "title": "How Do I Recycle Common Recyclables",
         "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
       }
@@ -44,9 +44,9 @@
     "special_handling": false,
     "status": "READY",
     "steps": [
-      "Pastikan material botol kaca dan pengelola yang menerima kondisi benda ini benar.",
-      "Kosongkan dan bersihkan sisa biasa sesuai petunjuk penerima; hentikan bila ada dugaan kontaminasi berbahaya.",
-      "Pisahkan sesuai jenis dan serahkan mengikuti prosedur pengelola; jangan memotong atau menghancurkan benda secara otomatis."
+      "Make sure the bottle really is glass and that your collector accepts it in this condition.",
+      "Empty it and rinse out ordinary residue as the collector asks. Stop if you suspect hazardous contamination.",
+      "Sort it by type and hand it over the way the collector asks. Don't cut or crush it unless they ask you to."
     ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"
