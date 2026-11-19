@@ -10,7 +10,7 @@ import (
 
 	"github.com/disintegration/imaging"
 
-	coreai "github.com/waste-not-app/waste-not-backend/internal/ai"
+	"github.com/waste-not-app/waste-not-backend/internal/aiclient"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
@@ -34,11 +34,11 @@ type Service interface {
 type service struct {
 	repo    Repository
 	cfg     config.Config
-	client  *coreai.Client
+	client  *aiclient.Client
 	limiter *ratelimit.Limiter
 }
 
-func NewService(repo Repository, cfg config.Config, client *coreai.Client, limiter *ratelimit.Limiter) Service {
+func NewService(repo Repository, cfg config.Config, client *aiclient.Client, limiter *ratelimit.Limiter) Service {
 	return &service{
 		repo:    repo,
 		cfg:     cfg,
@@ -84,13 +84,13 @@ func (s *service) PrepareDetectionSelection(ctx context.Context, userID string, 
 	}
 	var snapshot map[string]any
 	if json.Unmarshal(o.Snapshot, &snapshot) != nil {
-		return nil, nil, coreai.ErrInvalid
+		return nil, nil, aiclient.ErrInvalid
 	}
 	objectID := in["object_id"]
 	objects, _ := snapshot["objects"].([]any)
 	model, modelOK := snapshot["model"].(map[string]any)
 	if !modelOK {
-		return nil, nil, coreai.ErrInvalid
+		return nil, nil, aiclient.ErrInvalid
 	}
 	var object map[string]any
 	for _, entry := range objects {
@@ -133,11 +133,11 @@ func (s *service) ClaimOrReplay(ctx context.Context, userID, kind, clientID, has
 	}{{"ai-minute:", 10, time.Minute}, {"ai-day:", 100, 24 * time.Hour}} {
 		ok, qErr := s.limiter.Allow(ctx, quota.key+userID, quota.n, quota.window)
 		if qErr != nil {
-			_, _ = s.CompleteOperation(ctx, userID, o, nil, nil, &coreai.Error{Status: 503, Code: "AI_UNAVAILABLE"})
-			return o, false, &coreai.Error{Status: 503, Code: "AI_UNAVAILABLE"}
+			_, _ = s.CompleteOperation(ctx, userID, o, nil, nil, &aiclient.Error{Status: 503, Code: "AI_UNAVAILABLE"})
+			return o, false, &aiclient.Error{Status: 503, Code: "AI_UNAVAILABLE"}
 		}
 		if !ok {
-			rateErr := &coreai.Error{Status: 429, Code: "RATE_LIMITED", RetryAfter: int(quota.window.Seconds())}
+			rateErr := &aiclient.Error{Status: 429, Code: "RATE_LIMITED", RetryAfter: int(quota.window.Seconds())}
 			_, _ = s.CompleteOperation(ctx, userID, o, nil, nil, rateErr)
 			return o, false, rateErr
 		}
@@ -155,9 +155,9 @@ func (s *service) WaitReplay(ctx context.Context, userID string, o Operation) (O
 	for o.State == "IN_PROGRESS" {
 		select {
 		case <-ctx.Done():
-			return o, &coreai.Error{Status: 504, Code: "AI_TIMEOUT"}
+			return o, &aiclient.Error{Status: 504, Code: "AI_TIMEOUT"}
 		case <-timer.C:
-			return o, &coreai.Error{Status: 503, Code: "AI_BUSY", RetryAfter: 2}
+			return o, &aiclient.Error{Status: 503, Code: "AI_BUSY", RetryAfter: 2}
 		case <-poll.C:
 			delay = min(delay*2, time.Second)
 			poll.Reset(delay)
@@ -181,9 +181,9 @@ func (s *service) CompleteOperation(ctx context.Context, userID string, o Operat
 	status := 201
 	retry := 0
 	if opErr != nil {
-		var a *coreai.Error
+		var a *aiclient.Error
 		if !errors.As(opErr, &a) {
-			a = coreai.ErrInvalid
+			a = aiclient.ErrInvalid
 		}
 		code, status, retry = a.Code, a.Status, a.RetryAfter
 		state = "FAILED_UNCERTAIN"
@@ -211,11 +211,11 @@ func (s *service) CompleteOperation(ctx context.Context, userID string, o Operat
 func (s *service) ExecuteDetection(ctx context.Context, reqID string, o Operation, imageBytes []byte) (map[string]any, map[string]any, error) {
 	normalized, err := imaging.Decode(bytes.NewReader(imageBytes), imaging.AutoOrientation(true))
 	if err != nil {
-		return nil, nil, &coreai.Error{Status: 422, Code: "INVALID_IMAGE"}
+		return nil, nil, &aiclient.Error{Status: 422, Code: "INVALID_IMAGE"}
 	}
 	var clean bytes.Buffer
 	if err = jpeg.Encode(&clean, normalized, &jpeg.Options{Quality: 90}); err != nil || clean.Len() > MaxImageBytes {
-		return nil, nil, &coreai.Error{Status: 413, Code: "FILE_TOO_LARGE"}
+		return nil, nil, &aiclient.Error{Status: 413, Code: "FILE_TOO_LARGE"}
 	}
 	snapshot, err := s.client.Detect(ctx, reqID, "image/jpeg", clean.Bytes())
 	clean.Reset()

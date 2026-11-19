@@ -15,7 +15,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/waste-not-app/waste-not-backend/internal/config"
-	aiMod "github.com/waste-not-app/waste-not-backend/internal/modules/ai"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
@@ -170,7 +170,7 @@ func TestDeleteMePasswordOwnerIsolationAndPrivatePhotoCleanup(t *testing.T) {
 	requireStatus(t, st, 201, v)
 	ownerID := a["user"].(map[string]any)["id"].(string)
 	otherID := b["user"].(map[string]any)["id"].(string)
-	aiRepo := aiMod.NewRepository(s.DB)
+	aiRepo := ai.NewRepository(s.DB)
 	inflight, _, err := aiRepo.Claim(context.Background(), ownerID, "DETECTION", uuid.NewString(), "owner-operation", nil, time.Now())
 	if err != nil {
 		t.Fatal(err)
