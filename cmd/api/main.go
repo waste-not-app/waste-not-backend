@@ -15,9 +15,9 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 
-	"github.com/waste-not-app/waste-not-backend/internal/api"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/database"
+	"github.com/waste-not-app/waste-not-backend/internal/server"
 )
 
 // @title WasteNot API
@@ -84,7 +84,7 @@ func run(log *slog.Logger) error {
 	}
 	defer dbPool.Close()
 
-	srv, err := api.New(dbPool, cfg, log)
+	srv, err := server.New(dbPool, cfg, log)
 	if err != nil {
 		return err
 	}

@@ -75,7 +75,7 @@ diklaim otomatis menghapus setiap backup atau arsip deployment lama.
 
 ## Bukti verifikasi kode, 16 November 2026
 
-Regresi `Test(PasswordReset|DeleteMe|Photo)` pada `internal/api` lulus dengan
+Regresi `Test(PasswordReset|DeleteMe|Photo)` pada `internal/server` lulus dengan
 `go test -race -count=1`, memakai PostgreSQL 18 terisolasi, bukan database produksi.
 Adapter SMTP dan kesamaan salinan schema juga lulus. Validasi Compose tidak
 memerlukan daemon Docker dan sudah lulus.
