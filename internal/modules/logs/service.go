@@ -9,7 +9,6 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
@@ -24,23 +23,23 @@ type Service interface {
 }
 
 type service struct {
-	repo    Repository
-	cfg     config.Config
-	limiter *ratelimit.Limiter
-	codec   *cursor.Codec
+	repo  Repository
+	cfg   config.Config
+	now   func() time.Time
+	codec *cursor.Codec
 }
 
-func NewService(repo Repository, cfg config.Config, limiter *ratelimit.Limiter, codec *cursor.Codec) Service {
+func NewService(repo Repository, cfg config.Config, now func() time.Time, codec *cursor.Codec) Service {
 	return &service{
-		repo:    repo,
-		cfg:     cfg,
-		limiter: limiter,
-		codec:   codec,
+		repo:  repo,
+		cfg:   cfg,
+		now:   now,
+		codec: codec,
 	}
 }
 
 func (s *service) Now() time.Time {
-	return s.limiter.Now()
+	return s.now()
 }
 
 func (s *service) DecodeCursor(raw, scope string) (cursor.Token, error) {
@@ -61,7 +60,7 @@ func (s *service) CreateLog(ctx context.Context, u domain.User, in domain.LogInp
 	in.Notes = strings.TrimSpace(in.Notes)
 	raw, _ := json.Marshal(in)
 	hash := security.Digest(raw)
-	now := s.limiter.Now()
+	now := s.now()
 	today := domain.Today(now, u.Timezone)
 
 	return s.repo.CreateIdempotent(ctx, u.ID, u.Timezone, today, hash, in, now, s.cfg.AllowPrototype)
@@ -103,11 +102,11 @@ func (s *service) UpdateLog(ctx context.Context, u domain.User, id string, versi
 			Fields: map[string]string{"photo_id": "Lampiran foto belum diaktifkan."},
 		}
 	}
-	today := domain.Today(s.limiter.Now(), u.Timezone)
+	today := domain.Today(s.now(), u.Timezone)
 	return s.repo.Update(ctx, u.ID, u.Timezone, today, id, version, patch)
 }
 
 func (s *service) DeleteLog(ctx context.Context, u domain.User, id string, version int) error {
-	today := domain.Today(s.limiter.Now(), u.Timezone)
+	today := domain.Today(s.now(), u.Timezone)
 	return s.repo.Delete(ctx, u.ID, today, id, version)
 }

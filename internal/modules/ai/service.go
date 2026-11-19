@@ -36,14 +36,16 @@ type service struct {
 	cfg     config.Config
 	client  *aiclient.Client
 	limiter *ratelimit.Limiter
+	now     func() time.Time
 }
 
-func NewService(repo Repository, cfg config.Config, client *aiclient.Client, limiter *ratelimit.Limiter) Service {
+func NewService(repo Repository, cfg config.Config, client *aiclient.Client, limiter *ratelimit.Limiter, now func() time.Time) Service {
 	return &service{
 		repo:    repo,
 		cfg:     cfg,
 		client:  client,
 		limiter: limiter,
+		now:     now,
 	}
 }
 
@@ -56,7 +58,7 @@ func (s *service) IsRecommendationEnabled() bool {
 }
 
 func (s *service) Now() time.Time {
-	return s.limiter.Now()
+	return s.now()
 }
 
 func (s *service) GetCatalog(ctx context.Context, reqID string) (map[string]any, error) {
@@ -75,7 +77,7 @@ func (s *service) PrepareDetectionSelection(ctx context.Context, userID string, 
 	if !domain.ValidUUID(id) {
 		return nil, nil, ErrInvalidAIReference
 	}
-	o, err := s.repo.GetOperation(ctx, userID, id, "DETECTION", s.limiter.Now())
+	o, err := s.repo.GetOperation(ctx, userID, id, "DETECTION", s.now())
 	if err != nil {
 		return nil, nil, err
 	}
@@ -121,7 +123,7 @@ func (s *service) PrepareDetectionSelection(ctx context.Context, userID string, 
 }
 
 func (s *service) ClaimOrReplay(ctx context.Context, userID, kind, clientID, hash string, parent *string) (Operation, bool, error) {
-	o, isOwner, err := s.repo.Claim(ctx, userID, kind, clientID, hash, parent, s.limiter.Now())
+	o, isOwner, err := s.repo.Claim(ctx, userID, kind, clientID, hash, parent, s.now())
 	if err != nil || !isOwner {
 		return o, isOwner, err
 	}
@@ -162,13 +164,13 @@ func (s *service) WaitReplay(ctx context.Context, userID string, o Operation) (O
 			delay = min(delay*2, time.Second)
 			poll.Reset(delay)
 			var err error
-			o, err = s.repo.GetOperation(ctx, userID, o.ID, "", s.limiter.Now())
+			o, err = s.repo.GetOperation(ctx, userID, o.ID, "", s.now())
 			if err != nil {
 				return o, err
 			}
 		}
 	}
-	if !s.limiter.Now().Before(o.Expires) || o.Deleted {
+	if !s.now().Before(o.Expires) || o.Deleted {
 		return o, ErrAISessionExpired
 	}
 	return o, nil

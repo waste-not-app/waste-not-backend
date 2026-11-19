@@ -2,9 +2,9 @@ package achievements
 
 import (
 	"context"
+	"time"
 
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 )
 
 type Service interface {
@@ -12,18 +12,18 @@ type Service interface {
 }
 
 type service struct {
-	repo    Repository
-	limiter *ratelimit.Limiter
+	repo Repository
+	now  func() time.Time
 }
 
-func NewService(repo Repository, limiter *ratelimit.Limiter) Service {
+func NewService(repo Repository, now func() time.Time) Service {
 	return &service{
-		repo:    repo,
-		limiter: limiter,
+		repo: repo,
+		now:  now,
 	}
 }
 
 func (s *service) ListAchievements(ctx context.Context, u domain.User) ([]AchievementRes, error) {
-	today := domain.Today(s.limiter.Now(), u.Timezone)
+	today := domain.Today(s.now(), u.Timezone)
 	return s.repo.ListForUser(ctx, u.ID, today)
 }

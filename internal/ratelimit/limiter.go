@@ -34,10 +34,6 @@ func NewLimiter(dbPool *pgxpool.Pool, nowFn func() time.Time) *Limiter {
 	}
 }
 
-func (l *Limiter) Now() time.Time {
-	return l.nowFn()
-}
-
 func (l *Limiter) Allow(ctx context.Context, key string, n int, window time.Duration) (bool, error) {
 	bucket := l.nowFn().UTC().Truncate(window)
 	hits, err := l.q.IncrementRateLimit(ctx, db.IncrementRateLimitParams{
