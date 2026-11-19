@@ -17,16 +17,8 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
-type UserIdentity struct {
-	ID       string           `json:"id"`
-	Name     string           `json:"name"`
-	Email    string           `json:"email"`
-	Timezone string           `json:"timezone"`
-	Progress *domain.Progress `json:"progress,omitempty"`
-}
-
 type Identity struct {
-	User       UserIdentity
+	User       domain.User
 	SessionID  string
 	Generation int
 }
@@ -66,7 +58,7 @@ func Protected(dbPool *pgxpool.Pool, signer security.Signer, limiter *ratelimit.
 			return response.RateLimited(c, 60)
 		}
 
-		u := UserIdentity{
+		u := domain.User{
 			ID:       row.ID,
 			Name:     row.Name,
 			Email:    row.NormalizedEmail,

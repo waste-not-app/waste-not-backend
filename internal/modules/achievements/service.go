@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 )
 
 type Service interface {
-	ListAchievements(ctx context.Context, u middleware.UserIdentity) ([]AchievementRes, error)
+	ListAchievements(ctx context.Context, u domain.User) ([]AchievementRes, error)
 }
 
 type service struct {
@@ -24,7 +23,7 @@ func NewService(repo Repository, limiter *ratelimit.Limiter) Service {
 	}
 }
 
-func (s *service) ListAchievements(ctx context.Context, u middleware.UserIdentity) ([]AchievementRes, error) {
+func (s *service) ListAchievements(ctx context.Context, u domain.User) ([]AchievementRes, error) {
 	today := domain.Today(s.limiter.Now(), u.Timezone)
 	return s.repo.ListForUser(ctx, u.ID, today)
 }

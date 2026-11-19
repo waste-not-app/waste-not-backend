@@ -9,18 +9,17 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
 type Service interface {
 	Now() time.Time
-	CreateLog(ctx context.Context, u middleware.UserIdentity, in domain.LogInput) (LogWithProgressRes, bool, error)
+	CreateLog(ctx context.Context, u domain.User, in domain.LogInput) (LogWithProgressRes, bool, error)
 	GetLog(ctx context.Context, userID, id string) (domain.Log, error)
 	ListLogs(ctx context.Context, userID, scope string, q ListLogsQuery) (ListLogsRes, error)
-	UpdateLog(ctx context.Context, u middleware.UserIdentity, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error)
-	DeleteLog(ctx context.Context, u middleware.UserIdentity, id string, version int) error
+	UpdateLog(ctx context.Context, u domain.User, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error)
+	DeleteLog(ctx context.Context, u domain.User, id string, version int) error
 	DecodeCursor(raw, scope string) (cursor.Token, error)
 }
 
@@ -48,7 +47,7 @@ func (s *service) DecodeCursor(raw, scope string) (cursor.Token, error) {
 	return s.codec.Decode(raw, scope)
 }
 
-func (s *service) CreateLog(ctx context.Context, u middleware.UserIdentity, in domain.LogInput) (LogWithProgressRes, bool, error) {
+func (s *service) CreateLog(ctx context.Context, u domain.User, in domain.LogInput) (LogWithProgressRes, bool, error) {
 	if !domain.ValidUUID(in.ClientRequestID) {
 		return LogWithProgressRes{}, false, &ValidationError{
 			Fields: map[string]string{"client_request_id": "Gunakan UUID baru untuk draf baru."},
@@ -98,7 +97,7 @@ func (s *service) ListLogs(ctx context.Context, userID, scope string, q ListLogs
 	}, nil
 }
 
-func (s *service) UpdateLog(ctx context.Context, u middleware.UserIdentity, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error) {
+func (s *service) UpdateLog(ctx context.Context, u domain.User, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error) {
 	if raw, ok := patch["photo_id"]; ok && string(raw) != "null" && s.cfg.PhotoStorageDir == "" {
 		return LogWithProgressRes{}, &ValidationError{
 			Fields: map[string]string{"photo_id": "Lampiran foto belum diaktifkan."},
@@ -108,7 +107,7 @@ func (s *service) UpdateLog(ctx context.Context, u middleware.UserIdentity, id s
 	return s.repo.Update(ctx, u.ID, u.Timezone, today, id, version, patch)
 }
 
-func (s *service) DeleteLog(ctx context.Context, u middleware.UserIdentity, id string, version int) error {
+func (s *service) DeleteLog(ctx context.Context, u domain.User, id string, version int) error {
 	today := domain.Today(s.limiter.Now(), u.Timezone)
 	return s.repo.Delete(ctx, u.ID, today, id, version)
 }
