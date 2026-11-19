@@ -119,7 +119,7 @@ func (m *smtpMailer) Send(ctx context.Context, email, token string) error {
 	if err != nil {
 		return ErrMailUnavailable
 	}
-	message := fmt.Sprintf("Date: %s\r\nFrom: %s\r\nTo: %s\r\nSubject: Atur ulang kata sandi WasteNot\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\nTempel kode berikut di aplikasi WasteNot untuk mengganti kata sandi:\r\n\r\n%s\r\n\r\nKode berlaku 15 menit sejak permintaan dan hanya dapat digunakan sekali. Permintaan baru membatalkan kode sebelumnya.\r\nJika kamu tidak meminta perubahan ini, abaikan email ini.\r\n", time.Now().UTC().Format(time.RFC1123Z), m.from, email, token)
+	message := fmt.Sprintf("Date: %s\r\nFrom: %s\r\nTo: %s\r\nSubject: Reset your WasteNot password\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\nPaste this code into the WasteNot app to set a new password:\r\n\r\n%s\r\n\r\nThe code works for 15 minutes and only once. Requesting a new code cancels this one.\r\nIf you didn't ask to reset your password, you can ignore this email.\r\n", time.Now().UTC().Format(time.RFC1123Z), m.from, email, token)
 	if _, err := io.WriteString(writer, message); err != nil {
 		_ = writer.Close()
 		return ErrMailUnavailable
