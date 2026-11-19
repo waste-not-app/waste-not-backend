@@ -19,7 +19,6 @@ import (
 type Service interface {
 	IsAIEnabled() bool
 	IsRecommendationEnabled() bool
-	Now() time.Time
 	GetCatalog(ctx context.Context, reqID string) (map[string]any, error)
 	NormalizeRecommendationInput(in map[string]any) error
 	PrepareDetectionSelection(ctx context.Context, userID string, in map[string]any) (*string, any, error)
@@ -55,10 +54,6 @@ func (s *service) IsAIEnabled() bool {
 
 func (s *service) IsRecommendationEnabled() bool {
 	return s.cfg.RecommendationEnabled
-}
-
-func (s *service) Now() time.Time {
-	return s.now()
 }
 
 func (s *service) GetCatalog(ctx context.Context, reqID string) (map[string]any, error) {
