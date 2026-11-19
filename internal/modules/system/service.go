@@ -70,7 +70,7 @@ func (s *service) GetMetadata(ctx context.Context, requestID string) MetadataRes
 		},
 		Capabilities: CapabilitiesRes{
 			Achievements:     true,
-			Reminders:        false,
+			Reminders:        true,
 			Photos:           s.cfg.PhotoStorageDir != "",
 			RecyclingPoints:  false,
 			AIScan:           enabled,
