@@ -59,7 +59,7 @@ Suite standar memakai worker HTTP fixture untuk menguji protokol, biaya panggila
 export TEST_AI_RECOMMENDATION_URL=http://127.0.0.1:8093
 export TEST_AI_RECOMMENDATION_TOKEN='<token pengujian worker>'
 export TEST_DATABASE_URL='<database PostgreSQL khusus tes>'
-go test ./internal/api -run TestPythonDecisionWorker -v
+go test ./internal/server -run TestPythonDecisionWorker -v
 ```
 
 Test memverifikasi empat metode, NEEDS_CONTEXT dan CONDITIONAL melalui Go + DB + Python, dengan deteksi capability fixture. Ini tidak mengukur akurasi YOLO, kualitas Gemini live, latency perangkat atau biaya produksi. Tidak ada key Gemini yang dibaca dari checkout pengguna.
