@@ -55,7 +55,7 @@ const docTemplate = `{
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -80,19 +80,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -136,67 +136,67 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIDetectionRes"
                         }
                     },
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIDetectionRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "413": {
                         "description": "Request Entity Too Large",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "502": {
                         "description": "Bad Gateway",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -230,19 +230,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -267,25 +267,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AICatalogRes"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "502": {
                         "description": "Bad Gateway",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -324,67 +324,67 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes"
                         }
                     },
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "410": {
                         "description": "Gone",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "502": {
                         "description": "Bad Gateway",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -418,31 +418,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -467,19 +467,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -513,43 +513,43 @@ const docTemplate = `{
                     "202": {
                         "description": "Accepted",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_PasswordResetRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_PasswordResetRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "413": {
                         "description": "Request Entity Too Large",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -583,37 +583,37 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "413": {
                         "description": "Request Entity Too Large",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -647,31 +647,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -705,37 +705,37 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -760,19 +760,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_DashboardRes"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -797,19 +797,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_UserRes"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -846,49 +846,49 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "413": {
                         "description": "Request Entity Too Large",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -913,19 +913,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_system_MetadataRes"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -962,43 +962,43 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_photos_PhotoRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_photos_PhotoRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "413": {
                         "description": "Request Entity Too Large",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1038,19 +1038,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1082,25 +1082,25 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1139,25 +1139,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_StatisticsRes"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1208,31 +1208,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-internal_modules_guides_GuideRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1266,25 +1266,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_guides_GuideRes"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1347,31 +1347,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1408,49 +1408,49 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
                         }
                     },
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "410": {
                         "description": "Gone",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1484,25 +1484,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1541,37 +1541,37 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "428": {
                         "description": "Precondition Required",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1615,43 +1615,43 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse"
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
                         }
                     }
                 }
@@ -1813,7 +1813,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.ErrorDetail": {
             "type": "object",
             "properties": {
                 "code": {
@@ -1833,21 +1833,21 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse": {
             "type": "object",
             "properties": {
                 "api_version": {
                     "type": "string"
                 },
                 "error": {
-                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail"
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorDetail"
                 },
                 "request_id": {
                     "type": "string"
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.PageInfo": {
             "type": "object",
             "properties": {
                 "has_more": {
@@ -1858,7 +1858,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log": {
             "type": "object",
             "properties": {
                 "data": {
@@ -1868,11 +1868,11 @@ const docTemplate = `{
                     }
                 },
                 "page": {
-                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo"
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PageInfo"
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-internal_modules_guides_GuideRes": {
             "type": "object",
             "properties": {
                 "data": {
@@ -1882,11 +1882,11 @@ const docTemplate = `{
                     }
                 },
                 "page": {
-                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo"
+                    "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PageInfo"
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -1903,7 +1903,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -1917,7 +1917,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AICatalogRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -1931,7 +1931,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIDetectionRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -1945,7 +1945,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -1959,7 +1959,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_DashboardRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -1973,7 +1973,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_StatisticsRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -1987,7 +1987,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -2001,7 +2001,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_PasswordResetRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_PasswordResetRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -2015,7 +2015,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_UserRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -2029,7 +2029,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_guides_GuideRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -2043,7 +2043,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -2057,7 +2057,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_photos_PhotoRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_photos_PhotoRes": {
             "type": "object",
             "properties": {
                 "api_version": {
@@ -2071,7 +2071,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes": {
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_system_MetadataRes": {
             "type": "object",
             "properties": {
                 "api_version": {
