@@ -14,7 +14,6 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/achievements"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
-	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
@@ -65,7 +64,7 @@ func isDuplicate(err error) bool {
 
 func (r *repository) validateProvenance(ctx context.Context, qtx *db.Queries, userID string, in domain.LogInput, now time.Time, allowPrototype bool) error {
 	p := in.AIProvenance
-	if !security.UUID(p.RecommendationID) || !p.UserConfirmedObject || !p.UserConfirmedMethod || in.Method == "REDUCE" {
+	if !domain.ValidUUID(p.RecommendationID) || !p.UserConfirmedObject || !p.UserConfirmedMethod || in.Method == "REDUCE" {
 		return ErrAIReferenceInvalid
 	}
 

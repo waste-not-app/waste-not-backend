@@ -49,6 +49,11 @@ func ValidTimezone(s string) bool {
 	return e == nil
 }
 
+func ValidUUID(s string) bool {
+	u, err := uuid.Parse(s)
+	return err == nil && u != uuid.Nil && u.String() == s
+}
+
 var locations sync.Map
 
 func Location(zone string) *time.Location {

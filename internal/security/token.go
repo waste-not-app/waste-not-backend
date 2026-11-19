@@ -8,6 +8,8 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+
+	"github.com/waste-not-app/waste-not-backend/internal/domain"
 )
 
 const (
@@ -83,7 +85,7 @@ func (s Signer) Parse(raw string) (*Claims, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !UUID(claims.Subject) || !UUID(claims.SessionID) || claims.Generation < 1 || claims.IssuedAt == nil {
+	if !domain.ValidUUID(claims.Subject) || !domain.ValidUUID(claims.SessionID) || claims.Generation < 1 || claims.IssuedAt == nil {
 		return nil, errors.New("invalid claims")
 	}
 	return claims, nil

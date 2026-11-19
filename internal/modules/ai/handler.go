@@ -187,7 +187,7 @@ func (h *Handler) CreateDetection(c fiber.Ctx) error {
 		}
 	}
 
-	if !security.UUID(clientID) || len(imageBytes) == 0 {
+	if !domain.ValidUUID(clientID) || len(imageBytes) == 0 {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 	}
 	cfg, format, e := image.DecodeConfig(bytes.NewReader(imageBytes))
@@ -239,7 +239,7 @@ func (h *Handler) CreateRecommendation(c fiber.Ctx) error {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 	}
 	clientID, _ := in["client_request_id"].(string)
-	if !security.UUID(clientID) {
+	if !domain.ValidUUID(clientID) {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 	}
 
@@ -248,7 +248,7 @@ func (h *Handler) CreateRecommendation(c fiber.Ctx) error {
 	var selection any
 	if in["input_source"] == "DETECTION" {
 		id, _ := in["detection_id"].(string)
-		if !security.UUID(id) {
+		if !domain.ValidUUID(id) {
 			return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 		}
 		var prepErr error
