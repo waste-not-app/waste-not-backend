@@ -60,3 +60,17 @@ func TestTodayFallsBackToUTCForUnknownZone(t *testing.T) {
 		t.Fatal("location should be cached")
 	}
 }
+
+func TestValidUUID(t *testing.T) {
+	for in, want := range map[string]bool{
+		"0b5f8e39-6f0e-4b52-9a49-3c1b1f3d2a10": true,
+		"0B5F8E39-6F0E-4B52-9A49-3C1B1F3D2A10": false,
+		"00000000-0000-0000-0000-000000000000": false,
+		"0b5f8e396f0e4b529a493c1b1f3d2a10":     false,
+		"":                                     false,
+	} {
+		if got := ValidUUID(in); got != want {
+			t.Errorf("ValidUUID(%q) = %v, want %v", in, got, want)
+		}
+	}
+}

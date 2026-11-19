@@ -12,7 +12,7 @@ import (
 
 	coreai "github.com/waste-not-app/waste-not-backend/internal/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
-	"github.com/waste-not-app/waste-not-backend/internal/security"
+	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 )
 
@@ -72,7 +72,7 @@ func (s *service) PrepareDetectionSelection(ctx context.Context, userID string, 
 		return nil, nil, nil
 	}
 	id, _ := in["detection_id"].(string)
-	if !security.UUID(id) {
+	if !domain.ValidUUID(id) {
 		return nil, nil, ErrInvalidAIReference
 	}
 	o, err := s.repo.GetOperation(ctx, userID, id, "DETECTION", s.limiter.Now())
@@ -264,7 +264,7 @@ func (s *service) ExecuteRecommendation(ctx context.Context, reqID string, o Ope
 }
 
 func (s *service) DeleteDetection(ctx context.Context, userID, id string) error {
-	if !security.UUID(id) {
+	if !domain.ValidUUID(id) {
 		return ErrOperationNotFound
 	}
 	return s.repo.DeleteDetection(ctx, userID, id)

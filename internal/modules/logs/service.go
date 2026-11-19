@@ -49,7 +49,7 @@ func (s *service) DecodeCursor(raw, scope string) (cursor.Token, error) {
 }
 
 func (s *service) CreateLog(ctx context.Context, u middleware.UserIdentity, in domain.LogInput) (LogWithProgressRes, bool, error) {
-	if !security.UUID(in.ClientRequestID) {
+	if !domain.ValidUUID(in.ClientRequestID) {
 		return LogWithProgressRes{}, false, &ValidationError{
 			Fields: map[string]string{"client_request_id": "Gunakan UUID baru untuk draf baru."},
 		}
@@ -69,7 +69,7 @@ func (s *service) CreateLog(ctx context.Context, u middleware.UserIdentity, in d
 }
 
 func (s *service) GetLog(ctx context.Context, userID, id string) (domain.Log, error) {
-	if !security.UUID(id) {
+	if !domain.ValidUUID(id) {
 		return domain.Log{}, ErrLogNotFound
 	}
 	return s.repo.GetByID(ctx, userID, id)

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/waste-not-app/waste-not-backend/internal/database"
-	"github.com/waste-not-app/waste-not-backend/internal/security"
+	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
 )
 
@@ -31,7 +31,7 @@ func (s *service) DecodeCursor(raw, scope string) (cursor.Token, error) {
 }
 
 func (s *service) GetGuide(ctx context.Context, id string) (database.Guide, error) {
-	if !security.UUID(id) {
+	if !domain.ValidUUID(id) {
 		return database.Guide{}, ErrGuideNotFound
 	}
 	return s.repo.GetPublishedByID(ctx, id)

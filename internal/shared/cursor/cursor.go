@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
@@ -56,7 +57,7 @@ func (c *Codec) Decode(raw, scope string) (Token, error) {
 	if !hmac.Equal(sig, mac.Sum(nil)) {
 		return t, errors.New("cursor signature")
 	}
-	if e = json.Unmarshal(b, &t); e != nil || t.Scope != scope || !security.UUID(t.ID) {
+	if e = json.Unmarshal(b, &t); e != nil || t.Scope != scope || !domain.ValidUUID(t.ID) {
 		return t, errors.New("cursor scope")
 	}
 	return t, nil
