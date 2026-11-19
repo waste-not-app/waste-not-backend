@@ -9,6 +9,10 @@
 - Any change to an article's content requires a new review. Do not carry the previous reviewer or date over to unreviewed content.
 - Approval covers the article text only. It is not a legal review, a facility inspection, or a guarantee that a local collector accepts the material. Local limits and safety warnings remain part of each article.
 
+## Used by the AI recommendations
+
+The AI recommendation worker builds its guide bundle from this file with `scripts/build_reviewed_guides.py` in [waste-not-ai](https://github.com/waste-not-app/waste-not-ai/tree/main/guides), so scan advice and the Guide screen say the same thing. After any change here, regenerate that bundle and ask the operator to install it, or the two will drift apart.
+
 ## Importing
 
 The CD workflow imports the bundle after migrations on every deployment. The import is transactional and upserts by article ID, so redeploys never duplicate the catalog.
