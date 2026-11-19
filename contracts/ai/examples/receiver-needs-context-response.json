@@ -2,7 +2,7 @@
   "api_version": "1.0.0",
   "data": {
     "category": "GLASS",
-    "caution": "Kaca pecah memerlukan panduan penanganan khusus.",
+    "caution": "Broken glass needs special handling.",
     "conditions_to_verify": [],
     "confirmed_object_key": "glass_bottle",
     "context_revision": 1,
@@ -21,7 +21,7 @@
     "object_id": null,
     "prototype_only": true,
     "provider": "fixture",
-    "reason": "Belum cukup informasi untuk memilih penanganan benda saat ini. Lengkapi kondisi yang diketahui; sistem tidak menggantinya dengan saran Reduce.",
+    "reason": "There isn't enough information to choose how to handle this item yet. Fill in what you know about its condition. We won't swap in Reduce advice instead.",
     "reason_code": "CONTEXT_REQUIRED",
     "recommendation_basis": null,
     "recommendation_id": "00000000-0000-0000-0000-000000000009",
@@ -32,8 +32,8 @@
       {
         "checked_at": "2026-11-04",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+        "region": "United States",
+        "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
         "title": "How Do I Recycle Common Recyclables",
         "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
       }
@@ -44,10 +44,10 @@
     "special_handling": false,
     "status": "NEEDS_CONTEXT",
     "steps": [
-      "Periksa jenis kaca, kondisi, dan riwayat isi; bila belum diketahui, jangan menebak dari foto saja.",
-      "Pertimbangkan penggunaan ulang hanya jika fungsi, kebersihan, dan keamanannya memang sudah dipastikan.",
-      "Tanyakan kepada pengelola setempat apakah jenis dan kondisi barang ini diterima, lalu ikuti petunjuk pemilahan dan penyerahannya.",
-      "Jika ada tanda baterai/listrik, tepi tajam, bahan kimia, atau kontaminasi biologis, tandai jenis risikonya untuk mendapat arahan khusus."
+      "Check the kaca type, its condition, and what it held. If you don't know, don't guess from the photo.",
+      "Consider reusing it only once you've confirmed it works, is clean, and is safe.",
+      "Ask your local collector whether they accept this item in its condition, then follow their sorting and hand-over instructions.",
+      "If there are signs of a battery or electrics, sharp edges, chemicals, or biological contamination, mark the risk type to get specialist advice."
     ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"

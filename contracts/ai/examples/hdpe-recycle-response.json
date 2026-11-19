@@ -2,7 +2,7 @@
   "api_version": "1.0.0",
   "data": {
     "category": "PLASTIC",
-    "caution": "Kode 2 dan bentuk botol bukan bukti aman untuk dipakai ulang atau kontak pangan. Isi sebelumnya yang tidak diketahui atau bahan kimia tidak memakai aturan botol pangan ini.",
+    "caution": "Resin code 2 and a bottle shape don't prove it's safe to reuse or to hold food. Bottles with unknown or chemical contents can't follow this food bottle guide.",
     "conditions_to_verify": [],
     "confirmed_object_key": "hdpe_bottle",
     "context_revision": 1,
@@ -21,7 +21,7 @@
     "object_id": null,
     "prototype_only": true,
     "provider": "fixture",
-    "reason": "Botol HDPE bekas pangan/minuman yang bersih dapat diarahkan ke Recycle karena isi sebelumnya dan penerimaan pengelola telah kamu konfirmasi. Kode resin 2 tidak menjamin aman dipakai ulang atau diterima semua fasilitas.",
+    "reason": "You confirmed what this clean HDPE bottle held and that your collector accepts it, so it can go to Recycle. Resin code 2 doesn't guarantee it's safe to reuse or that every facility accepts it.",
     "reason_code": null,
     "recommendation_basis": "CONFIRMED",
     "recommendation_id": "00000000-0000-0000-0000-000000000007",
@@ -32,25 +32,25 @@
       {
         "checked_at": "2026-11-04",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Panduan bahan umum; jenis dan kebersihan tidak memastikan fasilitas lokal menerima benda tersebut.",
+        "region": "United States",
+        "scope_note": "General material guidance. The type and cleanliness of an item don't guarantee that a local facility accepts it.",
         "title": "How Do I Recycle Common Recyclables",
         "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables"
       },
       {
         "checked_at": "2026-11-04",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Edukasi PET resin 1 dan HDPE resin 2; bukan daftar penerima lokal atau identifikasi material dari foto.",
+        "region": "United States",
+        "scope_note": "Education on PET resin 1 and HDPE resin 2. Not a list of local collectors or a way to identify materials from a photo.",
         "title": "Recycle City: Materials Recovery Center",
         "url": "https://www3.epa.gov/recyclecity/recovery.htm"
       },
       {
         "checked_at": "2026-11-04",
-        "publisher": "Balai POM di Tasikmalaya",
+        "publisher": "BPOM Office in Tasikmalaya",
         "region": "Indonesia",
-        "scope_note": "Kode resin mengenali bahan; tidak membuktikan keamanan kontak pangan, kelayakan penggunaan ulang atau penerimaan daur ulang.",
-        "title": "Cerdas Memilih Kemasan: pengenalan kode plastik",
+        "scope_note": "Resin codes identify the material. They don't prove food-contact safety, fitness for reuse, or recycling acceptance.",
+        "title": "Choosing Packaging Wisely: understanding plastic codes",
         "url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik"
       }
     ],
@@ -62,9 +62,9 @@
     "special_handling": false,
     "status": "READY",
     "steps": [
-      "Konfirmasi bahan HDPE/kode 2 dan riwayat bekas pangan/minuman; jangan memakai aturan ini untuk bekas kimia atau isi yang tidak diketahui.",
-      "Kosongkan dan bersihkan sisa pangan sesuai petunjuk penerima; pisahkan sesuai jenis.",
-      "Serahkan kepada pengelola yang dikonfirmasi menerima HDPE dengan kondisi tersebut. Jangan menganggap botol bekas otomatis aman diisi ulang."
+      "Confirm that it's HDPE (code 2) and that it held food or drink. Don't use this guide for bottles that held chemicals or unknown contents.",
+      "Empty it, rinse out food residue as the collector asks, and sort it by type.",
+      "Hand it to a collector you confirmed accepts HDPE in this condition. Don't assume a used bottle is safe to refill."
     ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"

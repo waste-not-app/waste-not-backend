@@ -2,7 +2,7 @@
   "api_version": "1.0.0",
   "data": {
     "category": "OTHER",
-    "caution": "Saran bersyarat; informasi yang kosong tidak dianggap sudah terkonfirmasi. Cuci dahulu sebelum dipakai kembali. Jangan gunakan aturan cuci biasa untuk kontaminasi kimia/biologis. Kaca/keramik retak atau pecah tidak dipakai ulang.",
+    "caution": "Conditional advice. Anything left blank is not treated as confirmed. Wash it before using it again. Normal washing doesn't deal with chemical or biological contamination. Don't reuse cracked or broken glass or ceramics.",
     "conditions_to_verify": [
       "condition.cleanliness",
       "condition.integrity",
@@ -26,7 +26,7 @@
     "object_id": null,
     "prototype_only": true,
     "provider": "fixture",
-    "reason": "Saran sementara: Reuse untuk Cangkir keramik. Informasi yang diperlukan belum lengkap. Gunakan kembali hanya setelah kebersihan, keutuhan, kelayakan dan niat pakai ulang dipastikan.",
+    "reason": "Provisional advice: Reuse for this ceramic mug. Some information is still missing. Reuse it only after you've confirmed it's clean, intact, usable, and something you want to keep using.",
     "reason_code": null,
     "recommendation_basis": "CONDITIONAL",
     "recommendation_id": "00000000-0000-0000-0000-00000000000a",
@@ -37,17 +37,17 @@
       {
         "checked_at": "2026-10-20",
         "publisher": "US EPA",
-        "region": "Amerika Serikat",
-        "scope_note": "Prinsip penggunaan ulang peralatan makan/minum yang dirancang untuk digunakan berulang. Bukan sertifikasi keamanan objek dari foto.",
+        "region": "United States",
+        "scope_note": "Principles for reusing tableware designed for repeated use. Not a safety certification of an item from a photo.",
         "title": "Reusable food service ware: collection, washing and return",
         "url": "https://www.epa.gov/greenerproducts/identifying-sustainable-food-service-and-food-service-ware"
       },
       {
         "checked_at": "2026-10-20",
-        "publisher": "Pemerintah Kabupaten Banjarnegara",
+        "publisher": "Banjarnegara Regency Government",
         "region": "Banjarnegara, Indonesia",
-        "scope_note": "Contoh kebijakan lokal yang mendorong peralatan guna ulang. Tidak menjadi aturan penerimaan fasilitas seluruh Indonesia.",
-        "title": "Guna ulang peralatan makan-minum dan pemilahan dari sumber",
+        "scope_note": "An example of a local policy that encourages reusable tableware. It isn't an acceptance rule for facilities across Indonesia.",
+        "title": "Reusable tableware and sorting at the source",
         "url": "https://banjarnegarakab.go.id/2026/06/11/banjarnegara-terapkan-aturan-baru-kelola-sampah-wajib-dari-hulu/"
       }
     ],
@@ -58,13 +58,13 @@
     "special_handling": false,
     "status": "READY",
     "steps": [
-      "Periksa kebersihan; jalur ini memerlukan benda yang bersih.",
-      "Periksa retak dan kerusakan; gunakan jalur ini hanya bila benda utuh.",
-      "Pastikan benda masih layak digunakan sesuai fungsinya.",
-      "Lanjutkan penggunaan ulang hanya jika kamu ingin memakainya lagi.",
-      "Ikuti langkah berikut hanya setelah syarat di atas terpenuhi.",
-      "Periksa kembali kebersihan serta tidak adanya retak atau tepi tajam.",
-      "Gunakan kembali sesuai fungsi dan petunjuk bahan/produk; jangan menambah sampah dengan mengganti peralatan yang masih layak."
+      "Check that it's clean. This route needs a clean item.",
+      "Check for cracks and damage. Use this route only if the item is intact.",
+      "Make sure the item still works for its purpose.",
+      "Go ahead with reuse only if you want to keep using it.",
+      "Follow these steps only after the conditions above are met.",
+      "Check again that it's clean and has no cracks or sharp edges.",
+      "Use it for its intended purpose and follow the material or product instructions. Keeping usable tableware in service avoids extra waste."
     ]
   },
   "request_id": "00000000-0000-0000-0000-000000000063"
