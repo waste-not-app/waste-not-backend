@@ -1,16 +1,28 @@
-# Panduan Kontribusi
+# Contributing
 
-## Alur kerja
+Thank you for helping improve WasteNot Backend. This guide covers the workflow and standards every change is expected to follow.
 
-1. Buat branch dari `main`: `feat/...`, `fix/...`, `refactor/...`, atau `chore/...`.
-2. Satu commit untuk satu perubahan logis, dengan format [Conventional Commits](https://www.conventionalcommits.org/) satu baris, misalnya `fix(auth): release hashing slot on panic`.
-3. Jalankan `make check` sebelum push, dan `make test-integration` bila menyentuh database.
-4. Buka pull request ke `main`. CI harus hijau sebelum merge.
+## Workflow
 
-## Standar kode
+1. Branch from `main` using a descriptive prefix: `feat/`, `fix/`, `refactor/`, `docs/`, or `chore/`.
+2. Keep each commit to one logical change. Write a single-line message in the [Conventional Commits](https://www.conventionalcommits.org/) format, for example `fix(auth): release the hashing slot on error`.
+3. Run `make check` before pushing. If you change SQL, migrations, or transactions, also run `make test-integration`.
+4. Open a pull request against `main`. CI must pass before the pull request is merged.
 
-- Format dengan `make fmt`; `make lint` harus 0 issue.
-- Komentar hanya bila benar-benar perlu, cukup satu baris singkat. Anotasi Swagger (`// @...`) tetap dipertahankan.
-- Logika bisnis di `service`, akses data di `repository`, HTTP di `handler`.
-- Query baru ditulis di `sql/queries/` lalu `make sqlc`. Perubahan skema berupa migrasi baru di `internal/database/` dan `sql/migrations/`.
-- Perubahan endpoint harus memperbarui `contracts/core.openapi.json` dan `make swag`.
+## Code standards
+
+- **Formatting and lint.** Format with `make fmt`. `make lint` must report zero issues.
+- **Comments.** Prefer self-explanatory code. Add a comment only when it is essential, and keep it to one line. Swagger annotations (`// @...`) are required on handlers.
+- **Layering.**
+  - Handlers translate HTTP.
+  - Services hold business rules.
+  - Repositories hold SQL and transactions.
+  - Shared rules belong in `internal/domain`.
+- **Queries.** Write new queries in `sql/queries/`, then run `make sqlc`.
+- **Schema changes.** Add the change as a new migration in both `internal/database/` and `sql/migrations/`. Never edit a migration that has already been applied.
+- **API changes.** Update `contracts/core.openapi.json` and run `make swag`.
+- **AI contract changes.** These need matching updates in the AI repository. See [contracts/README.md](contracts/README.md).
+
+## Security
+
+Never commit secrets, tokens, `.env` files, or database dumps. Report vulnerabilities privately to the maintainers rather than in a public issue.
