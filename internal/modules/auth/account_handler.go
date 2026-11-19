@@ -67,10 +67,10 @@ func (h *Handler) ConfirmPasswordReset(c fiber.Ctx) error {
 	if len(fields) > 0 {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", fields)
 	}
-	if !h.limiter.AcquireHashSlot(c) {
-		return nil
+	if !h.limiter.HashSlots.TryAcquire() {
+		return response.Busy(c, "UNAVAILABLE")
 	}
-	defer h.limiter.ReleaseHashSlot()
+	defer h.limiter.HashSlots.Release()
 	err := h.service.ConfirmPasswordReset(c.Context(), req.Token, req.Password)
 	if errors.Is(err, ErrInvalidResetToken) {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "INVALID_RESET_TOKEN", map[string]string{"token": "Kode pemulihan tidak valid atau sudah kedaluwarsa."})
@@ -102,10 +102,10 @@ func (h *Handler) DeleteMe(c fiber.Ctx) error {
 	if n := utf8.RuneCountInString(req.Password); n < 1 || n > domain.MaxPasswordLength {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"password": "Masukkan kata sandi saat ini."})
 	}
-	if !h.limiter.AcquireHashSlot(c) {
-		return nil
+	if !h.limiter.HashSlots.TryAcquire() {
+		return response.Busy(c, "UNAVAILABLE")
 	}
-	defer h.limiter.ReleaseHashSlot()
+	defer h.limiter.HashSlots.Release()
 	err := h.service.DeleteMe(c.Context(), ident.User.ID, req.Password)
 	if errors.Is(err, ErrWrongPassword) {
 		return response.Fail(c, fiber.StatusForbidden, "WRONG_PASSWORD", map[string]string{"password": "Kata sandi saat ini tidak sesuai."})

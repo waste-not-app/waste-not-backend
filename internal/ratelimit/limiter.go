@@ -5,20 +5,18 @@ import (
 	"net"
 	"time"
 
-	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/waste-not-app/waste-not-backend/internal/database/db"
-	"github.com/waste-not-app/waste-not-backend/internal/response"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
 type Limiter struct {
 	q          *db.Queries
 	nowFn      func() time.Time
-	hashSlots  chan struct{}
-	imageSlots chan struct{}
-	photoSlots chan struct{}
+	HashSlots  Slots
+	ImageSlots Slots
+	PhotoSlots Slots
 }
 
 func NewLimiter(dbPool *pgxpool.Pool, nowFn func() time.Time) *Limiter {
@@ -28,9 +26,9 @@ func NewLimiter(dbPool *pgxpool.Pool, nowFn func() time.Time) *Limiter {
 	return &Limiter{
 		q:          db.New(dbPool),
 		nowFn:      nowFn,
-		hashSlots:  make(chan struct{}, 4),
-		imageSlots: make(chan struct{}, 2),
-		photoSlots: make(chan struct{}, 2),
+		HashSlots:  NewSlots(4),
+		ImageSlots: NewSlots(2),
+		PhotoSlots: NewSlots(2),
 	}
 }
 
@@ -59,49 +57,4 @@ func (l *Limiter) CheckAuthLimit(ctx context.Context, clientIP, email string) (b
 		}
 	}
 	return true, nil
-}
-
-func (l *Limiter) AcquireHashSlot(c fiber.Ctx) bool {
-	select {
-	case l.hashSlots <- struct{}{}:
-		return true
-	default:
-		c.Set("Retry-After", "1")
-		_ = response.Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
-		return false
-	}
-}
-
-func (l *Limiter) ReleaseHashSlot() {
-	<-l.hashSlots
-}
-
-func (l *Limiter) AcquireImageSlot(c fiber.Ctx) bool {
-	select {
-	case l.imageSlots <- struct{}{}:
-		return true
-	default:
-		c.Set("Retry-After", "1")
-		_ = response.Fail(c, fiber.StatusServiceUnavailable, "AI_BUSY", nil)
-		return false
-	}
-}
-
-func (l *Limiter) ReleaseImageSlot() {
-	<-l.imageSlots
-}
-
-func (l *Limiter) AcquirePhotoSlot(c fiber.Ctx) bool {
-	select {
-	case l.photoSlots <- struct{}{}:
-		return true
-	default:
-		c.Set("Retry-After", "1")
-		_ = response.Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
-		return false
-	}
-}
-
-func (l *Limiter) ReleasePhotoSlot() {
-	<-l.photoSlots
 }
