@@ -14,7 +14,7 @@
     },
     "capabilities": {
       "achievements": false,
-      "reminders": false,
+      "reminders": true,
       "photos": false,
       "recycling_points": false,
       "ai_scan": false,
