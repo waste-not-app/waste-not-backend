@@ -1,154 +1,286 @@
 # WasteNot Backend
 
-REST API Go untuk aplikasi [WasteNot Android](https://github.com/waste-not-app/waste-not-android). Layanan ini mengelola akun dan sesi, catatan sampah, dashboard, statistik, XP/level/streak, achievement, foto privat, panduan pengelolaan sampah, serta adapter ke worker AI ([waste-not-ai](https://github.com/waste-not-app/waste-not-ai)) untuk deteksi objek dan rekomendasi.
+**The REST API behind WasteNot, a mobile app for tracking household waste through Reduce, Reuse, Recycle, and Trash.**
 
-| Komponen | Teknologi |
-|---|---|
-| Bahasa | Go 1.27 |
-| HTTP | Fiber v3 |
-| Database | PostgreSQL 18, pgx v5, query type-safe via sqlc |
-| Auth | JWT HS256 (access 15 menit) + refresh token rotasi dengan deteksi reuse, Argon2id |
-| Dokumentasi API | OpenAPI (`contracts/`), Swagger opsional |
-| Container | Distroless static, nonroot, read-only |
+![Go 1.27](https://img.shields.io/badge/Go-1.27-00ADD8?logo=go&logoColor=white)
+![Fiber v3](https://img.shields.io/badge/Fiber-v3-00ACD7)
+![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-4169E1?logo=postgresql&logoColor=white)
+![OpenAPI](https://img.shields.io/badge/API-OpenAPI%203-6BA539?logo=openapiinitiative&logoColor=white)
+![Docker](https://img.shields.io/badge/image-distroless%20nonroot-2496ED?logo=docker&logoColor=white)
 
-## Daftar isi
+WasteNot Backend serves the [WasteNot Android](https://github.com/waste-not-app/waste-not-android) app. It owns user accounts and sessions, waste logs, dashboards and statistics, progress and achievements, private photo attachments, and the curated waste guide. It is also the only public gateway to the [WasteNot AI](https://github.com/waste-not-app/waste-not-ai) workers: it authenticates the caller, enforces ownership and quotas, and validates every worker response against a pinned contract before it reaches the app.
 
-- [Mulai cepat dengan Docker](#mulai-cepat-dengan-docker)
-- [Menjalankan tanpa Docker](#menjalankan-tanpa-docker)
-- [Konfigurasi](#konfigurasi)
-- [Perintah Make](#perintah-make)
-- [Kualitas dan keamanan](#kualitas-dan-keamanan)
-- [Struktur proyek](#struktur-proyek)
-- [Database dan migrasi](#database-dan-migrasi)
+## Contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Getting started](#getting-started)
+- [Configuration](#configuration)
+- [API overview](#api-overview)
+- [Development](#development)
+- [Project structure](#project-structure)
+- [Database and migrations](#database-and-migrations)
 - [Deployment](#deployment)
-- [Dokumentasi lanjutan](#dokumentasi-lanjutan)
+- [Related repositories](#related-repositories)
 
-## Mulai cepat dengan Docker
+## Features
 
-Prasyarat: Docker dengan Compose v2, `make`, dan `openssl`.
+- **Accounts and sessions.**
+  - Argon2id password hashing.
+  - 15-minute HS256 access tokens.
+  - Rotating refresh tokens with reuse detection. Replaying an old refresh token revokes the session.
+  - Every request checks the session in the database, so logout takes effect immediately.
+- **Password recovery.** One-time codes are delivered over SMTP through a durable, encrypted outbox with retries.
+- **Waste logs.**
+  - Create, edit, and soft-delete logs.
+  - Creates are idempotent through `client_request_id`.
+  - Edits and deletes use optimistic concurrency through `version` and `If-Match`.
+  - Lists use signed cursor pagination.
+- **Dashboard and statistics.** Daily, category, and method totals in the user's time zone, plus the recycling rate, XP, level, and streaks.
+- **Achievements.** Derived from the user's active logs.
+- **Private photos.** Upload, attach, and download photos as their owner. A durable cleanup queue makes deletes survive crashes.
+- **Waste guide.** Curated, source-reviewed articles with search and category filters.
+- **AI gateway.**
+  - Object detection and handling recommendations from the AI workers.
+  - Per-user quotas and request deduplication.
+  - Expiring sessions.
+  - Strict schema validation of every worker response.
+- **Account deletion.** Removes every row the user owns and drains the user's photo cleanup jobs before the deletion is confirmed.
+
+## Architecture
+
+```
+Android app ──HTTPS──▶ WasteNot API (this repo) ──▶ PostgreSQL 18
+                              │
+                              └──private HTTP──▶ AI workers (detection, recommendation)
+```
+
+- **Stateless API.** Rate limits, idempotency keys, and job queues live in PostgreSQL. Several instances can therefore share one database without resetting quotas.
+- **AI boundary.** The AI workers are never exposed to clients. The API calls them over loopback or a private network with dedicated service tokens.
+- **Request flow.** Each feature module follows `handler → service → repository`:
+  - Handlers translate HTTP.
+  - Services own the business rules.
+  - Repositories own SQL and transactions.
+
+## Getting started
+
+### With Docker (recommended)
+
+Requirements: Docker with Compose v2, `make`, and `openssl`.
 
 ```sh
-make env    # membuat .env dengan secret lokal acak
-make up     # db + migrate + import guides + api
+make env    # create .env with random local secrets
+make up     # start PostgreSQL, run migrations, import guides, start the API
 curl http://127.0.0.1:8080/health/ready
 make logs
 make down
 ```
 
-Stack lokal (`compose.dev.yaml`) membuka API di `127.0.0.1:8080`, PostgreSQL di `127.0.0.1:5432`, mengaktifkan lampiran foto pada volume Docker, dan Swagger UI di `http://127.0.0.1:8080/swagger/index.html`. AI nonaktif secara default; untuk menyambungkannya, jalankan worker dari repo AI di host lalu set `AI_ENABLED=true` beserta token di `.env`.
+The development stack (`compose.dev.yaml`) provides:
 
-`compose.yaml` adalah konfigurasi staging (host network, bind mount foto) yang dipakai workflow CD, bukan untuk pengembangan lokal.
+| Service | Address or location |
+|---|---|
+| API | `127.0.0.1:8080` |
+| PostgreSQL | `127.0.0.1:5432` |
+| Photo attachments | A Docker volume |
+| Swagger UI | <http://127.0.0.1:8080/swagger/index.html> |
 
-## Menjalankan tanpa Docker
+AI features are disabled by default. To enable them, start the workers from the AI repository on the host, then set `AI_ENABLED=true` and the worker tokens in `.env`.
 
-Prasyarat: Go 1.27.4 dan PostgreSQL 18.
+### From source
+
+Requirements: Go 1.27.4 and PostgreSQL 18.
 
 ```sh
-make env                 # lalu sesuaikan DATABASE_URL dengan PostgreSQL lokal
+make env       # then point DATABASE_URL at your local PostgreSQL
 make migrate
 make guides
 make run
 ```
 
-Binary tidak membaca `.env` sendiri; target `make` memuatnya. `make build` menghasilkan `bin/api`, `bin/migrate`, dan `bin/guides`. Binary API juga menyediakan `api healthcheck` untuk probe container.
+The binaries do not read `.env` themselves; the Make targets load it. `make build` produces `bin/api`, `bin/migrate`, and `bin/guides`.
 
-## Konfigurasi
+## Configuration
 
-Semua konfigurasi lewat environment variable. Contoh lengkap ada di [`.env.example`](.env.example).
+All configuration comes from environment variables. [`.env.example`](.env.example) lists every variable.
 
-| Variabel | Wajib | Default | Keterangan |
+| Variable | Required | Default | Description |
 |---|---|---|---|
-| `DATABASE_URL` | ya | | URL PostgreSQL |
-| `JWT_SECRET_BASE64` | ya | | Minimal 32 byte acak, base64 (`openssl rand -base64 32`) |
-| `HTTP_ADDR` | | `127.0.0.1:8080` | Alamat listen |
-| `WASTENOT_RELEASE` | | | Dikirim di header `X-WasteNot-Release` pada `/health/ready` |
-| `AI_ENABLED` | | `false` | Mengaktifkan deteksi AI |
-| `AI_RECOMMENDATION_ENABLED` | | ikut `AI_ENABLED` | Mengaktifkan rekomendasi AI |
-| `AI_ALLOW_PROTOTYPE` | | `false` | Menerima hasil fixture/draf (hanya untuk pengujian) |
-| `AI_DETECTION_URL`, `AI_RECOMMENDATION_URL` | bila AI aktif | | Origin worker privat |
-| `AI_SERVICE_TOKEN`, `AI_RECOMMENDATION_TOKEN` | bila AI aktif | | Berbeda satu sama lain, minimal 24 karakter |
-| `PHOTO_STORAGE_DIR` | | | Direktori privat untuk lampiran foto; kosong berarti fitur foto nonaktif |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM` | untuk reset password | port `587` | SMTP dengan STARTTLS atau TLS implisit (465) |
-| `SWAGGER_ENABLED` | | `false` | Swagger UI di `/swagger/index.html`; jangan aktifkan di server publik |
+| `DATABASE_URL` | Yes | | PostgreSQL connection URL |
+| `JWT_SECRET_BASE64` | Yes | | At least 32 random bytes, base64-encoded (`openssl rand -base64 32`) |
+| `HTTP_ADDR` | | `127.0.0.1:8080` | Listen address |
+| `WASTENOT_RELEASE` | | | Release identifier returned in `X-WasteNot-Release` by `/health/ready` |
+| `AI_ENABLED` | | `false` | Enables AI detection |
+| `AI_RECOMMENDATION_ENABLED` | | Value of `AI_ENABLED` | Enables AI recommendations |
+| `AI_ALLOW_PROTOTYPE` | | `false` | Accepts fixture or draft worker output. For testing only |
+| `AI_DETECTION_URL`, `AI_RECOMMENDATION_URL` | When AI is enabled | | Private worker origins |
+| `AI_SERVICE_TOKEN`, `AI_RECOMMENDATION_TOKEN` | When AI is enabled | | Distinct tokens of at least 24 characters |
+| `PHOTO_STORAGE_DIR` | | | Private directory for photo attachments. Leave empty to disable photos |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM` | For password recovery | Port `587` | SMTP with verified STARTTLS, or implicit TLS on port 465 |
+| `SWAGGER_ENABLED` | | `false` | Serves Swagger UI. Never enable it on a public server |
 
-## Perintah Make
+## API overview
 
-Jalankan `make help` untuk daftar lengkap. Yang paling sering dipakai:
+The machine-readable contract is [`contracts/core.openapi.json`](contracts/core.openapi.json). The public AI endpoints are described in [`contracts/ai/public.openapi.json`](contracts/ai/public.openapi.json).
 
-| Target | Fungsi |
+### Conventions
+
+- **Base path and format.** The base path is `/v1`.
+  - Bodies are UTF-8 JSON with `snake_case` fields.
+  - IDs are UUIDs, and timestamps are RFC 3339 in UTC.
+- **Authentication.** Every endpoint requires `Authorization: Bearer <access_token>`, except registration, login, refresh, password reset, and `/health/*`.
+- **Request IDs.** Every response carries an `X-Request-ID`. A valid UUID sent by the client is reused.
+- **Envelopes.**
+  - Successful responses use `{"data": ...}`.
+  - Lists add `"page": {"next_cursor": ..., "has_more": ...}`.
+  - Errors use `{"error": {"code", "message", "fields", "retryable"}, "request_id", "api_version"}`.
+- **Retries.** Respect `Retry-After` on `429` and `503`. When retrying a create, keep the same `client_request_id` and payload.
+
+### Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/v1/auth/register` | Create an account and a session |
+| `POST` | `/v1/auth/login` | Start a session |
+| `POST` | `/v1/auth/refresh` | Rotate the refresh token |
+| `POST` | `/v1/auth/logout` | Revoke the current session |
+| `POST` | `/v1/auth/password-reset` | Request a recovery code |
+| `POST` | `/v1/auth/password-reset/confirm` | Set a new password and revoke all sessions |
+| `GET` | `/v1/me` | Profile and progress |
+| `DELETE` | `/v1/me` | Delete the account and all owned data |
+| `GET` | `/v1/metadata` | Enums, form limits, and capabilities |
+| `GET`, `POST` | `/v1/waste-logs` | List or create waste logs |
+| `GET`, `PATCH`, `DELETE` | `/v1/waste-logs/{id}` | Read, edit, or delete a waste log |
+| `GET` | `/v1/dashboard` | Today's summary, recent logs, and progress |
+| `GET` | `/v1/statistics` | Totals by day, category, and method for a date range |
+| `GET` | `/v1/waste-guide` | Search published guides |
+| `GET` | `/v1/waste-guide/{id}` | Read a published guide |
+| `GET` | `/v1/achievements` | Achievements and their progress |
+| `POST` | `/v1/photos` | Upload a private photo |
+| `GET`, `DELETE` | `/v1/photos/{id}` | Download or delete an owned photo |
+| `GET` | `/v1/ai/objects` | AI object catalog and model capabilities |
+| `POST` | `/v1/ai/detections` | Detect objects in an image |
+| `POST` | `/v1/ai/recommendations` | Get handling recommendations for a confirmed object |
+| `DELETE` | `/v1/ai/detections/{id}` | Cancel an AI session |
+| `GET` | `/health/live` | Liveness probe |
+| `GET` | `/health/ready` | Readiness probe: database reachable and the latest migration applied |
+
+### Error codes
+
+| Status | Codes |
 |---|---|
-| `make up` / `make down` / `make logs` | Stack Docker lokal |
-| `make run` | Menjalankan API dari source |
-| `make fmt` | Format kode (gofmt + goimports) |
-| `make lint` | golangci-lint, termasuk gosec, errorlint, staticcheck |
-| `make vuln` | govulncheck untuk dependency dan call graph |
-| `make sec` | `lint` + `vuln` |
-| `make test` | Unit test (integration test dilewati tanpa database) |
-| `make test-integration` | Semua test terhadap PostgreSQL sementara di Docker |
-| `make cover` | Laporan coverage |
-| `make check` | Gate lokal: format, vet, lint, test |
-| `make ci` | Gate CI: format, vet, lint, vuln, race test, build |
-| `make sqlc` / `make swag` | Generate ulang query dan dokumentasi Swagger |
-| `make docker-build` | Build image produksi |
+| 400 | `INVALID_REQUEST` |
+| 401 | `UNAUTHENTICATED`, `SESSION_EXPIRED` |
+| 403 | `WRONG_PASSWORD` |
+| 404 | `NOT_FOUND` |
+| 409 | `EMAIL_EXISTS`, `VERSION_CONFLICT`, `IDEMPOTENCY_CONFLICT`, `PHOTO_ALREADY_LINKED`, `PHOTO_IN_USE` |
+| 410 | `LOG_DELETED`, `AI_SESSION_EXPIRED` |
+| 413 | `FILE_TOO_LARGE`, `REQUEST_TOO_LARGE` |
+| 415 | `UNSUPPORTED_MEDIA_TYPE` |
+| 422 | `VALIDATION_ERROR`, `INVALID_RESET_TOKEN`, `INVALID_IMAGE`, `IMAGE_DIMENSIONS_EXCEEDED` |
+| 428 | `PRECONDITION_REQUIRED` |
+| 429 | `RATE_LIMITED` |
+| 503 | `UNAVAILABLE`, `ACCOUNT_DELETION_PENDING`, `AI_DISABLED`, `AI_UNAVAILABLE`, `AI_BUSY`, `INVALID_AI_RESPONSE` |
+| 504 | `AI_TIMEOUT` |
 
-Versi tool dipin di Makefile dan dijalankan lewat `go run`, jadi tidak perlu instalasi global.
+## Development
 
-## Kualitas dan keamanan
+Run `make help` for every target. The ones you will use most:
 
-- **CI** (`.github/workflows/ci.yml`): verifikasi modul, cek kontrak AI, test deploy Python, `make ci` dengan PostgreSQL 18 dan race detector, lalu build image.
-- **CD** (`.github/workflows/cd.yml`): deploy staging hanya setelah CI di `main` sukses.
-- **Dependabot** memperbarui modul Go, GitHub Actions, dan base image setiap minggu.
-- **Runtime**: image distroless nonroot dengan filesystem read-only, `cap_drop: ALL`, dan healthcheck. Rate limit dan idempotensi disimpan di PostgreSQL sehingga berlaku antar instance. Slot hashing, decode foto, dan scan AI dibatasi per proses.
-- **Kebijakan data**: tidak ada akun demo, panduan palsu, atau hasil AI pengganti. Hasil fixture AI ditolak kecuali `AI_ALLOW_PROTOTYPE=true`.
+| Target | Purpose |
+|---|---|
+| `make up` / `make down` / `make logs` | Manage the local Docker stack |
+| `make run` | Run the API from source |
+| `make fmt` | Format code with gofmt and goimports |
+| `make lint` | Run golangci-lint, including gosec, errorlint, and staticcheck |
+| `make vuln` | Scan dependencies and the call graph with govulncheck |
+| `make test` | Run unit tests. Integration tests are skipped without a database |
+| `make test-integration` | Run every test against a disposable PostgreSQL container |
+| `make check` | Local gate: format, vet, lint, and test |
+| `make ci` | CI gate: format, vet, lint, vulnerability scan, race tests, and build |
+| `make sqlc` / `make swag` | Regenerate queries and Swagger docs |
+| `make docker-build` | Build the production image |
 
-## Struktur proyek
+Tool versions are pinned in the Makefile and run through `go run`, so no global installation is needed.
+
+Continuous integration:
+
+- **CI** (`.github/workflows/ci.yml`) runs on every pull request. It verifies modules, checks the AI contract pin, tests the deployment scripts, and runs `make ci` against PostgreSQL 18. It then builds the image.
+- **CD** (`.github/workflows/cd.yml`) deploys to staging only after CI succeeds on `main`.
+- **Dependabot** updates Go modules, GitHub Actions, and base images weekly.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch, commit, and review workflow.
+
+## Project structure
 
 ```
-cmd/
-  api/        entrypoint HTTP + subcommand healthcheck
-  migrate/    runner migrasi
-  guides/     import panduan yang sudah ditinjau
-internal/
-  server/     komposisi dependency, routing, worker latar, dan test end-to-end
-  modules/    fitur: auth, logs, analytics, achievements, photos, guides, ai, system
-              tiap modul: handler (HTTP) -> service (aturan) -> repository (SQL dan transaksi)
-  domain/     tipe dan aturan bisnis bersama tanpa dependency HTTP atau database
-  database/   koneksi, migrasi tertanam, import panduan; db/ berisi hasil sqlc
-  aiclient/   klien worker AI dan validasi kontrak
-  security/   JWT, hashing password Argon2id, digest
-  middleware/ autentikasi dan request ID
-  ratelimit/  kuota berbasis Postgres dan slot konkurensi
-  cursor/     cursor paginasi bertanda tangan
-  response/   envelope JSON dan pemetaan error
-  config/     konfigurasi dari environment
-contracts/    kontrak OpenAPI core, AI, dan fixture Android
-sql/          migrasi dan query sumber sqlc
-deploy/       skrip blue-green, nginx, systemd, hardening DB
-docs/         dokumentasi lanjutan dan Swagger hasil generate
-guides/       konten panduan yang sudah ditinjau
+waste-not-backend/
+├── cmd/
+│   ├── api/             HTTP server entrypoint and container healthcheck
+│   ├── migrate/         Migration runner
+│   └── guides/          Reviewed guide importer
+├── internal/
+│   ├── server/          Dependency wiring, routing, background workers, end-to-end tests
+│   ├── modules/         Feature modules: auth, logs, analytics, achievements, photos, guides, ai, system
+│   ├── domain/          Shared business types and rules, free of HTTP and SQL
+│   ├── database/        Connection pool, embedded migrations, guide import; db/ holds sqlc output
+│   ├── aiclient/        AI worker client and contract validation
+│   ├── security/        JWT, Argon2id password hashing, digests
+│   ├── middleware/      Authentication and request IDs
+│   ├── ratelimit/       PostgreSQL-backed quotas and concurrency slots
+│   ├── cursor/          Signed pagination cursors
+│   ├── response/        JSON envelopes and error mapping
+│   └── config/          Environment configuration
+├── contracts/           Core and AI OpenAPI contracts, Android fixtures
+├── sql/                 sqlc migrations and queries
+├── guides/              Curated waste guide content
+├── deploy/              Deployment scripts, Nginx, systemd, and database hardening
+├── docs/                Generated Swagger documentation
+└── scripts/             Contract and smoke-test tooling
 ```
 
-## Database dan migrasi
+## Database and migrations
 
-- Migrasi tidak dijalankan otomatis saat API start. Jalankan `cmd/migrate` sebagai langkah deploy terpisah (Compose melakukannya lewat service `migrate`).
-- `/health/ready` baru melaporkan siap setelah migrasi terbaru yang tertanam di binary sudah diterapkan.
-- Skema ada di dua tempat: `internal/database/*.sql` (dibaca runner, checksum tercatat di database produksi, jangan diubah) dan `sql/migrations/*.up.sql` (sumber sqlc). Setiap perubahan skema ditambahkan sebagai file baru di keduanya. `TestSchemaCopiesStayInSync` memastikan hasilnya identik.
-- Query SQL ditulis di `sql/queries/*.sql` lalu di-generate ke `internal/database/db` dengan `make sqlc`. Jangan edit hasil generate secara manual.
+- **Migrations run separately.** The API never migrates the database on startup. Run `cmd/migrate` as its own deployment step; Compose does this through the `migrate` service.
+- **Migration safety.** Migrations are embedded in the binary and applied in name order under an advisory lock. Their checksums are recorded, so a migration that has already been applied must never be edited. Evolve the schema with new files only.
+- **Two copies of the schema.** It lives in `internal/database/*.sql`, which the runner reads, and in `sql/migrations/*.up.sql`, which sqlc reads. Add every schema change to both places. `TestSchemaCopiesStayInSync` verifies that they match.
+- **Queries.** Write queries in `sql/queries/*.sql` and regenerate `internal/database/db` with `make sqlc`. Never edit generated code by hand.
 
 ## Deployment
 
-Staging berjalan di VM cp-bcc melalui GitHub Actions dengan runner self-hosted. Nginx harus meneruskan `X-Real-IP` (lihat `deploy/nginx-location.conf`) agar rate limit login dihitung per klien. Rincian blue-green, systemd, backup, dan rollback ada di [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) dan [docs/OPERATIONS.md](docs/OPERATIONS.md).
+Staging runs on a self-hosted GitHub Actions runner with Docker Compose. The public endpoint is <https://waste-not-api.bccdev.id/v1/>.
 
-Base URL staging: <https://pred-autoscaler.bccdev.id/wastenot/api/v1/>
+After CI passes on `main`, the CD workflow:
 
-## Dokumentasi lanjutan
+1. Builds the image.
+2. Loads runtime configuration from private files on the host.
+3. Runs migrations and starts the API.
+4. Imports the reviewed guides.
+5. Waits for `/health/ready`.
 
-- [Panduan integrasi Android dan AI](docs/INTEGRATION.md)
-- [Panduan API](docs/API.md): envelope, endpoint, retry, dan konflik
-- [OpenAPI core](contracts/core.openapi.json) dan [OpenAPI AI publik](contracts/ai/public.openapi.json)
-- [Integrasi Android](docs/ANDROID.md)
-- [Integrasi AI](docs/AI.md)
-- [Kurasi panduan](guides/README.md)
-- [Operasional](docs/OPERATIONS.md)
-- [Bukti pengujian](docs/VERIFICATION.md)
-- [Panduan kontribusi](CONTRIBUTING.md)
+The API container runs as a nonroot user with:
+
+- a read-only filesystem;
+- all capabilities dropped;
+- `no-new-privileges`.
+
+Before the first deployment, provision the photo directory on the host:
+
+```sh
+sudo install -d -o 65532 -g 65532 -m 0700 /var/lib/wastenot-photos
+```
+
+Operational notes:
+
+- **Secrets.** Never commit `.env` files, tokens, or database dumps. Rotating `JWT_SECRET_BASE64` signs every user out.
+- **Network exposure.** Terminate TLS at the ingress, and keep PostgreSQL and the AI workers off the public network.
+- **Rate limiting behind a proxy.** The reverse proxy must forward `X-Real-IP` (see [`deploy/nginx-location.conf`](deploy/nginx-location.conf)) so authentication rate limits apply per client.
+- **Capacity.** Each instance opens at most 10 database connections. Plan the PostgreSQL connection limit for every instance, plus migrations.
+
+## Related repositories
+
+| Repository | Description |
+|---|---|
+| [waste-not-android](https://github.com/waste-not-app/waste-not-android) | Android client |
+| [waste-not-ai](https://github.com/waste-not-app/waste-not-ai) | Detection and recommendation workers |
+| [waste-not-landing](https://github.com/waste-not-app/waste-not-landing) | Marketing site and privacy policy |
