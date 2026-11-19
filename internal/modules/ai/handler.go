@@ -17,7 +17,7 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 
-	coreai "github.com/waste-not-app/waste-not-backend/internal/ai"
+	"github.com/waste-not-app/waste-not-backend/internal/aiclient"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
@@ -48,9 +48,9 @@ func RegisterHTTPRoutes(app *fiber.App, service Service, limiter *ratelimit.Limi
 }
 
 func writeAIFailure(c fiber.Ctx, err error) error {
-	var a *coreai.Error
+	var a *aiclient.Error
 	if !errors.As(err, &a) {
-		a = coreai.ErrInvalid
+		a = aiclient.ErrInvalid
 	}
 	if a.RetryAfter > 0 {
 		c.Set("Retry-After", strconv.Itoa(a.RetryAfter))
@@ -59,7 +59,7 @@ func writeAIFailure(c fiber.Ctx, err error) error {
 }
 
 func (h *Handler) mapOperationError(c fiber.Ctx, err error) error {
-	var a *coreai.Error
+	var a *aiclient.Error
 	switch {
 	case errors.Is(err, ErrOperationNotFound):
 		return response.Fail(c, fiber.StatusNotFound, "NOT_FOUND", nil)
@@ -90,10 +90,10 @@ func (h *Handler) handleReplay(c fiber.Ctx, userID string, o Operation) error {
 		return h.mapOperationError(c, err)
 	}
 	if o.Code != "" {
-		return writeAIFailure(c, &coreai.Error{Status: o.Status, Code: o.Code, RetryAfter: o.RetryAfter})
+		return writeAIFailure(c, &aiclient.Error{Status: o.Status, Code: o.Code, RetryAfter: o.RetryAfter})
 	}
 	if !json.Valid(o.Response) {
-		return writeAIFailure(c, coreai.ErrInvalid)
+		return writeAIFailure(c, aiclient.ErrInvalid)
 	}
 	return response.OK(c, o.Response)
 }

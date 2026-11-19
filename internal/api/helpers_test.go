@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	aiMod "github.com/waste-not-app/waste-not-backend/internal/modules/ai"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/ai"
 )
 
-const maxImage = aiMod.MaxImageBytes
+const maxImage = ai.MaxImageBytes
 
 func mustDate(s string) time.Time {
 	t, _ := time.Parse(time.DateOnly, s)

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/waste-not-app/waste-not-backend/internal/ai"
+	"github.com/waste-not-app/waste-not-backend/internal/aiclient"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 )
@@ -18,10 +18,10 @@ type Service interface {
 type service struct {
 	repo     Repository
 	cfg      config.Config
-	aiClient *ai.Client
+	aiClient *aiclient.Client
 }
 
-func NewService(repo Repository, cfg config.Config, aiClient *ai.Client) Service {
+func NewService(repo Repository, cfg config.Config, aiClient *aiclient.Client) Service {
 	return &service{
 		repo:     repo,
 		cfg:      cfg,

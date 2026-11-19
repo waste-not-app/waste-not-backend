@@ -1,4 +1,4 @@
-package ai
+package aiclient
 
 func validDetection(v map[string]any) (valid bool) {
 	defer func() {

@@ -16,11 +16,11 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	_ "github.com/waste-not-app/waste-not-backend/docs"
-	"github.com/waste-not-app/waste-not-backend/internal/ai"
+	"github.com/waste-not-app/waste-not-backend/internal/aiclient"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/achievements"
-	aiMod "github.com/waste-not-app/waste-not-backend/internal/modules/ai"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/analytics"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/guides"
@@ -38,7 +38,7 @@ type Server struct {
 	DB      *pgxpool.Pool
 	Config  config.Config
 	Signer  security.Signer
-	AI      *ai.Client
+	AI      *aiclient.Client
 	Limiter *ratelimit.Limiter
 	Log     *slog.Logger
 	cancel  context.CancelFunc
@@ -54,7 +54,7 @@ func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
 }
 
 func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.ResetMailer) (*Server, error) {
-	aiClient, err := ai.New(c)
+	aiClient, err := aiclient.New(c)
 	if err != nil {
 		return nil, err
 	}
@@ -120,8 +120,8 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.
 	photosRepo := photos.NewRepository(db)
 	photosService := photos.NewService(photosRepo, photoStorage)
 
-	aiRepo := aiMod.NewRepository(db)
-	aiService := aiMod.NewService(aiRepo, c, aiClient, limiter)
+	aiRepo := ai.NewRepository(db)
+	aiService := ai.NewService(aiRepo, c, aiClient, limiter)
 
 	if c.SwaggerEnabled {
 		app.Get("/swagger/*", swaggo.HandlerDefault)
@@ -134,7 +134,7 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.
 	guides.RegisterHTTPRoutes(app, guidesService, log, authMw)
 	achievements.RegisterHTTPRoutes(app, achievementsService, log, authMw)
 	photos.RegisterHTTPRoutes(app, photosService, limiter, log, authMw)
-	aiMod.RegisterHTTPRoutes(app, aiService, limiter, log, authMw)
+	ai.RegisterHTTPRoutes(app, aiService, limiter, log, authMw)
 
 	s := &Server{
 		App:     app,
