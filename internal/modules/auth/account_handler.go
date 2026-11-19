@@ -6,9 +6,9 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 
-	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
 
@@ -54,7 +54,7 @@ func (h *Handler) ConfirmPasswordReset(c fiber.Ctx) error {
 	if !response.DecodeJSON(c, &req) {
 		return nil
 	}
-	if !h.checkAuthRateLimit(c, "password-reset-confirm:"+coreauth.Digest([]byte(req.Token))) {
+	if !h.checkAuthRateLimit(c, "password-reset-confirm:"+security.Digest([]byte(req.Token))) {
 		return nil
 	}
 	fields := map[string]string{}

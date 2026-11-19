@@ -7,14 +7,14 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 func DrainCleanup(ctx context.Context, pool *pgxpool.Pool, storage Storage, ownerID string, limit int) error {
 	prefix := ""
 	if ownerID != "" {
-		if !auth.UUID(ownerID) {
+		if !security.UUID(ownerID) {
 			return errors.New("invalid photo cleanup owner")
 		}
 		prefix = ownerID + "/"

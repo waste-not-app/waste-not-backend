@@ -14,10 +14,10 @@ import (
 
 	"github.com/google/uuid"
 
-	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	aiMod "github.com/waste-not-app/waste-not-backend/internal/modules/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
 type resetMessage struct{ email, token string }
@@ -363,7 +363,7 @@ func TestPasswordResetOutboxSurvivesWorkerRestartEncrypted(t *testing.T) {
 	restartedHTTP := httptest.NewServer(restarted.Handler())
 	t.Cleanup(restartedHTTP.Close)
 	message := mailer.next(t)
-	if bytes.Contains(encrypted, []byte(message.token)) || digest != coreauth.Digest([]byte(message.token)) {
+	if bytes.Contains(encrypted, []byte(message.token)) || digest != security.Digest([]byte(message.token)) {
 		t.Fatal("plaintext token stored or verifier mismatched")
 	}
 	st, v, _ = call(t, restartedHTTP.URL, "POST", "/v1/auth/password-reset/confirm", "", map[string]string{"token": message.token, "password": "replacement-passphrase-456"}, nil)

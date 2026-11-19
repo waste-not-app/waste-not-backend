@@ -10,17 +10,17 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 type Repository interface {
-	CreateUserWithSession(ctx context.Context, u UserRes, passwordHash string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error)
+	CreateUserWithSession(ctx context.Context, u UserRes, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error)
 	GetUserByEmail(ctx context.Context, email string) (UserRecord, error)
-	CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error)
-	RotateRefreshToken(ctx context.Context, refreshToken string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error)
+	CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error)
+	RotateRefreshToken(ctx context.Context, refreshToken string, signer security.Signer, now time.Time) (security.Tokens, error)
 	RevokeSession(ctx context.Context, sessionID, userID string) error
 	GetUserProgress(ctx context.Context, userID, today string) (domain.Progress, error)
 	RequestPasswordReset(ctx context.Context, email, tokenHash string, encrypted []byte, now time.Time) error
@@ -48,10 +48,10 @@ func isDuplicate(err error) bool {
 	return errors.As(err, &p) && p.Code == "23505"
 }
 
-func (r *repository) insertSession(ctx context.Context, qtx *db.Queries, u UserRes, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error) {
+func (r *repository) insertSession(ctx context.Context, qtx *db.Queries, u UserRes, signer security.Signer, now time.Time) (security.Tokens, error) {
 	nowUTC := now.UTC()
 	sid := uuid.NewString()
-	tokens, err := signer.Issue(u.ID, sid, 1, nowUTC.Add(coreauth.RefreshTTL), nowUTC)
+	tokens, err := signer.Issue(u.ID, sid, 1, nowUTC.Add(security.RefreshTTL), nowUTC)
 	if err != nil {
 		return tokens, err
 	}
@@ -63,17 +63,17 @@ func (r *repository) insertSession(ctx context.Context, qtx *db.Queries, u UserR
 		return tokens, err
 	}
 	err = qtx.CreateRefreshToken(ctx, db.CreateRefreshTokenParams{
-		TokenHash: coreauth.Digest([]byte(tokens.RefreshToken)),
+		TokenHash: security.Digest([]byte(tokens.RefreshToken)),
 		SessionID: sid,
 	})
 	tokens.User = u
 	return tokens, err
 }
 
-func (r *repository) CreateUserWithSession(ctx context.Context, u UserRes, passwordHash string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error) {
+func (r *repository) CreateUserWithSession(ctx context.Context, u UserRes, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error) {
 	tx, err := r.dbPool.Begin(ctx)
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 	defer tx.Rollback(ctx)
 
@@ -86,10 +86,10 @@ func (r *repository) CreateUserWithSession(ctx context.Context, u UserRes, passw
 		Timezone:        u.Timezone,
 	})
 	if isDuplicate(err) {
-		return coreauth.Tokens{}, ErrEmailExists
+		return security.Tokens{}, ErrEmailExists
 	}
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 
 	tokens, err := r.insertSession(ctx, qtx, u, signer, now)
@@ -118,10 +118,10 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (UserReco
 	}, nil
 }
 
-func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error) {
+func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error) {
 	tx, err := r.dbPool.Begin(ctx)
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 	defer tx.Rollback(ctx)
 
@@ -129,10 +129,10 @@ func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, passwo
 	// Serialize with password replacement so a pre-reset password check cannot create a new session afterward.
 	currentHash, err := qtx.LockAccount(ctx, u.ID)
 	if errors.Is(err, pgx.ErrNoRows) || (err == nil && currentHash != passwordHash) {
-		return coreauth.Tokens{}, ErrUnauthenticated
+		return security.Tokens{}, ErrUnauthenticated
 	}
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 	tokens, err := r.insertSession(ctx, qtx, u, signer, now)
 	if err == nil {
@@ -141,21 +141,21 @@ func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, passwo
 	return tokens, err
 }
 
-func (r *repository) RotateRefreshToken(ctx context.Context, refreshToken string, signer coreauth.Signer, now time.Time) (coreauth.Tokens, error) {
+func (r *repository) RotateRefreshToken(ctx context.Context, refreshToken string, signer security.Signer, now time.Time) (security.Tokens, error) {
 	tx, err := r.dbPool.Begin(ctx)
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 	defer tx.Rollback(ctx)
 
 	qtx := r.q.WithTx(tx)
-	hash := coreauth.Digest([]byte(refreshToken))
+	hash := security.Digest([]byte(refreshToken))
 	row, err := qtx.LockRefreshTokenSession(ctx, hash)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return coreauth.Tokens{}, ErrSessionExpired
+		return security.Tokens{}, ErrSessionExpired
 	}
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 
 	if row.Used {
@@ -163,18 +163,18 @@ func (r *repository) RotateRefreshToken(ctx context.Context, refreshToken string
 			err = tx.Commit(ctx)
 		}
 		if err != nil {
-			return coreauth.Tokens{}, err
+			return security.Tokens{}, err
 		}
-		return coreauth.Tokens{}, ErrSessionExpired
+		return security.Tokens{}, ErrSessionExpired
 	}
 
 	if row.Revoked || !row.ExpiresAt.After(now) {
-		return coreauth.Tokens{}, ErrSessionExpired
+		return security.Tokens{}, ErrSessionExpired
 	}
 
 	tokens, err := signer.Issue(row.UserID, row.SessionID, row.Generation+1, row.ExpiresAt, now.UTC())
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 
 	if err = qtx.MarkRefreshTokenUsed(ctx, hash); err == nil {
@@ -182,7 +182,7 @@ func (r *repository) RotateRefreshToken(ctx context.Context, refreshToken string
 	}
 	if err == nil {
 		err = qtx.CreateRefreshToken(ctx, db.CreateRefreshTokenParams{
-			TokenHash: coreauth.Digest([]byte(tokens.RefreshToken)),
+			TokenHash: security.Digest([]byte(tokens.RefreshToken)),
 			SessionID: row.SessionID,
 		})
 	}

@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
@@ -41,7 +41,7 @@ func (l *Limiter) Now() time.Time {
 func (l *Limiter) Allow(ctx context.Context, key string, n int, window time.Duration) (bool, error) {
 	bucket := l.nowFn().UTC().Truncate(window)
 	hits, err := l.q.IncrementRateLimit(ctx, db.IncrementRateLimitParams{
-		Key:     auth.Digest([]byte(key)),
+		Key:     security.Digest([]byte(key)),
 		Bucket:  bucket,
 		MaxHits: n,
 	})

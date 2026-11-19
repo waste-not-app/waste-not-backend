@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 )
@@ -49,7 +49,7 @@ func (s *service) DecodeCursor(raw, scope string) (cursor.Token, error) {
 }
 
 func (s *service) CreateLog(ctx context.Context, u middleware.UserIdentity, in domain.LogInput) (LogWithProgressRes, bool, error) {
-	if !auth.UUID(in.ClientRequestID) {
+	if !security.UUID(in.ClientRequestID) {
 		return LogWithProgressRes{}, false, &ValidationError{
 			Fields: map[string]string{"client_request_id": "Gunakan UUID baru untuk draf baru."},
 		}
@@ -61,7 +61,7 @@ func (s *service) CreateLog(ctx context.Context, u middleware.UserIdentity, in d
 	}
 	in.Notes = strings.TrimSpace(in.Notes)
 	raw, _ := json.Marshal(in)
-	hash := auth.Digest(raw)
+	hash := security.Digest(raw)
 	now := s.limiter.Now()
 	today := domain.Today(now, u.Timezone)
 
@@ -69,7 +69,7 @@ func (s *service) CreateLog(ctx context.Context, u middleware.UserIdentity, in d
 }
 
 func (s *service) GetLog(ctx context.Context, userID, id string) (domain.Log, error) {
-	if !auth.UUID(id) {
+	if !security.UUID(id) {
 		return domain.Log{}, ErrLogNotFound
 	}
 	return s.repo.GetByID(ctx, userID, id)

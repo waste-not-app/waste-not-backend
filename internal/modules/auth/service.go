@@ -10,16 +10,16 @@ import (
 
 	"github.com/google/uuid"
 
-	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 )
 
 type Service interface {
-	Register(ctx context.Context, req RegisterReq, normalizedEmail string) (coreauth.Tokens, error)
-	Login(ctx context.Context, normalizedEmail, password string) (coreauth.Tokens, error)
-	RefreshToken(ctx context.Context, refreshToken string) (coreauth.Tokens, error)
+	Register(ctx context.Context, req RegisterReq, normalizedEmail string) (security.Tokens, error)
+	Login(ctx context.Context, normalizedEmail, password string) (security.Tokens, error)
+	RefreshToken(ctx context.Context, refreshToken string) (security.Tokens, error)
 	Logout(ctx context.Context, sessionID, userID string) error
 	GetMe(ctx context.Context, u middleware.UserIdentity) (UserRes, error)
 	RequestPasswordReset(ctx context.Context, email string) error
@@ -30,14 +30,14 @@ type Service interface {
 
 type service struct {
 	repo      Repository
-	signer    coreauth.Signer
+	signer    security.Signer
 	limiter   *ratelimit.Limiter
 	dummyHash string
 	mailer    ResetMailer
 	mailKey   cipher.AEAD
 }
 
-func NewService(repo Repository, signer coreauth.Signer, limiter *ratelimit.Limiter, dummyHash string, mailer ResetMailer) Service {
+func NewService(repo Repository, signer security.Signer, limiter *ratelimit.Limiter, dummyHash string, mailer ResetMailer) Service {
 	keyHash := sha256.New()
 	keyHash.Write([]byte("wastenot-password-reset-mail-v1\x00"))
 	keyHash.Write(signer.Secret)
@@ -53,10 +53,10 @@ func NewService(repo Repository, signer coreauth.Signer, limiter *ratelimit.Limi
 	}
 }
 
-func (s *service) Register(ctx context.Context, req RegisterReq, normalizedEmail string) (coreauth.Tokens, error) {
-	hash, err := coreauth.Hash(req.Password)
+func (s *service) Register(ctx context.Context, req RegisterReq, normalizedEmail string) (security.Tokens, error) {
+	hash, err := security.Hash(req.Password)
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
 	u := UserRes{
 		ID:       uuid.NewString(),
@@ -67,24 +67,24 @@ func (s *service) Register(ctx context.Context, req RegisterReq, normalizedEmail
 	return s.repo.CreateUserWithSession(ctx, u, hash, s.signer, s.limiter.Now())
 }
 
-func (s *service) Login(ctx context.Context, normalizedEmail, password string) (coreauth.Tokens, error) {
+func (s *service) Login(ctx context.Context, normalizedEmail, password string) (security.Tokens, error) {
 	rec, err := s.repo.GetUserByEmail(ctx, normalizedEmail)
 	if errors.Is(err, ErrUnauthenticated) {
-		coreauth.Verify(password, s.dummyHash)
-		return coreauth.Tokens{}, ErrUnauthenticated
+		security.Verify(password, s.dummyHash)
+		return security.Tokens{}, ErrUnauthenticated
 	}
 	if err != nil {
-		return coreauth.Tokens{}, err
+		return security.Tokens{}, err
 	}
-	if !coreauth.Verify(password, rec.PasswordHash) {
-		return coreauth.Tokens{}, ErrUnauthenticated
+	if !security.Verify(password, rec.PasswordHash) {
+		return security.Tokens{}, ErrUnauthenticated
 	}
 	return s.repo.CreateSessionForUser(ctx, rec.UserRes, rec.PasswordHash, s.signer, s.limiter.Now())
 }
 
-func (s *service) RefreshToken(ctx context.Context, refreshToken string) (coreauth.Tokens, error) {
+func (s *service) RefreshToken(ctx context.Context, refreshToken string) (security.Tokens, error) {
 	if len(refreshToken) != 43 {
-		return coreauth.Tokens{}, ErrSessionExpired
+		return security.Tokens{}, ErrSessionExpired
 	}
 	return s.repo.RotateRefreshToken(ctx, refreshToken, s.signer, s.limiter.Now())
 }

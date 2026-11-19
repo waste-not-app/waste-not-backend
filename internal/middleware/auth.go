@@ -10,8 +10,8 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
@@ -31,7 +31,7 @@ type Identity struct {
 	Generation int
 }
 
-func Protected(dbPool *pgxpool.Pool, signer auth.Signer, limiter *ratelimit.Limiter, log *slog.Logger) fiber.Handler {
+func Protected(dbPool *pgxpool.Pool, signer security.Signer, limiter *ratelimit.Limiter, log *slog.Logger) fiber.Handler {
 	q := db.New(dbPool)
 
 	return func(c fiber.Ctx) error {

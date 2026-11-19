@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"time"
 
-	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
 func (s *service) RequestPasswordReset(ctx context.Context, email string) error {
@@ -27,7 +27,7 @@ func (s *service) RequestPasswordReset(ctx context.Context, email string) error 
 	}
 	token := base64.RawURLEncoding.EncodeToString(raw[:])
 	encrypted := s.mailKey.Seal(nil, nil, []byte(token), []byte(email))
-	return s.repo.RequestPasswordReset(ctx, email, coreauth.Digest([]byte(token)), encrypted, s.limiter.Now())
+	return s.repo.RequestPasswordReset(ctx, email, security.Digest([]byte(token)), encrypted, s.limiter.Now())
 }
 
 func (s *service) ConfirmPasswordReset(ctx context.Context, token, password string) error {
@@ -35,11 +35,11 @@ func (s *service) ConfirmPasswordReset(ctx context.Context, token, password stri
 	if err != nil || len(raw) != 32 || base64.RawURLEncoding.EncodeToString(raw) != token {
 		return ErrInvalidResetToken
 	}
-	hash, err := coreauth.Hash(password)
+	hash, err := security.Hash(password)
 	if err != nil {
 		return err
 	}
-	return s.repo.ConfirmPasswordReset(ctx, coreauth.Digest([]byte(token)), hash, s.limiter.Now())
+	return s.repo.ConfirmPasswordReset(ctx, security.Digest([]byte(token)), hash, s.limiter.Now())
 }
 
 func (s *service) DeleteMe(ctx context.Context, userID, password string) error {
