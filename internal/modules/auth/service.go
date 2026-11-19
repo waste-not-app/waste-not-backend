@@ -11,7 +11,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
@@ -21,7 +20,7 @@ type Service interface {
 	Login(ctx context.Context, normalizedEmail, password string) (security.Tokens, error)
 	RefreshToken(ctx context.Context, refreshToken string) (security.Tokens, error)
 	Logout(ctx context.Context, sessionID, userID string) error
-	GetMe(ctx context.Context, u middleware.UserIdentity) (UserRes, error)
+	GetMe(ctx context.Context, u domain.User) (UserRes, error)
 	RequestPasswordReset(ctx context.Context, email string) error
 	ConfirmPasswordReset(ctx context.Context, token, password string) error
 	DeleteMe(ctx context.Context, userID, password string) error
@@ -93,7 +92,7 @@ func (s *service) Logout(ctx context.Context, sessionID, userID string) error {
 	return s.repo.RevokeSession(ctx, sessionID, userID)
 }
 
-func (s *service) GetMe(ctx context.Context, u middleware.UserIdentity) (UserRes, error) {
+func (s *service) GetMe(ctx context.Context, u domain.User) (UserRes, error) {
 	today := domain.Today(s.limiter.Now(), u.Timezone)
 	prog, err := s.repo.GetUserProgress(ctx, u.ID, today)
 	if err != nil {
