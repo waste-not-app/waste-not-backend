@@ -10,9 +10,9 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
@@ -180,7 +180,7 @@ func (h *Handler) ListLogs(c fiber.Ctx) error {
 // @Router /v1/waste-logs/{id} [patch]
 func (h *Handler) UpdateLog(c fiber.Ctx) error {
 	id := c.Params("id")
-	if !auth.UUID(id) {
+	if !security.UUID(id) {
 		return response.Fail(c, fiber.StatusNotFound, "NOT_FOUND", nil)
 	}
 	var patch map[string]json.RawMessage
@@ -232,7 +232,7 @@ func (h *Handler) UpdateLog(c fiber.Ctx) error {
 // @Router /v1/waste-logs/{id} [delete]
 func (h *Handler) DeleteLog(c fiber.Ctx) error {
 	id := c.Params("id")
-	if !auth.UUID(id) {
+	if !security.UUID(id) {
 		return response.Fail(c, fiber.StatusNotFound, "NOT_FOUND", nil)
 	}
 	header := c.Get("If-Match")

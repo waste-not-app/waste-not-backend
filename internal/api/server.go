@@ -17,17 +17,17 @@ import (
 
 	_ "github.com/waste-not-app/waste-not-backend/docs"
 	"github.com/waste-not-app/waste-not-backend/internal/ai"
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/achievements"
 	aiMod "github.com/waste-not-app/waste-not-backend/internal/modules/ai"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/analytics"
-	authMod "github.com/waste-not-app/waste-not-backend/internal/modules/auth"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/guides"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/logs"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/system"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
@@ -37,7 +37,7 @@ type Server struct {
 	App     *fiber.App
 	DB      *pgxpool.Pool
 	Config  config.Config
-	Signer  auth.Signer
+	Signer  security.Signer
 	AI      *ai.Client
 	Limiter *ratelimit.Limiter
 	Log     *slog.Logger
@@ -46,24 +46,24 @@ type Server struct {
 }
 
 func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
-	mailer, err := authMod.NewSMTPMailer(c)
+	mailer, err := auth.NewSMTPMailer(c)
 	if err != nil {
 		return nil, err
 	}
 	return newServer(db, c, log, mailer)
 }
 
-func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer authMod.ResetMailer) (*Server, error) {
+func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.ResetMailer) (*Server, error) {
 	aiClient, err := ai.New(c)
 	if err != nil {
 		return nil, err
 	}
-	dummyHash, err := auth.Hash(uuid.NewString())
+	dummyHash, err := security.Hash(uuid.NewString())
 	if err != nil {
 		return nil, err
 	}
 
-	signer := auth.Signer{
+	signer := security.Signer{
 		Secret:   c.Secret,
 		Issuer:   c.Issuer,
 		Audience: c.Audience,
@@ -102,8 +102,8 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer authM
 	sysRepo := system.NewRepository(db)
 	sysService := system.NewService(sysRepo, c, aiClient)
 
-	authRepo := authMod.NewRepository(db, photoStorage)
-	authService := authMod.NewService(authRepo, signer, limiter, dummyHash, mailer)
+	authRepo := auth.NewRepository(db, photoStorage)
+	authService := auth.NewService(authRepo, signer, limiter, dummyHash, mailer)
 
 	logsRepo := logs.NewRepository(db, photoStorage)
 	logsService := logs.NewService(logsRepo, c, limiter, cursorCodec)
@@ -128,7 +128,7 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer authM
 	}
 
 	system.RegisterHTTPRoutes(app, sysService, authMw)
-	authMod.RegisterHTTPRoutes(app, authService, limiter, log, authMw)
+	auth.RegisterHTTPRoutes(app, authService, limiter, log, authMw)
 	logs.RegisterHTTPRoutes(app, logsService, log, authMw)
 	analytics.RegisterHTTPRoutes(app, analyticsService, log, authMw)
 	guides.RegisterHTTPRoutes(app, guidesService, log, authMw)

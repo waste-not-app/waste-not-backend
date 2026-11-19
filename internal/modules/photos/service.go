@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
 type Service interface {
@@ -62,7 +62,7 @@ func (s *service) GetContent(ctx context.Context, userID, id string) ([]byte, st
 	if s.storage == nil {
 		return nil, "", ErrPhotosDisabled
 	}
-	if !auth.UUID(id) {
+	if !security.UUID(id) {
 		return nil, "", ErrPhotoNotFound
 	}
 	rec, err := s.repo.GetActive(ctx, id, userID)
@@ -80,7 +80,7 @@ func (s *service) Delete(ctx context.Context, userID, id string) error {
 	if s.storage == nil {
 		return ErrPhotosDisabled
 	}
-	if !auth.UUID(id) {
+	if !security.UUID(id) {
 		return ErrPhotoNotFound
 	}
 	objectKey, err := s.repo.DeleteIfUnused(ctx, id, userID)

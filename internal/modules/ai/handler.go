@@ -18,9 +18,9 @@ import (
 	"github.com/gofiber/fiber/v3"
 
 	coreai "github.com/waste-not-app/waste-not-backend/internal/ai"
-	"github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
@@ -187,7 +187,7 @@ func (h *Handler) CreateDetection(c fiber.Ctx) error {
 		}
 	}
 
-	if !auth.UUID(clientID) || len(imageBytes) == 0 {
+	if !security.UUID(clientID) || len(imageBytes) == 0 {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 	}
 	cfg, format, e := image.DecodeConfig(bytes.NewReader(imageBytes))
@@ -199,7 +199,7 @@ func (h *Handler) CreateDetection(c fiber.Ctx) error {
 	}
 
 	ident := middleware.Who(c)
-	o, isOwner, err := h.service.ClaimOrReplay(c.Context(), ident.User.ID, "DETECTION", clientID, auth.Digest(imageBytes), nil)
+	o, isOwner, err := h.service.ClaimOrReplay(c.Context(), ident.User.ID, "DETECTION", clientID, security.Digest(imageBytes), nil)
 	if err != nil {
 		return h.mapOperationError(c, err)
 	}
@@ -239,7 +239,7 @@ func (h *Handler) CreateRecommendation(c fiber.Ctx) error {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 	}
 	clientID, _ := in["client_request_id"].(string)
-	if !auth.UUID(clientID) {
+	if !security.UUID(clientID) {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 	}
 
@@ -248,7 +248,7 @@ func (h *Handler) CreateRecommendation(c fiber.Ctx) error {
 	var selection any
 	if in["input_source"] == "DETECTION" {
 		id, _ := in["detection_id"].(string)
-		if !auth.UUID(id) {
+		if !security.UUID(id) {
 			return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", nil)
 		}
 		var prepErr error
@@ -259,7 +259,7 @@ func (h *Handler) CreateRecommendation(c fiber.Ctx) error {
 	}
 
 	raw, _ := json.Marshal(in)
-	o, isOwner, err := h.service.ClaimOrReplay(c.Context(), ident.User.ID, "RECOMMENDATION", clientID, auth.Digest(raw), parent)
+	o, isOwner, err := h.service.ClaimOrReplay(c.Context(), ident.User.ID, "RECOMMENDATION", clientID, security.Digest(raw), parent)
 	if err != nil {
 		return h.mapOperationError(c, err)
 	}

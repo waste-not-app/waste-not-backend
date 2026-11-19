@@ -21,10 +21,10 @@ import (
 
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/database"
-	authMod "github.com/waste-not-app/waste-not-backend/internal/modules/auth"
+	"github.com/waste-not-app/waste-not-backend/internal/modules/auth"
 )
 
-func setup(t *testing.T, change func(*config.Config), mailers ...authMod.ResetMailer) (*Server, *httptest.Server) {
+func setup(t *testing.T, change func(*config.Config), mailers ...auth.ResetMailer) (*Server, *httptest.Server) {
 	t.Helper()
 	dsn := os.Getenv("TEST_DATABASE_URL")
 	if dsn == "" {

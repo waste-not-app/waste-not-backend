@@ -7,9 +7,9 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 
-	coreauth "github.com/waste-not-app/waste-not-backend/internal/auth"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/security"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
@@ -139,7 +139,7 @@ func (h *Handler) RefreshToken(c fiber.Ctx) error {
 	if !response.DecodeJSON(c, &req) {
 		return nil
 	}
-	if !h.checkAuthRateLimit(c, "refresh:"+coreauth.Digest([]byte(req.RefreshToken))) {
+	if !h.checkAuthRateLimit(c, "refresh:"+security.Digest([]byte(req.RefreshToken))) {
 		return nil
 	}
 	tokens, err := h.service.RefreshToken(c.Context(), req.RefreshToken)
