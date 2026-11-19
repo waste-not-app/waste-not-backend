@@ -109,12 +109,18 @@ cmd/
   migrate/    runner migrasi
   guides/     import panduan yang sudah ditinjau
 internal/
-  api/        wiring server dan integration test
+  server/     komposisi dependency, routing, worker latar, dan test end-to-end
   modules/    fitur: auth, logs, analytics, achievements, photos, guides, ai, system
-              tiap modul: dto, errors, repository, service, handler
-  shared/     db (sqlc), cursor, ratelimit, response
-  ai/         klien worker AI dan validasi kontrak
-  database/   koneksi, migrasi tertanam, cleanup
+              tiap modul: handler (HTTP) -> service (aturan) -> repository (SQL dan transaksi)
+  domain/     tipe dan aturan bisnis bersama tanpa dependency HTTP atau database
+  database/   koneksi, migrasi tertanam, import panduan; db/ berisi hasil sqlc
+  aiclient/   klien worker AI dan validasi kontrak
+  security/   JWT, hashing password Argon2id, digest
+  middleware/ autentikasi dan request ID
+  ratelimit/  kuota berbasis Postgres dan slot konkurensi
+  cursor/     cursor paginasi bertanda tangan
+  response/   envelope JSON dan pemetaan error
+  config/     konfigurasi dari environment
 contracts/    kontrak OpenAPI core, AI, dan fixture Android
 sql/          migrasi dan query sumber sqlc
 deploy/       skrip blue-green, nginx, systemd, hardening DB
@@ -127,7 +133,7 @@ guides/       konten panduan yang sudah ditinjau
 - Migrasi tidak dijalankan otomatis saat API start. Jalankan `cmd/migrate` sebagai langkah deploy terpisah (Compose melakukannya lewat service `migrate`).
 - `/health/ready` baru melaporkan siap setelah migrasi terbaru yang tertanam di binary sudah diterapkan.
 - Skema ada di dua tempat: `internal/database/*.sql` (dibaca runner, checksum tercatat di database produksi, jangan diubah) dan `sql/migrations/*.up.sql` (sumber sqlc). Setiap perubahan skema ditambahkan sebagai file baru di keduanya. `TestSchemaCopiesStayInSync` memastikan hasilnya identik.
-- Query SQL ditulis di `sql/queries/*.sql` lalu di-generate ke `internal/shared/db` dengan `make sqlc`. Jangan edit hasil generate secara manual.
+- Query SQL ditulis di `sql/queries/*.sql` lalu di-generate ke `internal/database/db` dengan `make sqlc`. Jangan edit hasil generate secara manual.
 
 ## Deployment
 
