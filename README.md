@@ -8,7 +8,9 @@
 ![OpenAPI](https://img.shields.io/badge/API-OpenAPI%203-6BA539?logo=openapiinitiative&logoColor=white)
 ![Docker](https://img.shields.io/badge/image-distroless%20nonroot-2496ED?logo=docker&logoColor=white)
 
-WasteNot Backend serves the [WasteNot Android](https://github.com/waste-not-app/waste-not-android) app. It owns user accounts and sessions, waste logs, dashboards and statistics, progress and achievements, private photo attachments, and the curated waste guide. It is also the only public gateway to the [WasteNot AI](https://github.com/waste-not-app/waste-not-ai) workers: it authenticates the caller, enforces ownership and quotas, and validates every worker response against a pinned contract before it reaches the app.
+This service powers the [WasteNot Android](https://github.com/waste-not-app/waste-not-android) app. It handles accounts and sessions, waste logs, the dashboard and statistics, achievements, private photo attachments, and the curated waste guide.
+
+It's also the only public way into the [WasteNot AI](https://github.com/waste-not-app/waste-not-ai) workers. Before anything from AI reaches the app, the API checks who is asking, enforces ownership and quotas, and validates the worker's response against a pinned contract.
 
 ## Contents
 
@@ -25,27 +27,28 @@ WasteNot Backend serves the [WasteNot Android](https://github.com/waste-not-app/
 
 ## Features
 
-- **Accounts and sessions.**
-  - Argon2id password hashing.
-  - 15-minute HS256 access tokens.
-  - Rotating refresh tokens with reuse detection. Replaying an old refresh token revokes the session.
-  - Every request checks the session in the database, so logout takes effect immediately.
-- **Password recovery.** One-time codes are delivered over SMTP through a durable, encrypted outbox with retries.
-- **Waste logs.**
-  - Create, edit, and soft-delete logs.
-  - Creates are idempotent through `client_request_id`.
-  - Edits and deletes use optimistic concurrency through `version` and `If-Match`.
-  - Lists use signed cursor pagination.
-- **Dashboard and statistics.** Daily, category, and method totals in the user's time zone, plus the recycling rate, XP, level, and streaks.
-- **Achievements.** Derived from the user's active logs.
-- **Private photos.** Upload, attach, and download photos as their owner. A durable cleanup queue makes deletes survive crashes.
-- **Waste guide.** Curated, source-reviewed articles with search and category filters.
-- **AI gateway.**
-  - Object detection and handling recommendations from the AI workers.
-  - Per-user quotas and request deduplication.
-  - Expiring sessions.
-  - Strict schema validation of every worker response.
-- **Account deletion.** Removes every row the user owns and drains the user's photo cleanup jobs before the deletion is confirmed.
+### Accounts
+
+Passwords are hashed with Argon2id. Access tokens are HS256 JWTs that last 15 minutes. Refresh tokens rotate on every use, and replaying an old one revokes the whole session. The API checks the session in the database on every request, so signing out takes effect right away.
+
+Forgotten passwords are handled with a one-time code sent by email. Codes go through an encrypted outbox that retries delivery. Deleting an account removes everything the user owns and waits for their photo cleanup to finish before confirming.
+
+### Waste logs and progress
+
+- Create, edit, and soft-delete logs. Creates are idempotent through `client_request_id`, and edits and deletes use optimistic concurrency through `version` and `If-Match`.
+- Lists use signed cursors, so pagination can't be tampered with.
+- The dashboard and statistics show daily, category, and method totals in the user's time zone, along with the recycling rate, XP, level, and streaks.
+- Achievements are derived from the user's active logs.
+
+### Photos and guides
+
+Users can upload private photos, attach them to logs, and download them. Only the owner can read a photo. A durable cleanup queue makes sure deleted files really go away, even after a crash.
+
+The waste guide serves curated, source-reviewed articles with search and category filters.
+
+### AI gateway
+
+The API forwards object detection and handling recommendations to the AI workers. It adds per-user quotas, request deduplication, and expiring sessions, and it rejects any worker response that doesn't match the schema.
 
 ## Architecture
 
@@ -55,18 +58,17 @@ Android app ──HTTPS──▶ WasteNot API (this repo) ──▶ PostgreSQL 1
                               └──private HTTP──▶ AI workers (detection, recommendation)
 ```
 
-- **Stateless API.** Rate limits, idempotency keys, and job queues live in PostgreSQL. Several instances can therefore share one database without resetting quotas.
-- **AI boundary.** The AI workers are never exposed to clients. The API calls them over loopback or a private network with dedicated service tokens.
-- **Request flow.** Each feature module follows `handler → service → repository`:
-  - Handlers translate HTTP.
-  - Services own the business rules.
-  - Repositories own SQL and transactions.
+The API keeps no state of its own. Rate limits, idempotency keys, and job queues live in PostgreSQL, so several instances can share one database without resetting anyone's quota.
+
+Clients never talk to the AI workers directly. The API reaches them over loopback or a private network, using a separate service token for each worker.
+
+Every feature module follows `handler → service → repository`. Handlers deal with HTTP, services hold the business rules, and repositories own the SQL and transactions.
 
 ## Getting started
 
 ### With Docker (recommended)
 
-Requirements: Docker with Compose v2, `make`, and `openssl`.
+You'll need Docker with Compose v2, `make`, and `openssl`.
 
 ```sh
 make env    # create .env with random local secrets
@@ -76,7 +78,7 @@ make logs
 make down
 ```
 
-The development stack (`compose.dev.yaml`) provides:
+The development stack in `compose.dev.yaml` gives you:
 
 | Service | Address or location |
 |---|---|
@@ -85,11 +87,11 @@ The development stack (`compose.dev.yaml`) provides:
 | Photo attachments | A Docker volume |
 | Swagger UI | <http://127.0.0.1:8080/swagger/index.html> |
 
-AI features are disabled by default. To enable them, start the workers from the AI repository on the host, then set `AI_ENABLED=true` and the worker tokens in `.env`.
+AI features are off by default. To turn them on, start the workers from the AI repository on your machine, then set `AI_ENABLED=true` and the worker tokens in `.env`.
 
 ### From source
 
-Requirements: Go 1.27.4 and PostgreSQL 18.
+You'll need Go 1.27.4 and PostgreSQL 18.
 
 ```sh
 make env       # then point DATABASE_URL at your local PostgreSQL
@@ -98,11 +100,11 @@ make guides
 make run
 ```
 
-The binaries do not read `.env` themselves; the Make targets load it. `make build` produces `bin/api`, `bin/migrate`, and `bin/guides`.
+The binaries don't read `.env` on their own; the Make targets load it for them. `make build` produces `bin/api`, `bin/migrate`, and `bin/guides`.
 
 ## Configuration
 
-All configuration comes from environment variables. [`.env.example`](.env.example) lists every variable.
+Everything is configured through environment variables, and [`.env.example`](.env.example) lists all of them.
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
@@ -110,31 +112,30 @@ All configuration comes from environment variables. [`.env.example`](.env.exampl
 | `JWT_SECRET_BASE64` | Yes | | At least 32 random bytes, base64-encoded (`openssl rand -base64 32`) |
 | `HTTP_ADDR` | | `127.0.0.1:8080` | Listen address |
 | `WASTENOT_RELEASE` | | | Release identifier returned in `X-WasteNot-Release` by `/health/ready` |
-| `AI_ENABLED` | | `false` | Enables AI detection |
-| `AI_RECOMMENDATION_ENABLED` | | Value of `AI_ENABLED` | Enables AI recommendations |
+| `AI_ENABLED` | | `false` | Turns on AI detection |
+| `AI_RECOMMENDATION_ENABLED` | | Value of `AI_ENABLED` | Turns on AI recommendations |
 | `AI_ALLOW_PROTOTYPE` | | `false` | Accepts fixture or draft worker output. For testing only |
-| `AI_DETECTION_URL`, `AI_RECOMMENDATION_URL` | When AI is enabled | | Private worker origins |
-| `AI_SERVICE_TOKEN`, `AI_RECOMMENDATION_TOKEN` | When AI is enabled | | Distinct tokens of at least 24 characters |
-| `PHOTO_STORAGE_DIR` | | | Private directory for photo attachments. Leave empty to disable photos |
+| `AI_DETECTION_URL`, `AI_RECOMMENDATION_URL` | When AI is on | | Private worker origins |
+| `AI_SERVICE_TOKEN`, `AI_RECOMMENDATION_TOKEN` | When AI is on | | Two different tokens of at least 24 characters |
+| `PHOTO_STORAGE_DIR` | | | Private directory for photo attachments. Leave it empty to turn photos off |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM` | For password recovery | Port `587` | SMTP with verified STARTTLS, or implicit TLS on port 465 |
-| `SWAGGER_ENABLED` | | `false` | Serves Swagger UI. Never enable it on a public server |
+| `SWAGGER_ENABLED` | | `false` | Serves Swagger UI. Never turn it on for a public server |
 
 ## API overview
 
-The machine-readable contract is [`contracts/core.openapi.json`](contracts/core.openapi.json). The public AI endpoints are described in [`contracts/ai/public.openapi.json`](contracts/ai/public.openapi.json).
+The full contract is in [`contracts/core.openapi.json`](contracts/core.openapi.json), and the public AI endpoints are in [`contracts/ai/public.openapi.json`](contracts/ai/public.openapi.json).
 
 ### Conventions
 
-- **Base path and format.** The base path is `/v1`.
-  - Bodies are UTF-8 JSON with `snake_case` fields.
-  - IDs are UUIDs, and timestamps are RFC 3339 in UTC.
-- **Authentication.** Every endpoint requires `Authorization: Bearer <access_token>`, except registration, login, refresh, password reset, and `/health/*`.
-- **Request IDs.** Every response carries an `X-Request-ID`. A valid UUID sent by the client is reused.
-- **Envelopes.**
-  - Successful responses use `{"data": ...}`.
-  - Lists add `"page": {"next_cursor": ..., "has_more": ...}`.
-  - Errors use `{"error": {"code", "message", "fields", "retryable"}, "request_id", "api_version"}`.
-- **Retries.** Respect `Retry-After` on `429` and `503`. When retrying a create, keep the same `client_request_id` and payload.
+All paths start with `/v1`. Bodies are UTF-8 JSON with `snake_case` fields, IDs are UUIDs, and timestamps are RFC 3339 in UTC.
+
+Every endpoint needs `Authorization: Bearer <access_token>`, except registration, login, refresh, password reset, and `/health/*`.
+
+Each response carries an `X-Request-ID`. If the client sends a valid UUID in that header, the API reuses it.
+
+Successful responses look like `{"data": ...}`, and lists add `"page": {"next_cursor": ..., "has_more": ...}`. Errors look like `{"error": {"code", "message", "fields", "retryable"}, "request_id", "api_version"}`.
+
+When you get a `429` or `503`, wait for the time in `Retry-After`. If you retry a create, send the same `client_request_id` and payload.
 
 ### Endpoints
 
@@ -143,11 +144,11 @@ The machine-readable contract is [`contracts/core.openapi.json`](contracts/core.
 | `POST` | `/v1/auth/register` | Create an account and a session |
 | `POST` | `/v1/auth/login` | Start a session |
 | `POST` | `/v1/auth/refresh` | Rotate the refresh token |
-| `POST` | `/v1/auth/logout` | Revoke the current session |
+| `POST` | `/v1/auth/logout` | End the current session |
 | `POST` | `/v1/auth/password-reset` | Request a recovery code |
-| `POST` | `/v1/auth/password-reset/confirm` | Set a new password and revoke all sessions |
+| `POST` | `/v1/auth/password-reset/confirm` | Set a new password and end all sessions |
 | `GET` | `/v1/me` | Profile and progress |
-| `DELETE` | `/v1/me` | Delete the account and all owned data |
+| `DELETE` | `/v1/me` | Delete the account and everything it owns |
 | `GET` | `/v1/metadata` | Enums, form limits, and capabilities |
 | `GET`, `POST` | `/v1/waste-logs` | List or create waste logs |
 | `GET`, `PATCH`, `DELETE` | `/v1/waste-logs/{id}` | Read, edit, or delete a waste log |
@@ -155,15 +156,15 @@ The machine-readable contract is [`contracts/core.openapi.json`](contracts/core.
 | `GET` | `/v1/statistics` | Totals by day, category, and method for a date range |
 | `GET` | `/v1/waste-guide` | Search published guides |
 | `GET` | `/v1/waste-guide/{id}` | Read a published guide |
-| `GET` | `/v1/achievements` | Achievements and their progress |
+| `GET` | `/v1/achievements` | Achievements and progress toward them |
 | `POST` | `/v1/photos` | Upload a private photo |
-| `GET`, `DELETE` | `/v1/photos/{id}` | Download or delete an owned photo |
+| `GET`, `DELETE` | `/v1/photos/{id}` | Download or delete one of your photos |
 | `GET` | `/v1/ai/objects` | AI object catalog and model capabilities |
 | `POST` | `/v1/ai/detections` | Detect objects in an image |
-| `POST` | `/v1/ai/recommendations` | Get handling recommendations for a confirmed object |
+| `POST` | `/v1/ai/recommendations` | Get handling advice for a confirmed object |
 | `DELETE` | `/v1/ai/detections/{id}` | Cancel an AI session |
 | `GET` | `/health/live` | Liveness probe |
-| `GET` | `/health/ready` | Readiness probe: database reachable and the latest migration applied |
+| `GET` | `/health/ready` | Readiness probe: the database is reachable and the latest migration is applied |
 
 ### Error codes
 
@@ -185,7 +186,7 @@ The machine-readable contract is [`contracts/core.openapi.json`](contracts/core.
 
 ## Development
 
-Run `make help` for every target. The ones you will use most:
+`make help` lists every target. These are the ones you'll reach for most:
 
 | Target | Purpose |
 |---|---|
@@ -195,21 +196,17 @@ Run `make help` for every target. The ones you will use most:
 | `make lint` | Run golangci-lint, including gosec, errorlint, and staticcheck |
 | `make vuln` | Scan dependencies and the call graph with govulncheck |
 | `make test` | Run unit tests. Integration tests are skipped without a database |
-| `make test-integration` | Run every test against a disposable PostgreSQL container |
+| `make test-integration` | Run every test against a throwaway PostgreSQL container |
 | `make check` | Local gate: format, vet, lint, and test |
 | `make ci` | CI gate: format, vet, lint, vulnerability scan, race tests, and build |
 | `make sqlc` / `make swag` | Regenerate queries and Swagger docs |
 | `make docker-build` | Build the production image |
 
-Tool versions are pinned in the Makefile and run through `go run`, so no global installation is needed.
+Tool versions are pinned in the Makefile and run through `go run`, so there's nothing to install globally.
 
-Continuous integration:
+CI (`.github/workflows/ci.yml`) runs on every pull request. It verifies modules, checks the AI contract pin, tests the deployment scripts, runs `make ci` against PostgreSQL 18, and builds the image. CD (`.github/workflows/cd.yml`) only deploys to staging after CI passes on `main`. Dependabot keeps Go modules, GitHub Actions, and base images up to date each week.
 
-- **CI** (`.github/workflows/ci.yml`) runs on every pull request. It verifies modules, checks the AI contract pin, tests the deployment scripts, and runs `make ci` against PostgreSQL 18. It then builds the image.
-- **CD** (`.github/workflows/cd.yml`) deploys to staging only after CI succeeds on `main`.
-- **Dependabot** updates Go modules, GitHub Actions, and base images weekly.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch, commit, and review workflow.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how branches, commits, and reviews work.
 
 ## Project structure
 
@@ -241,16 +238,19 @@ waste-not-backend/
 
 ## Database and migrations
 
-- **Migrations run separately.** The API never migrates the database on startup. Run `cmd/migrate` as its own deployment step; Compose does this through the `migrate` service.
-- **Migration safety.** Migrations are embedded in the binary and applied in name order under an advisory lock. Their checksums are recorded, so a migration that has already been applied must never be edited. Evolve the schema with new files only.
-- **Two copies of the schema.** It lives in `internal/database/*.sql`, which the runner reads, and in `sql/migrations/*.up.sql`, which sqlc reads. Add every schema change to both places. `TestSchemaCopiesStayInSync` verifies that they match.
-- **Queries.** Write queries in `sql/queries/*.sql` and regenerate `internal/database/db` with `make sqlc`. Never edit generated code by hand.
+The API never migrates the database when it starts. Run `cmd/migrate` as its own deployment step; Compose does this for you through the `migrate` service.
+
+Migrations are embedded in the binary and applied in name order under an advisory lock. Their checksums are recorded, so once a migration has run, you must never edit it. Change the schema by adding new files instead. That's also why the oldest migrations still contain the original Indonesian seed text; a later migration updates those rows to English.
+
+The schema lives in two places: `internal/database/*.sql` for the runner and `sql/migrations/*.up.sql` for sqlc. Add every change to both, and `TestSchemaCopiesStayInSync` will tell you if they drift apart.
+
+Write queries in `sql/queries/*.sql` and regenerate `internal/database/db` with `make sqlc`. Don't edit the generated code by hand.
 
 ## Deployment
 
-Staging runs on a self-hosted GitHub Actions runner with Docker Compose. The public endpoint is <https://waste-not-api.bccdev.id/v1/>.
+Staging runs on a self-hosted GitHub Actions runner with Docker Compose. Its public endpoint is <https://waste-not-api.bccdev.id/v1/>.
 
-After CI passes on `main`, the CD workflow:
+Once CI passes on `main`, the CD workflow:
 
 1. Builds the image.
 2. Loads runtime configuration from private files on the host.
@@ -258,24 +258,20 @@ After CI passes on `main`, the CD workflow:
 4. Imports the reviewed guides.
 5. Waits for `/health/ready`.
 
-The API container runs as a nonroot user with:
+The API container runs as a nonroot user with a read-only filesystem, all capabilities dropped, and `no-new-privileges`.
 
-- a read-only filesystem;
-- all capabilities dropped;
-- `no-new-privileges`.
-
-Before the first deployment, provision the photo directory on the host:
+Before the first deployment, create the photo directory on the host:
 
 ```sh
 sudo install -d -o 65532 -g 65532 -m 0700 /var/lib/wastenot-photos
 ```
 
-Operational notes:
+A few things to keep in mind when running it:
 
-- **Secrets.** Never commit `.env` files, tokens, or database dumps. Rotating `JWT_SECRET_BASE64` signs every user out.
-- **Network exposure.** Terminate TLS at the ingress, and keep PostgreSQL and the AI workers off the public network.
-- **Rate limiting behind a proxy.** The reverse proxy must forward `X-Real-IP` (see [`deploy/nginx-location.conf`](deploy/nginx-location.conf)) so authentication rate limits apply per client.
-- **Capacity.** Each instance opens at most 10 database connections. Plan the PostgreSQL connection limit for every instance, plus migrations.
+- Never commit `.env` files, tokens, or database dumps. Rotating `JWT_SECRET_BASE64` signs everyone out.
+- Terminate TLS at the ingress, and keep PostgreSQL and the AI workers off the public network.
+- The reverse proxy has to forward `X-Real-IP` (see [`deploy/nginx-location.conf`](deploy/nginx-location.conf)), otherwise login rate limits apply to the proxy instead of each client.
+- Each instance opens up to 10 database connections. Size PostgreSQL's connection limit for every instance, plus migrations.
 
 ## Related repositories
 
