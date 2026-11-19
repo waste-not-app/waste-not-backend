@@ -1,8 +1,6 @@
 package logs
 
 import (
-	"time"
-
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 )
 
@@ -23,6 +21,15 @@ type UpdateLogReq struct {
 	PhotoID      *string `json:"photo_id,omitempty"`
 }
 
+type ListLogsParams struct {
+	Category string
+	Method   string
+	From     string
+	To       string
+	Limit    string
+	Cursor   string
+}
+
 type ListLogsQuery struct {
 	Category string
 	Method   string
@@ -37,20 +44,4 @@ type ListLogsRes struct {
 	Items      []domain.Log
 	HasMore    bool
 	NextCursor any
-}
-
-func ValidateFilters(category, method, from, to, today string) bool {
-	valid := category == "" || domain.Contains(domain.Categories, category)
-	valid = valid && (method == "" || domain.Contains(domain.Methods, method))
-	todayTime, _ := time.Parse(time.DateOnly, today)
-	for _, v := range []string{from, to} {
-		if v != "" {
-			d, e := time.Parse(time.DateOnly, v)
-			valid = valid && e == nil && !d.After(todayTime)
-		}
-	}
-	if from != "" && to != "" {
-		valid = valid && from <= to
-	}
-	return valid
 }

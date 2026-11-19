@@ -11,7 +11,6 @@ import (
 type Service interface {
 	GetGuide(ctx context.Context, id string) (database.Guide, error)
 	ListGuides(ctx context.Context, scope string, q ListGuidesQuery) (ListGuidesRes, error)
-	DecodeCursor(raw, scope string) (cursor.Token, error)
 }
 
 type service struct {
@@ -26,10 +25,6 @@ func NewService(repo Repository, codec *cursor.Codec) Service {
 	}
 }
 
-func (s *service) DecodeCursor(raw, scope string) (cursor.Token, error) {
-	return s.codec.Decode(raw, scope)
-}
-
 func (s *service) GetGuide(ctx context.Context, id string) (database.Guide, error) {
 	if !domain.ValidUUID(id) {
 		return database.Guide{}, ErrGuideNotFound
@@ -38,6 +33,13 @@ func (s *service) GetGuide(ctx context.Context, id string) (database.Guide, erro
 }
 
 func (s *service) ListGuides(ctx context.Context, scope string, q ListGuidesQuery) (ListGuidesRes, error) {
+	if q.Cursor != "" {
+		tok, err := s.codec.Decode(q.Cursor, scope)
+		if err != nil {
+			return ListGuidesRes{}, ErrInvalidCursor
+		}
+		q.NamePos, q.IDPos = tok.Position, tok.ID
+	}
 	list, err := s.repo.ListPublished(ctx, q)
 	if err != nil {
 		return ListGuidesRes{}, err

@@ -13,13 +13,11 @@ import (
 )
 
 type Service interface {
-	Now() time.Time
 	CreateLog(ctx context.Context, u domain.User, in domain.LogInput) (LogWithProgressRes, bool, error)
 	GetLog(ctx context.Context, userID, id string) (domain.Log, error)
-	ListLogs(ctx context.Context, userID, scope string, q ListLogsQuery) (ListLogsRes, error)
+	ListLogs(ctx context.Context, u domain.User, scope string, p ListLogsParams) (ListLogsRes, error)
 	UpdateLog(ctx context.Context, u domain.User, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error)
 	DeleteLog(ctx context.Context, u domain.User, id string, version int) error
-	DecodeCursor(raw, scope string) (cursor.Token, error)
 }
 
 type service struct {
@@ -36,14 +34,6 @@ func NewService(repo Repository, cfg config.Config, now func() time.Time, codec 
 		now:   now,
 		codec: codec,
 	}
-}
-
-func (s *service) Now() time.Time {
-	return s.now()
-}
-
-func (s *service) DecodeCursor(raw, scope string) (cursor.Token, error) {
-	return s.codec.Decode(raw, scope)
 }
 
 func (s *service) CreateLog(ctx context.Context, u domain.User, in domain.LogInput) (LogWithProgressRes, bool, error) {
@@ -73,8 +63,38 @@ func (s *service) GetLog(ctx context.Context, userID, id string) (domain.Log, er
 	return s.repo.GetByID(ctx, userID, id)
 }
 
-func (s *service) ListLogs(ctx context.Context, userID, scope string, q ListLogsQuery) (ListLogsRes, error) {
-	items, err := s.repo.List(ctx, userID, q)
+func (s *service) ListLogs(ctx context.Context, u domain.User, scope string, p ListLogsParams) (ListLogsRes, error) {
+	today := domain.Today(s.now(), u.Timezone)
+	if !validFilters(p.Category, p.Method, p.From, p.To, today) {
+		return ListLogsRes{}, &ValidationError{
+			Fields: map[string]string{"filters": "Periksa kategori, metode, dan rentang tanggal."},
+		}
+	}
+	limit, ok := cursor.ParseLimit(p.Limit)
+	if !ok {
+		return ListLogsRes{}, &ValidationError{
+			Fields: map[string]string{"limit": "Gunakan 1–100."},
+		}
+	}
+	q := ListLogsQuery{
+		Category: p.Category,
+		Method:   p.Method,
+		From:     p.From,
+		To:       p.To,
+		Limit:    limit,
+	}
+	if p.Cursor != "" {
+		tok, err := s.codec.Decode(p.Cursor, scope)
+		if err != nil {
+			return ListLogsRes{}, ErrInvalidCursor
+		}
+		if _, err = time.Parse(time.DateOnly, tok.Position); err != nil {
+			return ListLogsRes{}, ErrInvalidCursor
+		}
+		q.DatePos, q.IDPos = tok.Position, tok.ID
+	}
+
+	items, err := s.repo.List(ctx, u.ID, q)
 	if err != nil {
 		return ListLogsRes{}, err
 	}
@@ -109,4 +129,20 @@ func (s *service) UpdateLog(ctx context.Context, u domain.User, id string, versi
 func (s *service) DeleteLog(ctx context.Context, u domain.User, id string, version int) error {
 	today := domain.Today(s.now(), u.Timezone)
 	return s.repo.Delete(ctx, u.ID, today, id, version)
+}
+
+func validFilters(category, method, from, to, today string) bool {
+	valid := category == "" || domain.Contains(domain.Categories, category)
+	valid = valid && (method == "" || domain.Contains(domain.Methods, method))
+	todayTime, _ := time.Parse(time.DateOnly, today)
+	for _, v := range []string{from, to} {
+		if v != "" {
+			d, e := time.Parse(time.DateOnly, v)
+			valid = valid && e == nil && !d.After(todayTime)
+		}
+	}
+	if from != "" && to != "" {
+		valid = valid && from <= to
+	}
+	return valid
 }
