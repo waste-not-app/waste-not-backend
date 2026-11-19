@@ -1,21 +1,21 @@
 [
   {
     "id": "10000000-0000-4000-8000-000000000001",
-    "slug": "botol-plastik-pet",
-    "name": "Botol Minum Plastik (PET / Kode 1)",
+    "slug": "pet-plastic-bottles",
+    "name": "Plastic Drink Bottles (PET, Code 1)",
     "category": "PLASTIC",
-    "keywords": ["botol plastik", "pet", "air mineral", "kemasan minuman", "kode 1"],
+    "keywords": ["plastic bottle", "pet", "water bottle", "drink packaging", "code 1"],
     "recommended_method": "RECYCLE",
-    "summary": "Botol PET (kode resin 1) dapat disalurkan untuk daur ulang bila fasilitas setempat menerima jenis kemasannya. Kode plastik sendiri bukan jaminan diterima.",
+    "summary": "PET bottles (resin code 1) can go to recycling if your local facility accepts this kind of packaging. The plastic code on its own doesn't guarantee they'll take it.",
     "steps": [
-      "Kosongkan seluruh sisa cairan agar tidak mengontaminasi kertas atau plastik lain.",
-      "Bilas singkat dengan air secukupnya bila sebelumnya berisi minuman manis atau susu, lalu tiriskan.",
-      "Biarkan tutup terpasang atau pisahkan sesuai ketentuan bank sampah/pengelola setempat.",
-      "Pipihkan botol bila diperlukan untuk menghemat ruang sebelum disetor ke bank sampah atau tempat pilah daur ulang."
+      "Empty out every last drop so it doesn't contaminate paper or other plastics.",
+      "If it held a sweet drink or milk, give it a quick rinse with a little water and let it drain.",
+      "Leave the cap on or take it off, whichever your waste bank or local collector asks for.",
+      "Flatten the bottle if you need to save space before taking it to a waste bank or recycling drop-off."
     ],
     "cautions": [
-      "Jangan menggunakan ulang botol PET sekali pakai secara terus-menerus untuk pangan atau minuman bersuhu panas.",
-      "Penerimaan tutup dan label bergantung pada aturan pengelola daur ulang setempat."
+      "Don't keep refilling single-use PET bottles for food or hot drinks.",
+      "Whether caps and labels are accepted depends on your local recycler's rules."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -24,19 +24,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000002",
-    "slug": "wadah-plastik-hdpe",
-    "name": "Botol & Jeriken HDPE (Kode 2)",
+    "slug": "hdpe-containers",
+    "name": "HDPE Bottles and Jerry Cans (Code 2)",
     "category": "PLASTIC",
-    "keywords": ["hdpe", "botol susu", "jeriken", "kode 2", "kemasan plastik tebal"],
+    "keywords": ["hdpe", "milk bottle", "jerry can", "code 2", "thick plastic packaging"],
     "recommended_method": "RECYCLE",
-    "summary": "Plastik HDPE (kode resin 2) bersifat kuat dan banyak digunakan untuk botol susu atau kemasan rumah tangga, serta dapat disetor ke fasilitas daur ulang jika bersih dan bebas kontaminasi B3.",
+    "summary": "HDPE (resin code 2) is a sturdy plastic used for milk bottles and household packaging. It can go to a recycling facility when it's clean and free of hazardous residue.",
     "steps": [
-      "Pastikan isi sebelumnya bukan bahan kimia berbahaya atau pestisida sebelum menyetor ke daur ulang biasa.",
-      "Kosongkan dan bilas sisa produk biasa (seperti sisa minuman atau sabun cair) hingga bersih.",
-      "Serahkan ke bank sampah atau pusat daur ulang plastik yang menerima kode resin 2 (HDPE)."
+      "Before you recycle it with regular plastics, make sure it didn't hold hazardous chemicals or pesticides.",
+      "Empty it and rinse out ordinary residue, such as a drink or liquid soap, until it's clean.",
+      "Take it to a waste bank or plastic recycling center that accepts resin code 2 (HDPE)."
     ],
     "cautions": [
-      "Kemasan bekas bahan kimia berbahaya, oli, atau pelarut tidak boleh masuk aliran daur ulang rumah tangga biasa."
+      "Containers that held hazardous chemicals, oil, or solvents must never go into household recycling."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -45,20 +45,20 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000003",
-    "slug": "wadah-makanan-pp-guna-ulang",
-    "name": "Wadah Makanan PP Guna Ulang (Kode 5)",
+    "slug": "reusable-pp-food-containers",
+    "name": "Reusable PP Food Containers (Code 5)",
     "category": "PLASTIC",
-    "keywords": ["kotak makan", "wadah pp", "kode 5", "polypropylene", "reuse"],
+    "keywords": ["lunch box", "pp container", "code 5", "polypropylene", "reuse"],
     "recommended_method": "REUSE",
-    "summary": "Wadah PP (kode 5) hanya digunakan kembali untuk pangan bila produsen memang merancangnya untuk penggunaan berulang dan kontak pangan. Kode 5 saja bukan bukti aman pangan atau aman dipanaskan.",
+    "summary": "Only reuse a PP (code 5) container for food if the manufacturer designed it for repeated use and food contact. Code 5 alone doesn't prove it's food-safe or safe to heat.",
     "steps": [
-      "Periksa petunjuk produsen untuk penggunaan berulang dan kontak pangan; jangan gunakan wadah yang rusak atau berubah warna.",
-      "Cuci bersih dengan sabun dan air mengalir setelah dipakai, lalu keringkan sebelum disimpan.",
-      "Gunakan kembali untuk menyimpan bahan makanan kering atau bekal sesuai batas suhu pada label."
+      "Check the manufacturer's instructions for repeated use and food contact. Don't use containers that are damaged or discolored.",
+      "Wash it with soap under running water after each use, then dry it before putting it away.",
+      "Reuse it for dry food or packed meals within the temperature limits on the label."
     ],
     "cautions": [
-      "Hentikan penggunaan ulang jika wadah sudah tergores dalam, retak, atau berbau menyengat.",
-      "Jangan memanaskan makanan di dalam wadah yang tidak memiliki keterangan aman untuk pemanasan."
+      "Stop reusing it once it's deeply scratched, cracked, or smells strongly.",
+      "Don't heat food in a container unless it says it's safe to heat."
     ],
     "source_url": "https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik",
     "reviewed_at": "2026-11-16",
@@ -67,20 +67,20 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000004",
-    "slug": "kantong-dan-bungkus-plastik",
-    "name": "Kantong Belanja & Pembungkus Plastik Tipis",
+    "slug": "plastic-bags-and-wrap",
+    "name": "Plastic Shopping Bags and Thin Wrap",
     "category": "PLASTIC",
-    "keywords": ["kantong kresek", "plastik tipis", "film plastik", "bungkus", "reduce"],
+    "keywords": ["plastic bag", "thin plastic", "plastic film", "wrap", "reduce"],
     "recommended_method": "REDUCE",
-    "summary": "Kurangi kantong dan pembungkus plastik dengan membawa tas atau wadah sendiri. Daur ulang film plastik memerlukan penerima khusus, bukan otomatis masuk aliran daur ulang campur.",
+    "summary": "Cut down on plastic bags and wrap by bringing your own bag or container. Plastic film needs a dedicated collector and doesn't belong in mixed recycling by default.",
     "steps": [
-      "Bawa tas belanja kain atau wadah sendiri saat berbelanja untuk menghindari kantong plastik baru.",
-      "Jika sudah terlanjur memiliki kantong bersih, gunakan ulang sebagai pelapis tempat sampah atau pembungkus.",
-      "Tanyakan apakah toko ritel atau bank sampah setempat menerima plastik film bersih secara terpisah."
+      "Bring a cloth shopping bag or your own container when you shop so you don't need a new plastic bag.",
+      "If you already have clean bags, reuse them as bin liners or for wrapping.",
+      "Ask whether a local store or waste bank collects clean plastic film separately."
     ],
     "cautions": [
-      "Jangan memasukkan kantong kresek atau plastik pembungkus ke wadah daur ulang campur tanpa konfirmasi pengelola.",
-      "Catat sebagai Reduce hanya ketika kamu benar-benar menghindari penggunaan kemasan baru."
+      "Don't put plastic bags or wrap in a mixed recycling bin unless your collector confirms they take them.",
+      "Only log it as Reduce when you actually avoided new packaging."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -89,19 +89,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000005",
-    "slug": "kardus-karton-bersih",
-    "name": "Kardus & Karton Pengiriman",
+    "slug": "clean-cardboard-boxes",
+    "name": "Cardboard Boxes and Shipping Cartons",
     "category": "PAPER",
-    "keywords": ["kardus", "karton", "kotak paket", "dus", "kertas tebal"],
+    "keywords": ["cardboard", "carton", "parcel box", "box", "thick paper"],
     "recommended_method": "RECYCLE",
-    "summary": "Kardus bergelombang dan karton kemasan kering dapat didaur ulang atau dipakai ulang bila tidak basah maupun berminyak berat.",
+    "summary": "Dry corrugated cardboard and cartons can be recycled or reused as long as they aren't wet or heavily greasy.",
     "steps": [
-      "Keluarkan isi, plastik pengisi, atau sisa makanan dari dalam kotak.",
-      "Lepaskan lakban plastik berlebih jika diminta pengelola, lalu lipat kardus hingga rata.",
-      "Simpan di tempat kering agar serat kertas tidak berjamur sebelum disetor ke bank sampah atau pengepul."
+      "Take out the contents, plastic fillers, and any food scraps.",
+      "Remove excess plastic tape if your collector asks, then fold the box flat.",
+      "Keep it somewhere dry so the fibers don't go moldy before you take it to a waste bank or collector."
     ],
     "cautions": [
-      "Keluarkan sisa makanan. Noda minyak tidak selalu membuat kardus ditolak; tanyakan ketentuan penerima dan jangan menyamakan aturan suatu negara dengan fasilitas di Indonesia."
+      "Remove food scraps. Grease stains don't always get a box rejected, so ask your collector, and don't assume another country's rules apply to facilities in Indonesia."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -110,19 +110,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000006",
-    "slug": "kertas-hvs-dan-koran",
-    "name": "Kertas HVS, Buku & Koran Bekas",
+    "slug": "office-paper-and-newspapers",
+    "name": "Office Paper, Books, and Old Newspapers",
     "category": "PAPER",
-    "keywords": ["kertas", "hvs", "koran", "majalah", "buku bekas", "dokumen"],
+    "keywords": ["paper", "office paper", "newspaper", "magazine", "old books", "documents"],
     "recommended_method": "RECYCLE",
-    "summary": "Kertas kantor, koran, majalah, dan buku tak terpakai menjaga nilai daur ulangnya saat dipilah terpisah dari sampah basah dan organik.",
+    "summary": "Office paper, newspapers, magazines, and unwanted books keep their recycling value when you keep them separate from wet and organic waste.",
     "steps": [
-      "Pertimbangkan menyumbangkan buku layak baca ke sekolah, perpustakaan, atau komunitas sebelum mendaur ulang.",
-      "Pisahkan kertas kering dari sampah basah, sisa makanan, dan plastik laminasi.",
-      "Tumpuk atau ikat rapi kertas dan koran lalu serahkan ke bank sampah atau pusat daur ulang."
+      "Consider donating readable books to a school, library, or community group before recycling them.",
+      "Keep dry paper away from wet waste, food scraps, and laminated plastic.",
+      "Stack or tie the paper and newspapers neatly, then take them to a waste bank or recycling center."
     ],
     "cautions": [
-      "Kertas berlapis plastik atau laminasi perlu diperiksa terpisah. Konfirmasikan penerimaan buku, struk, tisu, dan kertas cacah kepada pengelola; jangan anggap semua produk kertas diterima."
+      "Check plastic-coated or laminated paper separately. Confirm with your collector whether they take books, receipts, tissues, and shredded paper, and don't assume every paper product is accepted."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -131,19 +131,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000007",
-    "slug": "botol-dan-toples-kaca-utuh",
-    "name": "Botol & Toples Kaca Utuh",
+    "slug": "intact-glass-bottles-and-jars",
+    "name": "Intact Glass Bottles and Jars",
     "category": "GLASS",
-    "keywords": ["botol kaca", "toples kaca", "beling utuh", "sirup", "selai"],
+    "keywords": ["glass bottle", "glass jar", "intact glass", "syrup", "jam"],
     "recommended_method": "RECYCLE",
-    "summary": "Botol dan toples kaca yang masih utuh dapat didaur ulang berkali-kali atau dipakai ulang sebagai wadah setelah dibersihkan.",
+    "summary": "Intact glass bottles and jars can be recycled again and again, or cleaned and reused as containers.",
     "steps": [
-      "Kosongkan isi botol atau toples lalu bilas hingga bersih dari sisa makanan atau minuman.",
-      "Pisahkan tutup logam atau plastik dari botol kaca sesuai petunjuk fasilitas penerima.",
-      "Serahkan secara hati-hati ke bank sampah atau titik pengumpulan kaca agar tidak pecah saat pengangkutan."
+      "Empty the bottle or jar and rinse off any food or drink residue.",
+      "Remove metal or plastic lids if the collection point asks you to.",
+      "Hand them over carefully at a waste bank or glass collection point so they don't break on the way."
     ],
     "cautions": [
-      "Panduan ini khusus botol dan toples kemasan. Jangan mencampurkan cermin, kaca jendela, keramik, atau lampu tanpa persetujuan penerima; lampu memerlukan jalur tersendiri."
+      "This guide only covers bottles and jars. Don't mix in mirrors, window glass, ceramics, or light bulbs without the collector's approval; bulbs need their own route."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -152,20 +152,20 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000008",
-    "slug": "pecahan-kaca-berisiko-tajam",
-    "name": "Pecahan Kaca & Beling Tajam",
+    "slug": "broken-glass-and-sharp-shards",
+    "name": "Broken Glass and Sharp Shards",
     "category": "GLASS",
-    "keywords": ["kaca pecah", "beling", "pecahan gelas", "tajam", "residu"],
+    "keywords": ["broken glass", "glass shards", "broken cup", "sharp", "residual waste"],
     "recommended_method": "TRASH",
-    "summary": "Pecahan kaca tidak boleh masuk tempat daur ulang biasa karena membahayakan petugas pemilah dan merusak mesin; bungkus rapat dan buang ke jalur residu atau serahkan ke pengelola khusus bila tersedia.",
+    "summary": "Broken glass doesn't belong in regular recycling because it can injure sorting staff and damage machines. Wrap it securely and put it out with residual waste, or give it to a specialist collector if one is available.",
     "steps": [
-      "Gunakan sarung tangan tebal atau sapu dan pengki; hindari memungut pecahan kecil langsung dengan tangan kosong.",
-      "Masukkan pecahan kaca ke dalam kardus tebal atau wadah kokoh lalu segel dengan lakban.",
-      "Beri label peringatan jelas seperti 'Hati-hati Pecahan Kaca' di bagian luar kemasan sebelum dibuang ke tempat sampah residu."
+      "Wear thick gloves or use a broom and dustpan, and don't pick up small pieces with bare hands.",
+      "Put the shards in a thick cardboard box or sturdy container and seal it with tape.",
+      "Write a clear warning such as \"Careful: broken glass\" on the outside before putting it in the residual waste bin."
     ],
     "cautions": [
-      "Jangan membuang pecahan kaca tanpa pelindung ke dalam kantong plastik tipis.",
-      "Pecahan lampu neon/CFL mengandung merkuri dan harus masuk jalur limbah B3/khusus, bukan residu biasa."
+      "Never throw away broken glass in a thin plastic bag without protection.",
+      "Broken fluorescent tubes and CFL bulbs contain mercury and must go through the hazardous waste route, not regular residual waste."
     ],
     "source_url": "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/broken-glass/",
     "reviewed_at": "2026-11-16",
@@ -174,19 +174,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000009",
-    "slug": "kaleng-minuman-aluminium",
-    "name": "Kaleng Minuman Aluminium",
+    "slug": "aluminium-drink-cans",
+    "name": "Aluminium Drink Cans",
     "category": "METAL",
-    "keywords": ["kaleng aluminium", "kaleng soda", "kaleng minuman", "logam"],
+    "keywords": ["aluminium can", "soda can", "drink can", "metal"],
     "recommended_method": "RECYCLE",
-    "summary": "Kaleng minuman aluminium bernilai tinggi untuk didaur ulang dan paling mudah disortir bila dalam keadaan kosong serta bersih dari sisa minuman.",
+    "summary": "Aluminium drink cans are valuable to recycle and easiest to sort when they're empty and free of leftover drink.",
     "steps": [
-      "Tuang habis sisa minuman dan bilas ringan agar tidak mengundang semut atau menimbulkan bau.",
-      "Biarkan bentuk kaleng tetap utuh bila pengelola menggunakan pemilahan otomatis, atau ikuti instruksi bank sampah setempat.",
-      "Kumpulkan dalam wadah kering bersama logam sejenis sebelum disetor."
+      "Pour out the rest of the drink and rinse lightly so the can doesn't attract ants or smell.",
+      "Leave the can in shape if your collector uses automated sorting, or follow your local waste bank's instructions.",
+      "Keep them in a dry container with other similar metals until you drop them off."
     ],
     "cautions": [
-      "Jangan memadatkan kaleng aerosol bertekanan seperti kaleng semprot cat atau insektisida; tangani kaleng bertekanan sesuai aturan B3 rumah tangga."
+      "Never crush pressurized aerosol cans such as spray paint or insecticide. Handle pressurized cans under the household hazardous waste rules."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -195,19 +195,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000010",
-    "slug": "kaleng-makanan-baja-timah",
-    "name": "Kaleng Makanan Logam & Aluminium Foil Bersih",
+    "slug": "food-cans-and-clean-foil",
+    "name": "Metal Food Cans and Clean Aluminium Foil",
     "category": "METAL",
-    "keywords": ["kaleng sarden", "kaleng susu", "kaleng makanan", "aluminium foil", "logam"],
+    "keywords": ["sardine can", "milk can", "food can", "aluminium foil", "metal"],
     "recommended_method": "RECYCLE",
-    "summary": "Kaleng makanan logam dan aluminium foil bersih dapat didaur ulang melalui pengelola yang menerima masing-masing bahan. Penerimaan foil tidak otomatis sama dengan kaleng.",
+    "summary": "Metal food cans and clean aluminium foil can be recycled through collectors that accept each material. A collector that takes cans doesn't necessarily take foil.",
     "steps": [
-      "Keruk dan bilas sisa saus, minyak, atau makanan hingga bersih.",
-      "Hindari menyentuh tepi kaleng yang tajam; jangan memaksa melipat atau memotongnya.",
-      "Kumpulkan setelah kering, pisahkan foil, lalu konfirmasikan penerimaan kepada bank sampah atau pengumpul logam."
+      "Scrape out and rinse off sauce, oil, or food until the can is clean.",
+      "Avoid touching the sharp rim, and don't force it to fold or cut it.",
+      "Collect the cans once they're dry, keep foil separate, and confirm with your waste bank or metal collector that they accept them."
     ],
     "cautions": [
-      "Aluminium foil yang sangat kotor oleh sisa makanan lengket tidak layak masuk daur ulang logam."
+      "Foil caked in sticky food isn't fit for metal recycling."
     ],
     "source_url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
     "reviewed_at": "2026-11-16",
@@ -216,20 +216,20 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000011",
-    "slug": "sisa-makanan-dan-kompos",
-    "name": "Sisa Makanan Nabati & Sampah Kebun (Kompos)",
+    "slug": "food-scraps-and-composting",
+    "name": "Plant-Based Food Scraps and Garden Waste (Compost)",
     "category": "ORGANIC",
-    "keywords": ["sampah organik", "kompos", "sisa sayur", "kulit buah", "daun kering", "ampas kopi"],
+    "keywords": ["organic waste", "compost", "vegetable scraps", "fruit peel", "dry leaves", "coffee grounds"],
     "recommended_method": "RECYCLE",
-    "summary": "Sisa buah, sayur, ampas kopi, cangkang telur, dan daun kering dapat diolah menjadi kompos di rumah atau disalurkan ke pengolahan organik komunitas agar tidak menghasilkan metana di TPA.",
+    "summary": "Fruit and vegetable scraps, coffee grounds, eggshells, and dry leaves can be composted at home or sent to a community organics program, so they don't produce methane in a landfill.",
     "steps": [
-      "Pilah sisa sayur, kulit buah, ampas kopi, dan daun kering terpisah dari plastik atau kemasan.",
-      "Potong bahan berukuran besar menjadi potongan kecil agar proses penguraian lebih cepat.",
-      "Campurkan sedikitnya dua sampai tiga bagian bahan kering (cokelat) menurut volume, seperti daun kering atau cacahan kardus tanpa lapisan, lakban, dan lem, untuk satu bagian bahan basah (hijau). Gunakan komposter yang memungkinkan udara masuk, bukan wadah kedap udara.",
-      "Aduk berkala dan jaga kelembapan seperti spons peras. Biarkan kompos matang sebelum digunakan; jangan menganggap bahan yang hanya dikeringkan sudah menjadi kompos."
+      "Keep vegetable scraps, fruit peels, coffee grounds, and dry leaves separate from plastic and packaging.",
+      "Cut large pieces into smaller ones so they break down faster.",
+      "Mix at least two to three parts dry (brown) material by volume, such as dry leaves or shredded cardboard without coating, tape, or glue, for every one part wet (green) material. Use a composter that lets air in, not an airtight container.",
+      "Turn it regularly and keep it as damp as a wrung-out sponge. Let the compost mature before you use it; material that's only been dried isn't compost yet."
     ],
     "cautions": [
-      "Hindari daging, ikan, tulang, susu, minyak, kotoran hewan peliharaan, kayu dicat, serta tanaman berpenyakit. Komposter rumah umumnya tidak mencapai kondisi pengolahan industri; kemasan berlabel compostable pun tidak otomatis cocok."
+      "Leave out meat, fish, bones, dairy, oil, pet waste, painted wood, and diseased plants. Home composters usually don't reach industrial processing conditions, so packaging labeled compostable isn't automatically suitable."
     ],
     "source_url": "https://www.epa.gov/recycle/composting-home",
     "reviewed_at": "2026-11-16",
@@ -238,19 +238,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000012",
-    "slug": "pencegahan-sisa-makanan",
-    "name": "Pencegahan Sisa Makanan Rumah Tangga",
+    "slug": "preventing-household-food-waste",
+    "name": "Preventing Household Food Waste",
     "category": "ORGANIC",
-    "keywords": ["food waste", "sisa makanan", "reduce makanan", "perencanaan belanja"],
+    "keywords": ["food waste", "leftovers", "reduce food waste", "meal planning"],
     "recommended_method": "REDUCE",
-    "summary": "Mengurangi sisa makanan sejak perencanaan belanja dan penyimpanan adalah langkah paling efektif untuk mencegah sampah organik terbuang.",
+    "summary": "Planning your shopping and storing food well is the most effective way to keep food from going to waste.",
     "steps": [
-      "Rencanakan menu dan periksa stok bahan di kulkas sebelum berbelanja agar tidak membeli berlebih.",
-      "Simpan bahan mudah rusak di wadah tertutup dan terapkan urutan pemakaian bahan yang lebih dulu masuk.",
-      "Ambil porsi secukupnya. Segera dinginkan makanan mudah rusak dalam wadah tertutup pada suhu kulkas paling tinggi 4 °C; jangan biarkan di suhu ruang lebih dari dua jam, atau satu jam saat suhu udara di atas 32 °C."
+      "Plan your meals and check what's in the fridge before you shop so you don't buy too much.",
+      "Keep perishable food in closed containers and use up older items first.",
+      "Serve sensible portions. Chill perishable food quickly in a closed container at 4 °C or below, and don't leave it at room temperature for more than two hours, or one hour when it's above 32 °C."
     ],
     "cautions": [
-      "Penampilan dan bau normal tidak menjamin makanan aman. Jangan mencicipi untuk menguji keamanan; jika waktu atau suhu penyimpanannya tidak aman atau tidak diketahui, jangan dikonsumsi."
+      "Normal looks and smell don't prove food is safe. Don't taste it to check. If you don't know how long or how warm it was stored, or it wasn't stored safely, don't eat it."
     ],
     "source_url": "https://www.epa.gov/recycle/preventing-wasted-food-home",
     "reviewed_at": "2026-11-16",
@@ -259,20 +259,20 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000013",
-    "slug": "baterai-rumah-tangga-bekas",
-    "name": "Baterai Rumah Tangga & Litium-Ion Bekas",
+    "slug": "used-household-batteries",
+    "name": "Used Household and Lithium-Ion Batteries",
     "category": "ELECTRONIC",
-    "keywords": ["baterai", "litium", "powerbank", "baterai koin", "aki kecil", "b3"],
+    "keywords": ["battery", "lithium", "power bank", "coin battery", "small lead-acid battery", "hazardous waste"],
     "recommended_method": "RECYCLE",
-    "summary": "Baterai bekas dapat menyimpan energi dan sebagian mengandung bahan berbahaya. Baterai litium, koin, dan isi ulang memerlukan pengumpulan khusus, bukan tong sampah atau daur ulang campur. Periksa jenis dan syarat penerima.",
+    "summary": "Used batteries can still hold energy, and some contain hazardous materials. Lithium, coin, and rechargeable batteries need a specialist collection point, not the trash or mixed recycling. Check the battery type and what the collector accepts.",
     "steps": [
-      "Simpan baterai bekas di tempat kering dan sejuk, jauh dari jangkauan anak-anak dan benda logam.",
-      "Tutup kedua kutub/terminal baterai litium atau koin dengan selotip non-konduktif (isolasi listrik) atau masukkan ke kantong terpisah agar tidak korsleting.",
-      "Konfirmasikan jenis baterai dan kondisinya kepada produsen atau pengelola sebelum dibawa. Tidak semua dropbox elektronik menerima baterai lepas, aki, atau baterai rusak."
+      "Store used batteries somewhere cool and dry, away from children and metal objects.",
+      "Cover both terminals of lithium or coin batteries with non-conductive electrical tape, or put each one in its own bag, so they can't short-circuit.",
+      "Confirm the battery type and condition with the manufacturer or collector before you bring them. Not every electronics drop box takes loose, lead-acid, or damaged batteries."
     ],
     "cautions": [
-      "Dilarang keras membongkar, menusuk, meremukkan, atau membakar baterai bekas.",
-      "Jika baterai menggembung, bocor, atau rusak fisik, hubungi pengelola B3/produsen resmi untuk penanganan khusus."
+      "Never take apart, puncture, crush, or burn used batteries.",
+      "If a battery is swollen, leaking, or physically damaged, contact a licensed hazardous waste handler or the manufacturer for special handling."
     ],
     "source_url": "https://www.epa.gov/recycle/used-household-batteries",
     "reviewed_at": "2026-11-16",
@@ -281,19 +281,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000014",
-    "slug": "perangkat-elektronik-kecil-ewaste",
-    "name": "Perangkat Elektronik Kecil & Kabel (E-Waste)",
+    "slug": "small-electronics-and-cables",
+    "name": "Small Electronics and Cables (E-Waste)",
     "category": "ELECTRONIC",
-    "keywords": ["e-waste", "ponsel bekas", "charger", "kabel", "elektronik", "dropbox"],
+    "keywords": ["e-waste", "old phone", "charger", "cable", "electronics", "drop box"],
     "recommended_method": "RECYCLE",
-    "summary": "Ponsel, pengisi daya, kabel, dan elektronik kecil mengandung komponen berbahaya sekaligus logam berharga yang harus disalurkan melalui pengumpul e-waste resmi.",
+    "summary": "Phones, chargers, cables, and small electronics contain hazardous parts as well as valuable metals, so they need to go to an official e-waste collector.",
     "steps": [
-      "Cadangkan data penting lalu hapus seluruh data pribadi (factory reset) sebelum menyerahkan perangkat.",
-      "Jika baterai tidak dapat dilepas oleh pengguna, biarkan perangkat tetap utuh tanpa membongkar paksa.",
-      "Serahkan ke layanan dropbox e-waste resmi pemerintah daerah, program penjemputan pengelola resmi, atau program pengembalian produsen."
+      "Back up anything important, then wipe all your personal data (factory reset) before handing the device over.",
+      "If the user can't remove the battery, leave the device intact and don't force it open.",
+      "Take it to an official local government e-waste drop box, a licensed collector's pickup service, or a manufacturer take-back program."
     ],
     "cautions": [
-      "Jangan membuang e-waste bersama sampah rumah tangga biasa atau membakar kabel untuk mengambil tembaga karena melepas asap beracun."
+      "Don't throw e-waste out with household trash, and never burn cables to recover copper; it releases toxic smoke."
     ],
     "source_url": "https://www.jakarta.go.id/e-waste",
     "reviewed_at": "2026-11-16",
@@ -302,19 +302,19 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000015",
-    "slug": "sikat-gigi-plastik-manual",
-    "name": "Sikat Gigi Plastik Manual (Campuran Bahan)",
+    "slug": "manual-plastic-toothbrushes",
+    "name": "Manual Plastic Toothbrushes (Mixed Materials)",
     "category": "OTHER",
-    "keywords": ["sikat gigi", "plastik campuran", "residu", "kamar mandi"],
+    "keywords": ["toothbrush", "mixed plastic", "residual waste", "bathroom"],
     "recommended_method": "TRASH",
-    "summary": "Sikat gigi plastik manual tidak termasuk pengumpulan daur ulang biasa pada sumber ini. Tanyakan program penerima khusus di daerahmu; tanpa penerima yang sesuai, gunakan jalur residu setempat.",
+    "summary": "This source doesn't include manual plastic toothbrushes in regular recycling collection. Ask about specialist programs in your area. If there's no suitable collector, use your local residual waste route.",
     "steps": [
-      "Pastikan sikat gigi yang dibuang adalah sikat manual biasa tanpa baterai atau komponen elektronik.",
-      "Jika ada program pengembalian khusus di komunitas atau ritel tertentu yang menerimanya, kamu dapat menyalurkan ke sana.",
-      "Jika tidak ada program khusus, buang ke tempat sampah residu."
+      "Make sure it's an ordinary manual toothbrush with no battery or electronic parts.",
+      "If a community or store take-back program accepts toothbrushes, you can send it there.",
+      "If there's no such program, put it in the residual waste bin."
     ],
     "cautions": [
-      "Sikat gigi elektrik yang memiliki baterai harus dikelola sebagai limbah elektronik (e-waste), bukan sampah residu biasa."
+      "Electric toothbrushes with batteries must be handled as e-waste, not regular residual waste."
     ],
     "source_url": "https://www.cornwall.gov.uk/rubbish-recycling-and-waste/recycling/recycling-items/toothbrushes/",
     "reviewed_at": "2026-11-16",
@@ -323,21 +323,21 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000016",
-    "slug": "limbah-bahan-berbahaya-rumah-tangga",
-    "name": "Sisa Cat, Pelarut & Bahan Kimia Rumah Tangga (B3)",
+    "slug": "household-hazardous-waste",
+    "name": "Leftover Paint, Solvents, and Household Chemicals",
     "category": "OTHER",
-    "keywords": ["limbah b3", "cat bekas", "pelarut", "pestisida", "kimia", "hhw"],
+    "keywords": ["hazardous waste", "old paint", "solvent", "pesticide", "chemicals", "hhw"],
     "recommended_method": "TRASH",
-    "summary": "Sisa produk rumah tangga yang mudah menyala, korosif, atau beracun memerlukan pengelolaan khusus melalui pengelola B3/HHW setempat agar tidak mencemari air dan tanah.",
+    "summary": "Leftover household products that are flammable, corrosive, or toxic need special handling through your local hazardous waste service so they don't pollute water and soil.",
     "steps": [
-      "Pertahankan sisa bahan kimia di dalam wadah aslinya dengan label tetap terbaca dan tutup rapat.",
-      "Jangan menuang sisa cat, oli, pelarut, atau pestisida ke wastafel, selokan, maupun tanah.",
-      "Hubungi pengelola persampahan atau titik pengumpulan B3 rumah tangga di daerahmu untuk jadwal dan syarat penyerahan."
+      "Keep leftover chemicals in their original container with the label readable and the lid closed tight.",
+      "Never pour leftover paint, oil, solvents, or pesticides down the sink, into drains, or onto the ground.",
+      "Contact your local waste service or household hazardous waste collection point for drop-off times and requirements."
     ],
     "cautions": [
-      "Label TRASH di WasteNot adalah kategori pencatatan, bukan izin membuang B3 ke tong residu. Ikuti petunjuk pengelola khusus. Wadah bocor atau berkarat memerlukan arahan petugas sebelum dipindahkan.",
-      "Jangan pernah mencampur dua bahan kimia sisa ke dalam satu wadah karena dapat memicu reaksi berbahaya atau gas beracun.",
-      "Penanganan limbah medis/infeksius atau jarum tajam rumah tangga wajib mengikuti panduan fasilitas kesehatan dan dinas terkait."
+      "The TRASH label in WasteNot is a logging category, not permission to put hazardous waste in the residual bin. Follow the specialist handler's instructions. Leaking or rusty containers need staff guidance before you move them.",
+      "Never mix two leftover chemicals in one container; they can react dangerously or release toxic gas.",
+      "Medical or infectious waste and household needles must follow the guidance of health facilities and the relevant authorities."
     ],
     "source_url": "https://www.epa.gov/hw/household-hazardous-waste-hhw",
     "reviewed_at": "2026-11-16",

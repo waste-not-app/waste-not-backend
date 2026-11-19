@@ -1,6 +1,6 @@
 # Curated Waste Guides
 
-`core-guides-v1.json` contains **16 articles** covering all seven categories: `PLASTIC`, `ORGANIC`, `PAPER`, `GLASS`, `METAL`, `ELECTRONIC`, and `OTHER`. Each article was checked against primary sources. The reviewer approved all 16 for publication on 16 November 2026.
+`core-guides-v1.json` contains **16 articles** covering all seven categories: `PLASTIC`, `ORGANIC`, `PAPER`, `GLASS`, `METAL`, `ELECTRONIC`, and `OTHER`. Each article was checked against primary sources, and the reviewer approved all 16 for publication on 16 November 2026. The articles were later translated from the approved Indonesian text into English without changing their advice, so the next review should confirm the English wording.
 
 ## Publication rules
 
@@ -50,22 +50,22 @@ Every source below was opened and compared with the article text on 16 November 
 
 | Slug | Sources | Notes |
 |---|---|---|
-| `botol-plastik-pet` | [EPA][epa-common], [BPOM][bpom] | Code 1 does not guarantee local acceptance |
-| `wadah-plastik-hdpe` | [EPA][epa-common], [BPOM][bpom], [HHW][epa-hhw] | Previous chemical contents decide separation, not visual cleanliness |
-| `wadah-makanan-pp-guna-ulang` | [BPOM][bpom] | Code 5 is not automatically food-safe, reusable, or microwave-safe |
-| `kantong-dan-bungkus-plastik` | [EPA][epa-common] | Film needs a dedicated collector; Reduce stays the preferred action |
-| `kardus-karton-bersih` | [EPA][epa-common] | Pizza boxes are recyclable once food residue is removed |
-| `kertas-hvs-dan-koran` | [EPA][epa-common] | Donating books comes first; paper grades are not assumed accepted |
-| `botol-dan-toples-kaca-utuh` | [EPA][epa-common] | Packaging glass only; separate metal lids |
-| `pecahan-kaca-berisiko-tajam` | [Cornwall][cornwall-glass], [EPA][epa-common], [CFL][epa-cfl] | Wrap and label; broken lamps are handled differently |
-| `kaleng-minuman-aluminium` | [EPA][epa-common], [HHW][epa-hhw] | Do not crush cans for machine sorting; aerosols are excluded |
-| `kaleng-makanan-baja-timah` | [EPA][epa-common] | Confirm acceptance of cans and foil separately |
-| `sisa-makanan-dan-kompos` | [EPA][epa-compost] | Volume ratio, aeration, and excluded materials |
-| `pencegahan-sisa-makanan` | [EPA][epa-food], [FDA][fda-food] | Refrigerate at or below 4 °C; smell and appearance do not prove safety |
-| `baterai-rumah-tangga-bekas` | [EPA][epa-batteries], [DLH][dlh-ewaste] | Not every drop box accepts every battery type or condition |
-| `perangkat-elektronik-kecil-ewaste` | [Jakarta][jakarta-ewaste], [DLH][dlh-ewaste], [EPA][epa-common], [Batteries][epa-batteries] | Wipe personal data; leave built-in batteries in place |
-| `sikat-gigi-plastik-manual` | [Cornwall][cornwall-toothbrush], [Batteries][epa-batteries] | Electric toothbrushes follow the electronics route |
-| `limbah-bahan-berbahaya-rumah-tangga` | [EPA][epa-hhw] | `TRASH` is only a logging category. The article directs users to hazardous waste handlers, not residual waste bins |
+| `pet-plastic-bottles` | [EPA][epa-common], [BPOM][bpom] | Code 1 does not guarantee local acceptance |
+| `hdpe-containers` | [EPA][epa-common], [BPOM][bpom], [HHW][epa-hhw] | Previous chemical contents decide separation, not visual cleanliness |
+| `reusable-pp-food-containers` | [BPOM][bpom] | Code 5 is not automatically food-safe, reusable, or microwave-safe |
+| `plastic-bags-and-wrap` | [EPA][epa-common] | Film needs a dedicated collector; Reduce stays the preferred action |
+| `clean-cardboard-boxes` | [EPA][epa-common] | Pizza boxes are recyclable once food residue is removed |
+| `office-paper-and-newspapers` | [EPA][epa-common] | Donating books comes first; paper grades are not assumed accepted |
+| `intact-glass-bottles-and-jars` | [EPA][epa-common] | Packaging glass only; separate metal lids |
+| `broken-glass-and-sharp-shards` | [Cornwall][cornwall-glass], [EPA][epa-common], [CFL][epa-cfl] | Wrap and label; broken lamps are handled differently |
+| `aluminium-drink-cans` | [EPA][epa-common], [HHW][epa-hhw] | Do not crush cans for machine sorting; aerosols are excluded |
+| `food-cans-and-clean-foil` | [EPA][epa-common] | Confirm acceptance of cans and foil separately |
+| `food-scraps-and-composting` | [EPA][epa-compost] | Volume ratio, aeration, and excluded materials |
+| `preventing-household-food-waste` | [EPA][epa-food], [FDA][fda-food] | Refrigerate at or below 4 °C; smell and appearance do not prove safety |
+| `used-household-batteries` | [EPA][epa-batteries], [DLH][dlh-ewaste] | Not every drop box accepts every battery type or condition |
+| `small-electronics-and-cables` | [Jakarta][jakarta-ewaste], [DLH][dlh-ewaste], [EPA][epa-common], [Batteries][epa-batteries] | Wipe personal data; leave built-in batteries in place |
+| `manual-plastic-toothbrushes` | [Cornwall][cornwall-toothbrush], [Batteries][epa-batteries] | Electric toothbrushes follow the electronics route |
+| `household-hazardous-waste` | [EPA][epa-hhw] | `TRASH` is only a logging category. The article directs users to hazardous waste handlers, not residual waste bins |
 
 [epa-common]: https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables
 [bpom]: https://tasikmalaya.pom.go.id/berita/cerdas-memilih-kemasan-wujudkan-pangan-aman-melalui-pengenalan-kode-plastik
