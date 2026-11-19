@@ -101,7 +101,7 @@ definitions:
       total_handled_weight_g:
         type: integer
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail:
+  github_com_waste-not-app_waste-not-backend_internal_response.ErrorDetail:
     properties:
       code:
         type: string
@@ -114,42 +114,42 @@ definitions:
       retryable:
         type: boolean
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse:
+  github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse:
     properties:
       api_version:
         type: string
       error:
-        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorDetail'
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorDetail'
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo:
+  github_com_waste-not-app_waste-not-backend_internal_response.PageInfo:
     properties:
       has_more:
         type: boolean
       next_cursor:
         type: string
     type: object
-  ? github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log
+  ? github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log
   : properties:
       data:
         items:
           $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_domain.Log'
         type: array
       page:
-        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo'
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PageInfo'
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-internal_modules_guides_GuideRes:
     properties:
       data:
         items:
           $ref: '#/definitions/internal_modules_guides.GuideRes'
         type: array
       page:
-        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PageInfo'
+        $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PageInfo'
     type: object
-  ? github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes
-  : properties:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes:
+    properties:
       api_version:
         type: string
       data:
@@ -159,7 +159,7 @@ definitions:
       request_id:
         type: string
     type: object
-  ? github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log
+  ? github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log
   : properties:
       api_version:
         type: string
@@ -168,7 +168,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AICatalogRes:
     properties:
       api_version:
         type: string
@@ -177,7 +177,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIDetectionRes:
     properties:
       api_version:
         type: string
@@ -186,7 +186,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes:
     properties:
       api_version:
         type: string
@@ -195,7 +195,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_DashboardRes:
     properties:
       api_version:
         type: string
@@ -204,7 +204,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_StatisticsRes:
     properties:
       api_version:
         type: string
@@ -213,7 +213,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes:
     properties:
       api_version:
         type: string
@@ -222,7 +222,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_PasswordResetRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_PasswordResetRes:
     properties:
       api_version:
         type: string
@@ -231,7 +231,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_UserRes:
     properties:
       api_version:
         type: string
@@ -240,7 +240,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_guides_GuideRes:
     properties:
       api_version:
         type: string
@@ -249,7 +249,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes:
     properties:
       api_version:
         type: string
@@ -258,7 +258,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_photos_PhotoRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_photos_PhotoRes:
     properties:
       api_version:
         type: string
@@ -267,7 +267,7 @@ definitions:
       request_id:
         type: string
     type: object
-  github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes:
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_system_MetadataRes:
     properties:
       api_version:
         type: string
@@ -724,7 +724,7 @@ paths:
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       summary: Readiness Probe
       tags:
       - System
@@ -738,15 +738,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-array_internal_modules_achievements_AchievementRes'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: List User Achievements
@@ -774,47 +774,47 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIDetectionRes'
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIDetectionRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIDetectionRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "413":
           description: Request Entity Too Large
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "415":
           description: Unsupported Media Type
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "502":
           description: Bad Gateway
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Detect Waste Object from Image
@@ -835,15 +835,15 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete AI Detection Session
@@ -859,19 +859,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AICatalogRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AICatalogRes'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "502":
           description: Bad Gateway
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get AI Object Catalog
@@ -896,47 +896,47 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes'
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_ai_AIRecommendationRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "502":
           description: Bad Gateway
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Generate AI Waste Disposal Recommendation
@@ -961,23 +961,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       summary: Login User
       tags:
       - Auth
@@ -990,15 +990,15 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Logout Session
@@ -1023,31 +1023,31 @@ paths:
         "202":
           description: Accepted
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_PasswordResetRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_PasswordResetRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "413":
           description: Request Entity Too Large
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "415":
           description: Unsupported Media Type
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       summary: Request password reset
       tags:
       - Auth
@@ -1070,27 +1070,27 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "413":
           description: Request Entity Too Large
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "415":
           description: Unsupported Media Type
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       summary: Confirm password reset
       tags:
       - Auth
@@ -1112,23 +1112,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       summary: Refresh Access Token
       tags:
       - Auth
@@ -1151,27 +1151,27 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       summary: Register User
       tags:
       - Auth
@@ -1184,15 +1184,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_DashboardRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_DashboardRes'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Today's Dashboard
@@ -1218,35 +1218,35 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "413":
           description: Request Entity Too Large
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "415":
           description: Unsupported Media Type
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "429":
           description: Too Many Requests
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete current account
@@ -1260,15 +1260,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_auth_UserRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_UserRes'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Current User Profile
@@ -1284,15 +1284,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_system_MetadataRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_system_MetadataRes'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Client Metadata & Capabilities
@@ -1316,31 +1316,31 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_photos_PhotoRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_photos_PhotoRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "413":
           description: Request Entity Too Large
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "415":
           description: Unsupported Media Type
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Upload Private Photo Attachment
@@ -1361,19 +1361,19 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete Unused Photo Attachment
@@ -1397,15 +1397,15 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Download Private Photo Attachment
@@ -1430,19 +1430,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_analytics_StatisticsRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_analytics_StatisticsRes'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Waste Statistics
@@ -1475,23 +1475,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-internal_modules_guides_GuideRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-internal_modules_guides_GuideRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: List Waste Guides
@@ -1513,19 +1513,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_guides_GuideRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_guides_GuideRes'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Waste Guide by ID
@@ -1567,23 +1567,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.PaginatedDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: List Waste Logs
@@ -1607,35 +1607,35 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "410":
           description: Gone
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create Waste Log
@@ -1661,27 +1661,27 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "428":
           description: Precondition Required
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete Waste Log
@@ -1702,19 +1702,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-github_com_waste-not-app_waste-not-backend_internal_domain_Log'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get Waste Log by ID
@@ -1743,31 +1743,31 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_logs_LogWithProgressRes'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_shared_response.ErrorResponse'
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update Waste Log
