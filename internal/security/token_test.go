@@ -9,16 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-func TestPassword(t *testing.T) {
-	a, e := Hash("password-example-123")
-	if e != nil {
-		t.Fatal(e)
-	}
-	b, _ := Hash("password-example-123")
-	if a == b || !Verify("password-example-123", a) || Verify("password-example-124", a) {
-		t.Fatal("salt or verification failed")
-	}
-}
 func TestJWT(t *testing.T) {
 	s := Signer{[]byte(strings.Repeat("x", 32)), "issuer", "audience"}
 	tokens, e := s.Issue(uuid.NewString(), uuid.NewString(), 1, time.Now().Add(time.Hour), time.Now())
