@@ -10,11 +10,11 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/waste-not-app/waste-not-backend/internal/database/db"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/response"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 type UserIdentity struct {

@@ -7,9 +7,9 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
+	"github.com/waste-not-app/waste-not-backend/internal/database/db"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 func (r *repository) RequestPasswordReset(ctx context.Context, email, tokenHash string, encrypted []byte, now time.Time) error {

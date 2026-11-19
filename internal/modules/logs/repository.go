@@ -11,10 +11,10 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/waste-not-app/waste-not-backend/internal/database/db"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/achievements"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 type Repository interface {

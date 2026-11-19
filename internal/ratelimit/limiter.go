@@ -8,9 +8,9 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/waste-not-app/waste-not-backend/internal/database/db"
 	"github.com/waste-not-app/waste-not-backend/internal/response"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 type Limiter struct {

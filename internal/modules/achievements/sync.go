@@ -3,8 +3,8 @@ package achievements
 import (
 	"context"
 
+	"github.com/waste-not-app/waste-not-backend/internal/database/db"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/db"
 )
 
 func SyncUser(ctx context.Context, qtx *db.Queries, userID, today string) ([]AchievementRes, error) {
