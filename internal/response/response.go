@@ -95,16 +95,16 @@ func Fail(c fiber.Ctx, status int, code string, fields map[string]string) error 
 	if fields == nil {
 		fields = map[string]string{}
 	}
-	message := "Permintaan tidak dapat diproses."
+	message := "We couldn't process this request."
 	switch {
 	case status == fiber.StatusUnauthorized:
-		message = "Silakan masuk kembali."
+		message = "Please sign in again."
 	case status == fiber.StatusNotFound:
-		message = "Data tidak ditemukan."
+		message = "Not found."
 	case status == fiber.StatusUnprocessableEntity:
-		message = "Periksa kembali isianmu."
+		message = "Check your input."
 	case status >= fiber.StatusInternalServerError:
-		message = "Layanan belum tersedia. Coba lagi nanti."
+		message = "The service is unavailable. Try again later."
 	}
 	return Raw(c, status, fiber.Map{
 		"api_version": APIVersion,

@@ -69,7 +69,7 @@ func (h *Handler) ListGuides(c fiber.Ctx) error {
 	n, ok := cursor.ParseLimit(c.Query("limit"))
 	if !ok || utf8.RuneCountInString(query) > 100 || (category != "" && !slices.Contains(domain.Categories, category)) {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{
-			"q": "Periksa pencarian, kategori, dan batas halaman.",
+			"q": "Check the search text, category, and page size.",
 		})
 	}
 

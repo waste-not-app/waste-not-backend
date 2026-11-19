@@ -98,7 +98,7 @@ func (h *Handler) UploadPhoto(c fiber.Ctx) error {
 
 	if !seenImage || len(imageBytes) == 0 {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{
-			"image": "Pilih gambar maksimal 5 MB.",
+			"image": "Choose an image up to 5 MB.",
 		})
 	}
 

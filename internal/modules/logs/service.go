@@ -40,12 +40,12 @@ func NewService(repo Repository, cfg config.Config, now func() time.Time, codec 
 func (s *service) CreateLog(ctx context.Context, u domain.User, in domain.LogInput) (LogWithProgressRes, bool, error) {
 	if !domain.ValidUUID(in.ClientRequestID) {
 		return LogWithProgressRes{}, false, &ValidationError{
-			Fields: map[string]string{"client_request_id": "Gunakan UUID baru untuk draf baru."},
+			Fields: map[string]string{"client_request_id": "Use a new UUID for each new draft."},
 		}
 	}
 	if in.PhotoID != nil && s.cfg.PhotoStorageDir == "" {
 		return LogWithProgressRes{}, false, &ValidationError{
-			Fields: map[string]string{"photo_id": "Lampiran foto belum diaktifkan."},
+			Fields: map[string]string{"photo_id": "Photo attachments aren't enabled."},
 		}
 	}
 	in.Notes = strings.TrimSpace(in.Notes)
@@ -68,13 +68,13 @@ func (s *service) ListLogs(ctx context.Context, u domain.User, scope string, p L
 	today := domain.Today(s.now(), u.Timezone)
 	if !validFilters(p.Category, p.Method, p.From, p.To, today) {
 		return ListLogsRes{}, &ValidationError{
-			Fields: map[string]string{"filters": "Periksa kategori, metode, dan rentang tanggal."},
+			Fields: map[string]string{"filters": "Check the category, method, and date range."},
 		}
 	}
 	limit, ok := cursor.ParseLimit(p.Limit)
 	if !ok {
 		return ListLogsRes{}, &ValidationError{
-			Fields: map[string]string{"limit": "Gunakan 1–100."},
+			Fields: map[string]string{"limit": "Use a limit from 1 to 100."},
 		}
 	}
 	q := ListLogsQuery{
@@ -120,7 +120,7 @@ func (s *service) ListLogs(ctx context.Context, u domain.User, scope string, p L
 func (s *service) UpdateLog(ctx context.Context, u domain.User, id string, version int, patch map[string]json.RawMessage) (LogWithProgressRes, error) {
 	if raw, ok := patch["photo_id"]; ok && string(raw) != "null" && s.cfg.PhotoStorageDir == "" {
 		return LogWithProgressRes{}, &ValidationError{
-			Fields: map[string]string{"photo_id": "Lampiran foto belum diaktifkan."},
+			Fields: map[string]string{"photo_id": "Photo attachments aren't enabled."},
 		}
 	}
 	today := domain.Today(s.now(), u.Timezone)
