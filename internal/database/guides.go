@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/url"
+	"slices"
 	"strings"
 	"time"
 
@@ -35,7 +36,7 @@ func ImportGuides(ctx context.Context, db *pgxpool.Pool, guides []Guide) error {
 		u, e := url.Parse(g.SourceURL)
 		_, dateErr := time.Parse(time.DateOnly, g.ReviewedAt)
 		id, idErr := uuid.Parse(g.ID)
-		if e != nil || u.Scheme != "https" || u.Host == "" || u.User != nil || dateErr != nil || g.ReviewedAt > time.Now().UTC().Format(time.DateOnly) || idErr != nil || id == uuid.Nil || g.Slug == "" || strings.TrimSpace(g.Name) == "" || g.Summary == "" || len(g.Steps) == 0 || g.Cautions == nil || strings.TrimSpace(g.Reviewer) == "" || !domain.Contains(domain.Categories, g.Category) || !domain.Contains(domain.Methods, g.RecommendedMethod) || !domain.Contains([]string{"PUBLISHED", "DRAFT", "ARCHIVED"}, g.PublicationStatus) {
+		if e != nil || u.Scheme != "https" || u.Host == "" || u.User != nil || dateErr != nil || g.ReviewedAt > time.Now().UTC().Format(time.DateOnly) || idErr != nil || id == uuid.Nil || g.Slug == "" || strings.TrimSpace(g.Name) == "" || g.Summary == "" || len(g.Steps) == 0 || g.Cautions == nil || strings.TrimSpace(g.Reviewer) == "" || !slices.Contains(domain.Categories, g.Category) || !slices.Contains(domain.Methods, g.RecommendedMethod) || !slices.Contains([]string{"PUBLISHED", "DRAFT", "ARCHIVED"}, g.PublicationStatus) {
 			return errors.New("invalid guide: provide a UUID, reviewed content, real source, reviewer, date, enum fields and arrays")
 		}
 	}

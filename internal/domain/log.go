@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"slices"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -46,10 +47,10 @@ type LogInput struct {
 func (i *LogInput) Validate(today, oldDate string) map[string]string {
 	i.Notes = strings.TrimSpace(i.Notes)
 	f := map[string]string{}
-	if !Contains(Categories, i.Category) {
+	if !slices.Contains(Categories, i.Category) {
 		f["category"] = "Pilih kategori yang tersedia."
 	}
-	if !Contains(Methods, i.Method) {
+	if !slices.Contains(Methods, i.Method) {
 		f["method"] = "Pilih metode yang tersedia."
 	}
 	switch i.QuantityKind {

@@ -7,10 +7,10 @@ import (
 	"log/slog"
 	"mime"
 	"mime/multipart"
+	"slices"
 
 	"github.com/gofiber/fiber/v3"
 
-	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/response"
@@ -84,7 +84,7 @@ func (h *Handler) UploadPhoto(c fiber.Ctx) error {
 		}
 		seenImage = true
 		contentType, _, err := mime.ParseMediaType(part.Header.Get("Content-Type"))
-		if err != nil || !domain.Contains([]string{"image/jpeg", "image/png", "image/webp"}, contentType) {
+		if err != nil || !slices.Contains([]string{"image/jpeg", "image/png", "image/webp"}, contentType) {
 			part.Close()
 			return response.Fail(c, fiber.StatusUnsupportedMediaType, "UNSUPPORTED_MEDIA_TYPE", nil)
 		}

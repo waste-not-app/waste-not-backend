@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/url"
 	"os"
+	"slices"
 	"strings"
 	"testing"
 
@@ -41,11 +42,11 @@ func TestCuratedCoreGuidesDataset(t *testing.T) {
 		}
 		seenIDs[g.ID] = true
 		seenSlugs[g.Slug] = true
-		if !domain.Contains(domain.Categories, g.Category) {
+		if !slices.Contains(domain.Categories, g.Category) {
 			t.Fatalf("invalid category %q", g.Category)
 		}
 		seenCats[g.Category] = true
-		if !domain.Contains(domain.Methods, g.RecommendedMethod) {
+		if !slices.Contains(domain.Methods, g.RecommendedMethod) {
 			t.Fatalf("invalid method %q", g.RecommendedMethod)
 		}
 		u, err := url.Parse(g.SourceURL)

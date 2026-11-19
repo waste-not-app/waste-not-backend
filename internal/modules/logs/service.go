@@ -3,6 +3,7 @@ package logs
 import (
 	"context"
 	"encoding/json"
+	"slices"
 	"strings"
 	"time"
 
@@ -132,8 +133,8 @@ func (s *service) DeleteLog(ctx context.Context, u domain.User, id string, versi
 }
 
 func validFilters(category, method, from, to, today string) bool {
-	valid := category == "" || domain.Contains(domain.Categories, category)
-	valid = valid && (method == "" || domain.Contains(domain.Methods, method))
+	valid := category == "" || slices.Contains(domain.Categories, category)
+	valid = valid && (method == "" || slices.Contains(domain.Methods, method))
 	todayTime, _ := time.Parse(time.DateOnly, today)
 	for _, v := range []string{from, to} {
 		if v != "" {

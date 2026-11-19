@@ -19,12 +19,3 @@ var (
 	Categories = []string{"ORGANIC", "PLASTIC", "PAPER", "GLASS", "METAL", "ELECTRONIC", "OTHER"}
 	Methods    = []string{"REDUCE", "REUSE", "RECYCLE", "TRASH"}
 )
-
-func Contains(values []string, s string) bool {
-	for _, v := range values {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}

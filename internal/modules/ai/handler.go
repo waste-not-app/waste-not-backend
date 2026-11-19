@@ -12,6 +12,7 @@ import (
 	"log/slog"
 	"mime"
 	"mime/multipart"
+	"slices"
 	"strconv"
 	"time"
 
@@ -163,7 +164,7 @@ func (h *Handler) CreateDetection(c fiber.Ctx) error {
 			return response.Fail(c, fiber.StatusRequestEntityTooLarge, "FILE_TOO_LARGE", nil)
 		}
 		name := part.FormName()
-		if seen[name] || !domain.Contains([]string{"image", "client_request_id"}, name) {
+		if seen[name] || !slices.Contains([]string{"image", "client_request_id"}, name) {
 			part.Close()
 			return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
 		}

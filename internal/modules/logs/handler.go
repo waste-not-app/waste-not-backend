@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log/slog"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -166,7 +167,7 @@ func (h *Handler) UpdateLog(c fiber.Ctx) error {
 		})
 	}
 	for key := range patch {
-		if !domain.Contains([]string{"version", "category", "method", "quantity_kind", "weight_g", "item_count", "activity_date", "notes", "photo_id"}, key) {
+		if !slices.Contains([]string{"version", "category", "method", "quantity_kind", "weight_g", "item_count", "activity_date", "notes", "photo_id"}, key) {
 			return response.Fail(c, fiber.StatusBadRequest, "INVALID_REQUEST", nil)
 		}
 	}
