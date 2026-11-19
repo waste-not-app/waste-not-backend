@@ -13,7 +13,7 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/aiclient"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
+	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 )
 
 type Service interface {

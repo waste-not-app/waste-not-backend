@@ -18,6 +18,7 @@ import (
 	_ "github.com/waste-not-app/waste-not-backend/docs"
 	"github.com/waste-not-app/waste-not-backend/internal/aiclient"
 	"github.com/waste-not-app/waste-not-backend/internal/config"
+	"github.com/waste-not-app/waste-not-backend/internal/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/achievements"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/ai"
@@ -27,10 +28,9 @@ import (
 	"github.com/waste-not-app/waste-not-backend/internal/modules/logs"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/photos"
 	"github.com/waste-not-app/waste-not-backend/internal/modules/system"
+	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
+	"github.com/waste-not-app/waste-not-backend/internal/response"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
 )
 
 type Server struct {

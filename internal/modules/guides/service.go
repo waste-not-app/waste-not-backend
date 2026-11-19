@@ -3,9 +3,9 @@ package guides
 import (
 	"context"
 
+	"github.com/waste-not-app/waste-not-backend/internal/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/database"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
 )
 
 type Service interface {

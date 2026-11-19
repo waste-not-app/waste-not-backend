@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/response"
+	"github.com/waste-not-app/waste-not-backend/internal/response"
 )
 
 type Handler struct {

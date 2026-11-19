@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/waste-not-app/waste-not-backend/internal/config"
+	"github.com/waste-not-app/waste-not-backend/internal/cursor"
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
 	"github.com/waste-not-app/waste-not-backend/internal/middleware"
+	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/cursor"
-	"github.com/waste-not-app/waste-not-backend/internal/shared/ratelimit"
 )
 
 type Service interface {
