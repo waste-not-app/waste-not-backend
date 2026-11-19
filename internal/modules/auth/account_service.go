@@ -27,7 +27,7 @@ func (s *service) RequestPasswordReset(ctx context.Context, email string) error 
 	}
 	token := base64.RawURLEncoding.EncodeToString(raw[:])
 	encrypted := s.mailKey.Seal(nil, nil, []byte(token), []byte(email))
-	return s.repo.RequestPasswordReset(ctx, email, security.Digest([]byte(token)), encrypted, s.limiter.Now())
+	return s.repo.RequestPasswordReset(ctx, email, security.Digest([]byte(token)), encrypted, s.now())
 }
 
 func (s *service) ConfirmPasswordReset(ctx context.Context, token, password string) error {
@@ -39,7 +39,7 @@ func (s *service) ConfirmPasswordReset(ctx context.Context, token, password stri
 	if err != nil {
 		return err
 	}
-	return s.repo.ConfirmPasswordReset(ctx, security.Digest([]byte(token)), hash, s.limiter.Now())
+	return s.repo.ConfirmPasswordReset(ctx, security.Digest([]byte(token)), hash, s.now())
 }
 
 func (s *service) DeleteMe(ctx context.Context, userID, password string) error {

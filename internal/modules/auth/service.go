@@ -7,11 +7,11 @@ import (
 	"crypto/sha256"
 	"errors"
 	"log/slog"
+	"time"
 
 	"github.com/google/uuid"
 
 	"github.com/waste-not-app/waste-not-backend/internal/domain"
-	"github.com/waste-not-app/waste-not-backend/internal/ratelimit"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
@@ -30,13 +30,13 @@ type Service interface {
 type service struct {
 	repo      Repository
 	signer    security.Signer
-	limiter   *ratelimit.Limiter
+	now       func() time.Time
 	dummyHash string
 	mailer    ResetMailer
 	mailKey   cipher.AEAD
 }
 
-func NewService(repo Repository, signer security.Signer, limiter *ratelimit.Limiter, dummyHash string, mailer ResetMailer) Service {
+func NewService(repo Repository, signer security.Signer, now func() time.Time, dummyHash string, mailer ResetMailer) Service {
 	keyHash := sha256.New()
 	keyHash.Write([]byte("wastenot-password-reset-mail-v1\x00"))
 	keyHash.Write(signer.Secret)
@@ -45,7 +45,7 @@ func NewService(repo Repository, signer security.Signer, limiter *ratelimit.Limi
 	return &service{
 		repo:      repo,
 		signer:    signer,
-		limiter:   limiter,
+		now:       now,
 		dummyHash: dummyHash,
 		mailer:    mailer,
 		mailKey:   mailKey,
@@ -63,7 +63,7 @@ func (s *service) Register(ctx context.Context, req RegisterReq, normalizedEmail
 		Email:    normalizedEmail,
 		Timezone: req.Timezone,
 	}
-	return s.repo.CreateUserWithSession(ctx, u, hash, s.signer, s.limiter.Now())
+	return s.repo.CreateUserWithSession(ctx, u, hash, s.signer, s.now())
 }
 
 func (s *service) Login(ctx context.Context, normalizedEmail, password string) (security.Tokens, error) {
@@ -78,14 +78,14 @@ func (s *service) Login(ctx context.Context, normalizedEmail, password string) (
 	if !security.Verify(password, rec.PasswordHash) {
 		return security.Tokens{}, ErrUnauthenticated
 	}
-	return s.repo.CreateSessionForUser(ctx, rec.UserRes, rec.PasswordHash, s.signer, s.limiter.Now())
+	return s.repo.CreateSessionForUser(ctx, rec.UserRes, rec.PasswordHash, s.signer, s.now())
 }
 
 func (s *service) RefreshToken(ctx context.Context, refreshToken string) (security.Tokens, error) {
 	if len(refreshToken) != 43 {
 		return security.Tokens{}, ErrSessionExpired
 	}
-	return s.repo.RotateRefreshToken(ctx, refreshToken, s.signer, s.limiter.Now())
+	return s.repo.RotateRefreshToken(ctx, refreshToken, s.signer, s.now())
 }
 
 func (s *service) Logout(ctx context.Context, sessionID, userID string) error {
@@ -93,7 +93,7 @@ func (s *service) Logout(ctx context.Context, sessionID, userID string) error {
 }
 
 func (s *service) GetMe(ctx context.Context, u domain.User) (UserRes, error) {
-	today := domain.Today(s.limiter.Now(), u.Timezone)
+	today := domain.Today(s.now(), u.Timezone)
 	prog, err := s.repo.GetUserProgress(ctx, u.ID, today)
 	if err != nil {
 		return UserRes{}, err

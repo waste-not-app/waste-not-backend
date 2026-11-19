@@ -47,7 +47,7 @@ func Protected(dbPool *pgxpool.Pool, signer security.Signer, limiter *ratelimit.
 			return response.InternalError(c, log, err)
 		}
 
-		now := limiter.Now()
+		now := time.Now()
 		if !row.ExpiresAt.After(now) || ((row.Revoked || row.Generation != claims.Generation) && c.Path() != "/v1/auth/logout") {
 			return response.Fail(c, fiber.StatusUnauthorized, "SESSION_EXPIRED", nil)
 		}

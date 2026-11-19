@@ -103,25 +103,25 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.
 	sysService := system.NewService(sysRepo, c, aiClient)
 
 	authRepo := auth.NewRepository(db, photoStorage)
-	authService := auth.NewService(authRepo, signer, limiter, dummyHash, mailer)
+	authService := auth.NewService(authRepo, signer, time.Now, dummyHash, mailer)
 
 	logsRepo := logs.NewRepository(db, photoStorage)
-	logsService := logs.NewService(logsRepo, c, limiter, cursorCodec)
+	logsService := logs.NewService(logsRepo, c, time.Now, cursorCodec)
 
 	analyticsRepo := analytics.NewRepository(db)
-	analyticsService := analytics.NewService(analyticsRepo, limiter)
+	analyticsService := analytics.NewService(analyticsRepo, time.Now)
 
 	guidesRepo := guides.NewRepository(db)
 	guidesService := guides.NewService(guidesRepo, cursorCodec)
 
 	achievementsRepo := achievements.NewRepository(db)
-	achievementsService := achievements.NewService(achievementsRepo, limiter)
+	achievementsService := achievements.NewService(achievementsRepo, time.Now)
 
 	photosRepo := photos.NewRepository(db)
 	photosService := photos.NewService(photosRepo, photoStorage)
 
 	aiRepo := ai.NewRepository(db)
-	aiService := ai.NewService(aiRepo, c, aiClient, limiter)
+	aiService := ai.NewService(aiRepo, c, aiClient, limiter, time.Now)
 
 	if c.SwaggerEnabled {
 		app.Get("/swagger/*", swaggo.HandlerDefault)
