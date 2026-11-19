@@ -1,8 +1,8 @@
 {
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "Periksa kembali isianmu.",
-    "fields": {"weight_g": "Berat minimal 1 gram."}
+    "message": "Check your input.",
+    "fields": {"weight_g": "Weight must be at least 1 gram."}
   },
   "request_id": "fixture-request-id"
 }
