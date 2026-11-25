@@ -36,7 +36,8 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
-          cache: true
+          # The self-hosted runner already keeps Go's caches on disk.
+          cache: false
       - run: go mod verify
       - run: python3 scripts/check_contracts.py contracts/ai contracts/ai.lock.json
       - run: python3 -m unittest discover -s deploy -v

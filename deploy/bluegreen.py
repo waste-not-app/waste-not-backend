@@ -149,6 +149,8 @@ def deploy(image, env_file):
             '--security-opt', 'no-new-privileges', '--env-file', str(migrate_env),
             '--entrypoint', '/migrate', image)
         runtime = {key: value for key, value in values.items() if key.startswith('AI_')}
+        if audience := values.get('WASTENOT_GOOGLE_WEB_CLIENT_ID', '').strip():
+            runtime['WASTENOT_GOOGLE_WEB_CLIENT_ID'] = audience
         photo_dir = values.get('PHOTO_STORAGE_DIR', '').strip()
         photo_mounts = []
         if photo_dir:

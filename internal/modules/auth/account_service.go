@@ -4,9 +4,11 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"log/slog"
 	"time"
 
+	"github.com/waste-not-app/waste-not-backend/internal/middleware"
 	"github.com/waste-not-app/waste-not-backend/internal/security"
 )
 
@@ -42,8 +44,27 @@ func (s *service) ConfirmPasswordReset(ctx context.Context, token, password stri
 	return s.repo.ConfirmPasswordReset(ctx, security.Digest([]byte(token)), hash, s.now())
 }
 
-func (s *service) DeleteMe(ctx context.Context, userID, password string) error {
-	return s.repo.DeleteMe(ctx, userID, password)
+type deleteAccountProof struct {
+	identity      middleware.Identity
+	password      string
+	googleSubject string
+}
+
+func (s *service) DeleteMe(ctx context.Context, ident middleware.Identity, req DeleteMeReq) error {
+	proof := deleteAccountProof{identity: ident}
+	if req.GoogleIDToken != nil {
+		google, err := s.consumeGoogleToken(ctx, *req.GoogleIDToken)
+		if errors.Is(err, ErrUnauthenticated) {
+			return ErrGoogleReauthFailed
+		}
+		if err != nil {
+			return err
+		}
+		proof.googleSubject = google.Subject
+	} else if req.Password != nil {
+		proof.password = *req.Password
+	}
+	return s.repo.DeleteMe(ctx, proof)
 }
 
 func (s *service) RunResetMail(ctx context.Context, log *slog.Logger) {

@@ -333,6 +333,40 @@
         }
       }
     },
+    "/v1/auth/google/challenge": {
+      "post": {
+        "summary": "Start a Google credential request",
+        "description": "Use nonce as the Google ID token nonce. It expires after five minutes and can be used once, including for Google account-deletion confirmation.",
+        "operationId": "post_v1_auth_google_challenge",
+        "security": [],
+        "responses": {
+          "200": {"description": "Google challenge issued", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/GoogleChallengeResponse"}}}},
+          "400": {"description": "No request body is accepted", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "429": {"description": "Rate limited", "headers": {"Retry-After": {"schema": {"type": "integer", "minimum": 1}}}, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "503": {"description": "GOOGLE_AUTH_UNAVAILABLE", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+        }
+      }
+    },
+    "/v1/auth/google": {
+      "post": {
+        "summary": "Exchange a Google ID token for a WasteNot session",
+        "description": "New accounts do not have a password. Sign in by Google subject, not by email. To link a previously unlinked WasteNot account with the same email, obtain a fresh challenge and supply its current password.",
+        "operationId": "post_v1_auth_google",
+        "security": [],
+        "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/GoogleSignIn"}}}},
+        "responses": {
+          "200": {"description": "WasteNot session", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SessionResponse"}}}},
+          "400": {"description": "Invalid JSON", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "401": {"description": "UNAUTHENTICATED: invalid Google proof or existing password", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "409": {"description": "GOOGLE_LINK_REQUIRED or GOOGLE_IDENTITY_CONFLICT", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "413": {"description": "Body too large", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "415": {"description": "JSON required", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "422": {"description": "VALIDATION_ERROR", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "429": {"description": "Rate limited", "headers": {"Retry-After": {"schema": {"type": "integer", "minimum": 1}}}, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "503": {"description": "GOOGLE_AUTH_UNAVAILABLE", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+        }
+      }
+    },
     "/v1/auth/refresh": {
       "post": {
         "summary": "Rotate opaque refresh token; reuse revokes the session",
@@ -594,19 +628,19 @@
     "/v1/me": {
       "delete": {
         "summary": "Delete authenticated account and owned data",
-        "description": "Verify current password. 403 WRONG_PASSWORD has field password, not session expiry. Owner data cascades and photo removal/upload intents are durably tracked. 204 confirms physical cleanup including interrupted-upload temporary files. Deferred or locked owner cleanup returns 503 ACCOUNT_DELETION_PENDING after committed account/session removal: clear owner-local state and sign out without reporting a completed purge.",
+        "description": "Verify the current password or a fresh Google ID token from the linked Google account. Owner data cascades and photo removal/upload intents are durably tracked. 204 confirms physical cleanup including interrupted-upload temporary files. Deferred or locked owner cleanup returns 503 ACCOUNT_DELETION_PENDING after committed account/session removal: clear owner-local state and sign out without reporting a completed purge.",
         "operationId": "delete_v1_me",
         "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/DeleteMe"}}}},
         "responses": {
           "204": {"description": "Account, owned database data and queued private photos removed"},
           "400": {"description": "Invalid JSON", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
           "401": {"description": "Invalid or expired session", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
-          "403": {"description": "WRONG_PASSWORD; fields.password explains rejection", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
+          "403": {"description": "WRONG_PASSWORD with fields.password, or GOOGLE_REAUTH_FAILED for rejected Google proof", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
           "413": {"description": "Body too large", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
           "415": {"description": "JSON required", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
           "422": {"description": "VALIDATION_ERROR", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
           "429": {"description": "Rate limited", "headers": {"Retry-After": {"schema": {"type": "integer", "minimum": 1}}}, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}},
-          "503": {"description": "UNAVAILABLE before commit; ACCOUNT_DELETION_PENDING after committed owner removal with physical cleanup pending", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
+          "503": {"description": "UNAVAILABLE or GOOGLE_AUTH_UNAVAILABLE before commit; ACCOUNT_DELETION_PENDING after committed owner removal with physical cleanup pending", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}}
         }
       },
       "get": {
@@ -2499,8 +2533,34 @@
         "additionalProperties": false
       },
       "DeleteMe": {
-        "type": "object", "required": ["password"],
-        "properties": {"password": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "type": "object",
+        "properties": {
+          "password": {"type": "string", "minLength": 1, "maxLength": 128},
+          "google_id_token": {"type": "string", "minLength": 1}
+        },
+        "oneOf": [{"required": ["password"]}, {"required": ["google_id_token"]}],
+        "additionalProperties": false
+      },
+      "GoogleChallengeResponse": {
+        "type": "object", "required": ["data", "request_id", "api_version"],
+        "properties": {
+          "data": {
+            "type": "object", "required": ["nonce"],
+            "properties": {"nonce": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$"}},
+            "additionalProperties": false
+          },
+          "request_id": {"type": "string", "format": "uuid"},
+          "api_version": {"const": "1.0.0"}
+        },
+        "additionalProperties": false
+      },
+      "GoogleSignIn": {
+        "type": "object", "required": ["id_token", "timezone"],
+        "properties": {
+          "id_token": {"type": "string", "minLength": 1},
+          "timezone": {"type": "string"},
+          "current_password": {"type": "string", "minLength": 1, "maxLength": 128}
+        },
         "additionalProperties": false
       },
       "PasswordResetResponse": {
@@ -2597,6 +2657,10 @@
           },
           "timezone": {
             "type": "string"
+          },
+          "has_password": {
+            "type": "boolean",
+            "description": "True if the account can authenticate with a WasteNot password."
           },
           "progress": {
             "$ref": "#/components/schemas/Progress"

@@ -30,6 +30,7 @@ services:
       HTTP_ADDR: 127.0.0.1:8080
       DATABASE_URL: postgres://wastenot:${POSTGRES_PASSWORD}@127.0.0.1:5432/wastenot?sslmode=disable
       JWT_SECRET_BASE64: ${JWT_SECRET_BASE64:?Generate a JWT signing secret in .env}
+      WASTENOT_GOOGLE_WEB_CLIENT_ID: ${WASTENOT_GOOGLE_WEB_CLIENT_ID:-}
       AI_ENABLED: ${AI_ENABLED:-false}
       AI_RECOMMENDATION_ENABLED: ${AI_RECOMMENDATION_ENABLED:-false}
       AI_ALLOW_PROTOTYPE: ${AI_ALLOW_PROTOTYPE:-false}

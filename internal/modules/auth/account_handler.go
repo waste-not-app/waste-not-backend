@@ -36,7 +36,7 @@ func (h *Handler) RequestPasswordReset(c fiber.Ctx) error {
 	if err := h.service.RequestPasswordReset(c.Context(), email); errors.Is(err, ErrMailUnavailable) {
 		return response.Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
 	} else if err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.Data(c, fiber.StatusAccepted, PasswordResetRes{Message: "If this email is registered, we'll process the password reset. Check your inbox for a recovery code."})
 }
@@ -76,17 +76,17 @@ func (h *Handler) ConfirmPasswordReset(c fiber.Ctx) error {
 		return response.Fail(c, fiber.StatusUnprocessableEntity, "INVALID_RESET_TOKEN", map[string]string{"token": "This recovery code is invalid or has expired."})
 	}
 	if err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.NoContent(c)
 }
 
 // @Summary Delete current account
-// @Description Verify the current password, cascade owned data and remove private photo files. Storage failures return 503 with durable cleanup pending, never a confirmed purge.
+// @Description Verify the current password or a fresh token from the linked Google account, cascade owned data and remove private photo files. Storage failures return 503 with durable cleanup pending, never a confirmed purge.
 // @Tags Auth
 // @Security BearerAuth
 // @Accept json
-// @Param req body DeleteMeReq true "Current password"
+// @Param req body DeleteMeReq true "Exactly one current password or Google ID token"
 // @Success 204 "No Content"
 // @Failure 400,401,403,413,415,422,429,503 {object} response.ErrorResponse
 // @Router /v1/me [delete]
@@ -99,16 +99,27 @@ func (h *Handler) DeleteMe(c fiber.Ctx) error {
 	if !h.checkAuthRateLimit(c, "delete-me:"+ident.User.ID) {
 		return nil
 	}
-	if n := utf8.RuneCountInString(req.Password); n < 1 || n > domain.MaxPasswordLength {
-		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"password": "Enter your current password."})
+	if (req.Password == nil) == (req.GoogleIDToken == nil) {
+		return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"password": "Provide either your current password or a Google ID token."})
 	}
-	if !h.limiter.HashSlots.TryAcquire() {
-		return response.Busy(c, "UNAVAILABLE")
+	if req.Password != nil {
+		if n := utf8.RuneCountInString(*req.Password); n < 1 || n > domain.MaxPasswordLength {
+			return response.Fail(c, fiber.StatusUnprocessableEntity, "VALIDATION_ERROR", map[string]string{"password": "Enter your current password."})
+		}
+		if !h.limiter.HashSlots.TryAcquire() {
+			return response.Busy(c, "UNAVAILABLE")
+		}
+		defer h.limiter.HashSlots.Release()
 	}
-	defer h.limiter.HashSlots.Release()
-	err := h.service.DeleteMe(c.Context(), ident.User.ID, req.Password)
+	err := h.service.DeleteMe(c.Context(), ident, req)
 	if errors.Is(err, ErrWrongPassword) {
 		return response.Fail(c, fiber.StatusForbidden, "WRONG_PASSWORD", map[string]string{"password": "Your current password is incorrect."})
+	}
+	if errors.Is(err, ErrGoogleReauthFailed) {
+		return response.Fail(c, fiber.StatusForbidden, "GOOGLE_REAUTH_FAILED", nil)
+	}
+	if errors.Is(err, ErrGoogleAuthUnavailable) {
+		return response.Busy(c, "GOOGLE_AUTH_UNAVAILABLE")
 	}
 	if errors.Is(err, ErrSessionExpired) {
 		return response.Fail(c, fiber.StatusUnauthorized, "SESSION_EXPIRED", nil)
@@ -117,7 +128,7 @@ func (h *Handler) DeleteMe(c fiber.Ctx) error {
 		return response.Fail(c, fiber.StatusServiceUnavailable, "ACCOUNT_DELETION_PENDING", nil)
 	}
 	if err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.NoContent(c)
 }

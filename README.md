@@ -33,6 +33,8 @@ Passwords are hashed with Argon2id. Access tokens are HS256 JWTs that last 15 mi
 
 Forgotten passwords are handled with a one-time code sent by email. Codes go through an encrypted outbox that retries delivery. Deleting an account removes everything the user owns and waits for their photo cleanup to finish before confirming.
 
+Google sign-in is optional. The API verifies the Google ID token and a one-time nonce, then creates a regular WasteNot session. The stable Google subject identifies the user after linking. Matching an existing email never links accounts without the current WasteNot password. New Google accounts have no password and use a fresh Google proof to confirm account deletion.
+
 ### Waste logs and progress
 
 - Create, edit, and soft-delete logs. Creates are idempotent through `client_request_id`, and edits and deletes use optimistic concurrency through `version` and `If-Match`.
@@ -112,6 +114,7 @@ Everything is configured through environment variables, and [`.env.example`](.en
 | `JWT_SECRET_BASE64` | Yes | | At least 32 random bytes, base64-encoded (`openssl rand -base64 32`) |
 | `HTTP_ADDR` | | `127.0.0.1:8080` | Listen address |
 | `WASTENOT_RELEASE` | | | Release identifier returned in `X-WasteNot-Release` by `/health/ready` |
+| `WASTENOT_GOOGLE_WEB_CLIENT_ID` | For Google sign-in | | Public Google OAuth Web client ID; use the same value in the Android build |
 | `AI_ENABLED` | | `false` | Turns on AI detection |
 | `AI_RECOMMENDATION_ENABLED` | | Value of `AI_ENABLED` | Turns on AI recommendations |
 | `AI_ALLOW_PROTOTYPE` | | `false` | Accepts fixture or draft worker output. For testing only |
@@ -129,7 +132,7 @@ The full contract is in [`contracts/core.openapi.json`](contracts/core.openapi.j
 
 All paths start with `/v1`. Bodies are UTF-8 JSON with `snake_case` fields, IDs are UUIDs, and timestamps are RFC 3339 in UTC.
 
-Every endpoint needs `Authorization: Bearer <access_token>`, except registration, login, refresh, password reset, and `/health/*`.
+Every endpoint needs `Authorization: Bearer <access_token>`, except registration, password and Google sign-in, Google challenge issuance, refresh, password reset, and `/health/*`.
 
 Each response carries an `X-Request-ID`. If the client sends a valid UUID in that header, the API reuses it.
 
@@ -143,6 +146,8 @@ When you get a `429` or `503`, wait for the time in `Retry-After`. If you retry 
 |---|---|---|
 | `POST` | `/v1/auth/register` | Create an account and a session |
 | `POST` | `/v1/auth/login` | Start a session |
+| `POST` | `/v1/auth/google/challenge` | Issue a five-minute, one-time Google nonce |
+| `POST` | `/v1/auth/google` | Exchange a verified Google ID token for a WasteNot session |
 | `POST` | `/v1/auth/refresh` | Rotate the refresh token |
 | `POST` | `/v1/auth/logout` | End the current session |
 | `POST` | `/v1/auth/password-reset` | Request a recovery code |
