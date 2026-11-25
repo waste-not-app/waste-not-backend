@@ -100,6 +100,7 @@ func Cleanup(ctx context.Context, p *pgxpool.Pool) error {
 		`DELETE FROM rate_limits WHERE bucket<now()-interval '2 days'`,
 		`DELETE FROM password_reset_tokens WHERE expires_at<now()`,
 		`DELETE FROM password_reset_mail WHERE expires_at<now()`,
+		`DELETE FROM google_auth_challenges WHERE expires_at<=now()`,
 		`DELETE FROM sessions WHERE expires_at<now()-interval '7 days'`,
 	} {
 		if _, err = tx.Exec(ctx, q); err != nil {

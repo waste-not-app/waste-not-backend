@@ -26,6 +26,11 @@ import (
 
 func setup(t *testing.T, change func(*config.Config), mailers ...auth.ResetMailer) (*Server, *httptest.Server) {
 	t.Helper()
+	return setupWithGoogleVerifier(t, change, nil, mailers...)
+}
+
+func setupWithGoogleVerifier(t *testing.T, change func(*config.Config), google auth.GoogleVerifier, mailers ...auth.ResetMailer) (*Server, *httptest.Server) {
+	t.Helper()
 	dsn := os.Getenv("TEST_DATABASE_URL")
 	if dsn == "" {
 		t.Skip("TEST_DATABASE_URL required for PostgreSQL integration tests")
@@ -67,7 +72,13 @@ func setup(t *testing.T, change func(*config.Config), mailers ...auth.ResetMaile
 	}
 	log := slog.New(slog.NewTextHandler(io.Discard, nil))
 	var s *Server
-	if len(mailers) > 0 {
+	if google != nil {
+		var mailer auth.ResetMailer
+		if len(mailers) > 0 {
+			mailer = mailers[0]
+		}
+		s, e = newServerWithGoogle(db, c, log, mailer, google)
+	} else if len(mailers) > 0 {
 		s, e = newServer(db, c, log, mailers[0])
 	} else {
 		s, e = New(db, c, log)

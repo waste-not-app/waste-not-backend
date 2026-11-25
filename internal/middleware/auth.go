@@ -44,7 +44,7 @@ func Protected(dbPool *pgxpool.Pool, signer security.Signer, limiter *ratelimit.
 			return response.Fail(c, fiber.StatusUnauthorized, "SESSION_EXPIRED", nil)
 		}
 		if err != nil {
-			return response.InternalError(c, log, err)
+			return response.InternalErrorRedacted(c, log, err)
 		}
 
 		now := time.Now()
@@ -53,16 +53,17 @@ func Protected(dbPool *pgxpool.Pool, signer security.Signer, limiter *ratelimit.
 		}
 
 		if ok, err := limiter.Allow(c.Context(), "api:"+row.ID, 300, time.Minute); err != nil {
-			return response.InternalError(c, log, err)
+			return response.InternalErrorRedacted(c, log, err)
 		} else if !ok {
 			return response.RateLimited(c, 60)
 		}
 
 		u := domain.User{
-			ID:       row.ID,
-			Name:     row.Name,
-			Email:    row.NormalizedEmail,
-			Timezone: row.Timezone,
+			ID:          row.ID,
+			Name:        row.Name,
+			Email:       row.NormalizedEmail,
+			Timezone:    row.Timezone,
+			HasPassword: row.HasPassword,
 		}
 		ident := Identity{
 			User:       u,

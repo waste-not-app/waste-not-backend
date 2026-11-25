@@ -1,8 +1,17 @@
 -- name: LockAccount :one
-SELECT password_hash FROM users WHERE id = $1 FOR UPDATE;
+SELECT name, normalized_email, timezone, COALESCE(password_hash, '')::text AS password_hash,
+       (password_hash IS NOT NULL)::bool AS has_password,
+       COALESCE(google_sub, '')::text AS google_sub
+FROM users WHERE id = $1 FOR UPDATE;
 
 -- name: LockAccountByEmail :one
-SELECT id::text AS id FROM users WHERE normalized_email = $1 FOR UPDATE;
+SELECT id::text AS id FROM users WHERE normalized_email = $1 AND password_hash IS NOT NULL FOR UPDATE;
+
+-- name: LockAccountDeletionSession :one
+SELECT id::text AS id FROM sessions
+WHERE id = $1 AND user_id = $2 AND generation = $3
+  AND revoked_at IS NULL AND expires_at > clock_timestamp()
+FOR UPDATE;
 
 -- name: ReplacePasswordResetToken :exec
 INSERT INTO password_reset_tokens (user_id, token_hash, expires_at)

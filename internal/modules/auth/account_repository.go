@@ -50,7 +50,8 @@ func (r *repository) ConfirmPasswordReset(ctx context.Context, tokenHash, passwo
 	if err != nil {
 		return err
 	}
-	if _, err := q.LockAccount(ctx, id); errors.Is(err, pgx.ErrNoRows) {
+	account, err := q.LockAccount(ctx, id)
+	if errors.Is(err, pgx.ErrNoRows) || (err == nil && !account.HasPassword) {
 		return ErrInvalidResetToken
 	} else if err != nil {
 		return err
@@ -77,21 +78,34 @@ func (r *repository) ConfirmPasswordReset(ctx context.Context, tokenHash, passwo
 	return tx.Commit(ctx)
 }
 
-func (r *repository) DeleteMe(ctx context.Context, userID, password string) error {
+func (r *repository) DeleteMe(ctx context.Context, proof deleteAccountProof) error {
+	userID := proof.identity.User.ID
 	tx, err := r.dbPool.Begin(ctx)
 	if err != nil {
 		return err
 	}
 	defer tx.Rollback(ctx)
 	q := r.q.WithTx(tx)
-	hash, err := q.LockAccount(ctx, userID)
+	account, err := q.LockAccount(ctx, userID)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return ErrSessionExpired
 	}
 	if err != nil {
 		return err
 	}
-	if !security.Verify(password, hash) {
+	session := db.LockAccountDeletionSessionParams{
+		ID: proof.identity.SessionID, UserID: userID, Generation: proof.identity.Generation,
+	}
+	if _, err := q.LockAccountDeletionSession(ctx, session); errors.Is(err, pgx.ErrNoRows) {
+		return ErrSessionExpired
+	} else if err != nil {
+		return err
+	}
+	if proof.googleSubject != "" {
+		if account.GoogleSub != proof.googleSubject {
+			return ErrGoogleReauthFailed
+		}
+	} else if !security.Verify(proof.password, account.PasswordHash) {
 		return ErrWrongPassword
 	}
 	if affected, err := q.DeleteAccount(ctx, userID); err != nil {

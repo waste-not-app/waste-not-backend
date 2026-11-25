@@ -25,3 +25,19 @@ func TestRecommendationFeatureCanBeDisabledSeparately(t *testing.T) {
 		t.Fatal("recommendations did not enable")
 	}
 }
+
+func TestGoogleWebClientIDIsOptional(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://example")
+	t.Setenv("JWT_SECRET_BASE64", base64.StdEncoding.EncodeToString([]byte(strings.Repeat("s", 32))))
+	t.Setenv("AI_ENABLED", "false")
+	t.Setenv("WASTENOT_GOOGLE_WEB_CLIENT_ID", " ")
+	c, err := Load()
+	if err != nil || c.GoogleWebClientID != "" {
+		t.Fatal("blank Google client ID should keep Google sign-in disabled", err)
+	}
+	t.Setenv("WASTENOT_GOOGLE_WEB_CLIENT_ID", " test-only-client.apps.googleusercontent.com ")
+	c, err = Load()
+	if err != nil || c.GoogleWebClientID != "test-only-client.apps.googleusercontent.com" {
+		t.Fatal("Google Web client ID was not loaded", err)
+	}
+}

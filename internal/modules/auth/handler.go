@@ -30,6 +30,8 @@ func RegisterHTTPRoutes(app *fiber.App, service Service, limiter *ratelimit.Limi
 	v1Auth := app.Group("/v1/auth")
 	v1Auth.Post("/register", handler.Register)
 	v1Auth.Post("/login", handler.Login)
+	v1Auth.Post("/google/challenge", handler.IssueGoogleChallenge)
+	v1Auth.Post("/google", handler.GoogleLogin)
 	v1Auth.Post("/refresh", handler.RefreshToken)
 	v1Auth.Post("/logout", authMw, handler.Logout)
 	v1Auth.Post("/password-reset", handler.RequestPasswordReset)
@@ -41,8 +43,12 @@ func RegisterHTTPRoutes(app *fiber.App, service Service, limiter *ratelimit.Limi
 
 func (h *Handler) checkAuthRateLimit(c fiber.Ctx, key string) bool {
 	ok, err := h.limiter.CheckAuthLimit(c.Context(), c.IP(), key)
+	return h.allowAuthRateLimit(c, ok, err)
+}
+
+func (h *Handler) allowAuthRateLimit(c fiber.Ctx, ok bool, err error) bool {
 	if err != nil {
-		_ = response.InternalError(c, h.log, err)
+		_ = response.InternalErrorRedacted(c, h.log, err)
 		return false
 	}
 	if !ok {
@@ -84,7 +90,7 @@ func (h *Handler) Register(c fiber.Ctx) error {
 		return response.Fail(c, fiber.StatusConflict, "EMAIL_EXISTS", map[string]string{"email": "This email is already in use."})
 	}
 	if err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.Created(c, tokens)
 }
@@ -120,7 +126,7 @@ func (h *Handler) Login(c fiber.Ctx) error {
 		return response.Fail(c, fiber.StatusUnauthorized, "UNAUTHENTICATED", nil)
 	}
 	if err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.OK(c, tokens)
 }
@@ -147,7 +153,7 @@ func (h *Handler) RefreshToken(c fiber.Ctx) error {
 		return response.Fail(c, fiber.StatusUnauthorized, "SESSION_EXPIRED", nil)
 	}
 	if err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.OK(c, tokens)
 }
@@ -162,7 +168,7 @@ func (h *Handler) RefreshToken(c fiber.Ctx) error {
 func (h *Handler) Logout(c fiber.Ctx) error {
 	ident := middleware.Who(c)
 	if err := h.service.Logout(c.Context(), ident.SessionID, ident.User.ID); err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.NoContent(c)
 }
@@ -179,7 +185,7 @@ func (h *Handler) GetMe(c fiber.Ctx) error {
 	ident := middleware.Who(c)
 	res, err := h.service.GetMe(c.Context(), ident.User)
 	if err != nil {
-		return response.InternalError(c, h.log, err)
+		return response.InternalErrorRedacted(c, h.log, err)
 	}
 	return response.OK(c, res)
 }

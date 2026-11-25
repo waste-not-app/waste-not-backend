@@ -18,14 +18,17 @@ import (
 
 type Repository interface {
 	CreateUserWithSession(ctx context.Context, u UserRes, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error)
-	GetUserByEmail(ctx context.Context, email string) (UserRecord, error)
-	CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error)
+	GetPasswordAccount(ctx context.Context, email string) (userID, passwordHash string, err error)
+	CreateSessionForUser(ctx context.Context, userID, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error)
+	IssueGoogleChallenge(ctx context.Context, nonceHash string) error
+	ClaimGoogleChallenge(ctx context.Context, nonceHash string) error
+	ExchangeGoogleIdentity(ctx context.Context, identity GoogleIdentity, timezone string, password *string, signer security.Signer, now time.Time) (security.Tokens, error)
 	RotateRefreshToken(ctx context.Context, refreshToken string, signer security.Signer, now time.Time) (security.Tokens, error)
 	RevokeSession(ctx context.Context, sessionID, userID string) error
 	GetUserProgress(ctx context.Context, userID, today string) (domain.Progress, error)
 	RequestPasswordReset(ctx context.Context, email, tokenHash string, encrypted []byte, now time.Time) error
 	ConfirmPasswordReset(ctx context.Context, tokenHash, passwordHash string, now time.Time) error
-	DeleteMe(ctx context.Context, userID, password string) error
+	DeleteMe(ctx context.Context, proof deleteAccountProof) error
 	DeliverResetMail(ctx context.Context, deliver func(context.Context, string, []byte) error) (bool, error)
 }
 
@@ -99,26 +102,15 @@ func (r *repository) CreateUserWithSession(ctx context.Context, u UserRes, passw
 	return tokens, err
 }
 
-func (r *repository) GetUserByEmail(ctx context.Context, email string) (UserRecord, error) {
+func (r *repository) GetPasswordAccount(ctx context.Context, email string) (userID, passwordHash string, err error) {
 	row, err := r.q.GetUserByEmail(ctx, email)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return UserRecord{}, ErrUnauthenticated
+		return "", "", ErrUnauthenticated
 	}
-	if err != nil {
-		return UserRecord{}, err
-	}
-	return UserRecord{
-		UserRes: UserRes{
-			ID:       row.ID,
-			Name:     row.Name,
-			Email:    row.NormalizedEmail,
-			Timezone: row.Timezone,
-		},
-		PasswordHash: row.PasswordHash,
-	}, nil
+	return row.ID, row.PasswordHash, err
 }
 
-func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error) {
+func (r *repository) CreateSessionForUser(ctx context.Context, userID, passwordHash string, signer security.Signer, now time.Time) (security.Tokens, error) {
 	tx, err := r.dbPool.Begin(ctx)
 	if err != nil {
 		return security.Tokens{}, err
@@ -127,18 +119,28 @@ func (r *repository) CreateSessionForUser(ctx context.Context, u UserRes, passwo
 
 	qtx := r.q.WithTx(tx)
 	// Serialize with password replacement so a pre-reset password check cannot create a new session afterward.
-	currentHash, err := qtx.LockAccount(ctx, u.ID)
-	if errors.Is(err, pgx.ErrNoRows) || (err == nil && currentHash != passwordHash) {
+	account, err := qtx.LockAccount(ctx, userID)
+	if errors.Is(err, pgx.ErrNoRows) || (err == nil && account.PasswordHash != passwordHash) {
 		return security.Tokens{}, ErrUnauthenticated
 	}
 	if err != nil {
 		return security.Tokens{}, err
 	}
-	tokens, err := r.insertSession(ctx, qtx, u, signer, now)
+	tokens, err := r.insertSession(ctx, qtx, lockedUserRes(userID, account), signer, now)
 	if err == nil {
 		err = tx.Commit(ctx)
 	}
 	return tokens, err
+}
+
+func lockedUserRes(id string, account db.LockAccountRow) UserRes {
+	return UserRes{
+		ID:          id,
+		Name:        account.Name,
+		Email:       account.NormalizedEmail,
+		Timezone:    account.Timezone,
+		HasPassword: account.HasPassword,
+	}
 }
 
 func (r *repository) RotateRefreshToken(ctx context.Context, refreshToken string, signer security.Signer, now time.Time) (security.Tokens, error) {

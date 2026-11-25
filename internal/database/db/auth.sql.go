@@ -66,7 +66,8 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 }
 
 const getSessionAndUser = `-- name: GetSessionAndUser :one
-SELECT u.id::text AS id, u.name, u.normalized_email, u.timezone, s.generation, (s.revoked_at IS NOT NULL)::bool AS revoked, s.expires_at
+SELECT u.id::text AS id, u.name, u.normalized_email, u.timezone, (u.password_hash IS NOT NULL)::bool AS has_password,
+       s.generation, (s.revoked_at IS NOT NULL)::bool AS revoked, s.expires_at
 FROM sessions s
 JOIN users u ON u.id = s.user_id
 WHERE s.id = $1 AND s.user_id = $2
@@ -82,6 +83,7 @@ type GetSessionAndUserRow struct {
 	Name            string
 	NormalizedEmail string
 	Timezone        string
+	HasPassword     bool
 	Generation      int
 	Revoked         bool
 	ExpiresAt       time.Time
@@ -95,6 +97,7 @@ func (q *Queries) GetSessionAndUser(ctx context.Context, arg GetSessionAndUserPa
 		&i.Name,
 		&i.NormalizedEmail,
 		&i.Timezone,
+		&i.HasPassword,
 		&i.Generation,
 		&i.Revoked,
 		&i.ExpiresAt,
@@ -103,29 +106,20 @@ func (q *Queries) GetSessionAndUser(ctx context.Context, arg GetSessionAndUserPa
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id::text AS id, name, normalized_email, timezone, password_hash
+SELECT id::text AS id, COALESCE(password_hash, '')::text AS password_hash
 FROM users
-WHERE normalized_email = $1
+WHERE normalized_email = $1 AND password_hash IS NOT NULL
 `
 
 type GetUserByEmailRow struct {
-	ID              string
-	Name            string
-	NormalizedEmail string
-	Timezone        string
-	PasswordHash    string
+	ID           string
+	PasswordHash string
 }
 
 func (q *Queries) GetUserByEmail(ctx context.Context, normalizedEmail string) (GetUserByEmailRow, error) {
 	row := q.db.QueryRow(ctx, getUserByEmail, normalizedEmail)
 	var i GetUserByEmailRow
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.NormalizedEmail,
-		&i.Timezone,
-		&i.PasswordHash,
-	)
+	err := row.Scan(&i.ID, &i.PasswordHash)
 	return i, err
 }
 

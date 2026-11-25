@@ -51,7 +51,18 @@ type PasswordResetConfirmReq struct {
 }
 
 type DeleteMeReq struct {
-	Password string `json:"password"`
+	Password      *string `json:"password,omitempty"`
+	GoogleIDToken *string `json:"google_id_token,omitempty"`
+}
+
+type GoogleLoginReq struct {
+	IDToken         string  `json:"id_token"`
+	Timezone        string  `json:"timezone"`
+	CurrentPassword *string `json:"current_password,omitempty"`
+}
+
+type GoogleChallengeRes struct {
+	Nonce string `json:"nonce"`
 }
 
 type PasswordResetRes struct {
@@ -68,14 +79,10 @@ type AuthTokensRes struct {
 }
 
 type UserRes struct {
-	ID       string           `json:"id"`
-	Name     string           `json:"name"`
-	Email    string           `json:"email"`
-	Timezone string           `json:"timezone"`
-	Progress *domain.Progress `json:"progress,omitempty"`
-}
-
-type UserRecord struct {
-	UserRes
-	PasswordHash string
+	ID          string           `json:"id"`
+	Name        string           `json:"name"`
+	Email       string           `json:"email"`
+	Timezone    string           `json:"timezone"`
+	HasPassword bool             `json:"has_password"`
+	Progress    *domain.Progress `json:"progress,omitempty"`
 }

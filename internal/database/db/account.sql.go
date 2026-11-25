@@ -164,22 +164,61 @@ func (q *Queries) HasOwnerPhotoCleanup(ctx context.Context, dollar_1 string) (bo
 }
 
 const lockAccount = `-- name: LockAccount :one
-SELECT password_hash FROM users WHERE id = $1 FOR UPDATE
+SELECT name, normalized_email, timezone, COALESCE(password_hash, '')::text AS password_hash,
+       (password_hash IS NOT NULL)::bool AS has_password,
+       COALESCE(google_sub, '')::text AS google_sub
+FROM users WHERE id = $1 FOR UPDATE
 `
 
-func (q *Queries) LockAccount(ctx context.Context, id string) (string, error) {
+type LockAccountRow struct {
+	Name            string
+	NormalizedEmail string
+	Timezone        string
+	PasswordHash    string
+	HasPassword     bool
+	GoogleSub       string
+}
+
+func (q *Queries) LockAccount(ctx context.Context, id string) (LockAccountRow, error) {
 	row := q.db.QueryRow(ctx, lockAccount, id)
-	var password_hash string
-	err := row.Scan(&password_hash)
-	return password_hash, err
+	var i LockAccountRow
+	err := row.Scan(
+		&i.Name,
+		&i.NormalizedEmail,
+		&i.Timezone,
+		&i.PasswordHash,
+		&i.HasPassword,
+		&i.GoogleSub,
+	)
+	return i, err
 }
 
 const lockAccountByEmail = `-- name: LockAccountByEmail :one
-SELECT id::text AS id FROM users WHERE normalized_email = $1 FOR UPDATE
+SELECT id::text AS id FROM users WHERE normalized_email = $1 AND password_hash IS NOT NULL FOR UPDATE
 `
 
 func (q *Queries) LockAccountByEmail(ctx context.Context, normalizedEmail string) (string, error) {
 	row := q.db.QueryRow(ctx, lockAccountByEmail, normalizedEmail)
+	var id string
+	err := row.Scan(&id)
+	return id, err
+}
+
+const lockAccountDeletionSession = `-- name: LockAccountDeletionSession :one
+SELECT id::text AS id FROM sessions
+WHERE id = $1 AND user_id = $2 AND generation = $3
+  AND revoked_at IS NULL AND expires_at > clock_timestamp()
+FOR UPDATE
+`
+
+type LockAccountDeletionSessionParams struct {
+	ID         string
+	UserID     string
+	Generation int
+}
+
+func (q *Queries) LockAccountDeletionSession(ctx context.Context, arg LockAccountDeletionSessionParams) (string, error) {
+	row := q.db.QueryRow(ctx, lockAccountDeletionSession, arg.ID, arg.UserID, arg.Generation)
 	var id string
 	err := row.Scan(&id)
 	return id, err

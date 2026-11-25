@@ -222,6 +222,15 @@ definitions:
       request_id:
         type: string
     type: object
+  github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_GoogleChallengeRes:
+    properties:
+      api_version:
+        type: string
+      data:
+        $ref: '#/definitions/internal_modules_auth.GoogleChallengeRes'
+      request_id:
+        type: string
+    type: object
   github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_PasswordResetRes:
     properties:
       api_version:
@@ -464,7 +473,23 @@ definitions:
     type: object
   internal_modules_auth.DeleteMeReq:
     properties:
+      google_id_token:
+        type: string
       password:
+        type: string
+    type: object
+  internal_modules_auth.GoogleChallengeRes:
+    properties:
+      nonce:
+        type: string
+    type: object
+  internal_modules_auth.GoogleLoginReq:
+    properties:
+      current_password:
+        type: string
+      id_token:
+        type: string
+      timezone:
         type: string
     type: object
   internal_modules_auth.LoginReq:
@@ -511,6 +536,8 @@ definitions:
     properties:
       email:
         type: string
+      has_password:
+        type: boolean
       id:
         type: string
       name:
@@ -942,6 +969,88 @@ paths:
       summary: Generate AI Waste Disposal Recommendation
       tags:
       - AI Scan
+  /v1/auth/google:
+    post:
+      consumes:
+      - application/json
+      description: Exchange a verified Google ID token and single-use nonce for a
+        WasteNot session. Linking an existing password account also requires its current
+        password.
+      parameters:
+      - description: Google ID token, time zone, and optional WasteNot linking proof
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/internal_modules_auth.GoogleLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+      summary: Sign in with Google
+      tags:
+      - Auth
+  /v1/auth/google/challenge:
+    post:
+      description: Return a five-minute single-use nonce. Pass it to Google when requesting
+        an ID token for sign-in or account deletion.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_GoogleChallengeRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse'
+      summary: Issue a Google sign-in challenge
+      tags:
+      - Auth
   /v1/auth/login:
     post:
       consumes:
@@ -1202,11 +1311,11 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Verify the current password, cascade owned data and remove private
-        photo files. Storage failures return 503 with durable cleanup pending, never
-        a confirmed purge.
+      description: Verify the current password or a fresh token from the linked Google
+        account, cascade owned data and remove private photo files. Storage failures
+        return 503 with durable cleanup pending, never a confirmed purge.
       parameters:
-      - description: Current password
+      - description: Exactly one current password or Google ID token
         in: body
         name: req
         required: true

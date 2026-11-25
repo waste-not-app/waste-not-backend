@@ -50,6 +50,8 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Deploy with Docker Compose
+        env:
+          WASTENOT_GOOGLE_WEB_CLIENT_ID: ${{ vars.WASTENOT_GOOGLE_WEB_CLIENT_ID }}
         run: |
           set -e
           umask 077

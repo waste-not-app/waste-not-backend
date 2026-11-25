@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"mime"
 	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v3"
 )
@@ -135,6 +137,17 @@ func InternalError(c fiber.Ctx, log *slog.Logger, err error) error {
 	return Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
 }
 
+func InternalErrorRedacted(c fiber.Ctx, log *slog.Logger, err error) error {
+	LogRedactedError(c, log, err)
+	return Fail(c, fiber.StatusServiceUnavailable, "UNAVAILABLE", nil)
+}
+
+func LogRedactedError(c fiber.Ctx, log *slog.Logger, err error) {
+	if log != nil {
+		log.Error("authentication request failed", "request_id", RequestID(c), "error_type", fmt.Sprintf("%T", err))
+	}
+}
+
 func DecodeJSON(c fiber.Ctx, v any) bool {
 	media, _, err := mime.ParseMediaType(c.Get(fiber.HeaderContentType))
 	if err != nil || media != "application/json" {
@@ -178,7 +191,11 @@ func ErrorHandler(log *slog.Logger) fiber.ErrorHandler {
 				return Fail(c, fiber.StatusRequestEntityTooLarge, "FILE_TOO_LARGE", nil)
 			}
 		}
-		if log != nil {
+		path := strings.TrimSuffix(c.Path(), "/")
+		const authPrefix = "/v1/auth/"
+		if strings.EqualFold(path, "/v1/me") || (len(path) >= len(authPrefix) && strings.EqualFold(path[:len(authPrefix)], authPrefix)) {
+			LogRedactedError(c, log, err)
+		} else if log != nil {
 			log.Error("unhandled error", "request_id", RequestID(c), "detail", err)
 		}
 		return Fail(c, fiber.StatusInternalServerError, "INTERNAL_ERROR", nil)

@@ -54,6 +54,10 @@ func New(db *pgxpool.Pool, c config.Config, log *slog.Logger) (*Server, error) {
 }
 
 func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.ResetMailer) (*Server, error) {
+	return newServerWithGoogle(db, c, log, mailer, auth.NewGoogleVerifier(c.GoogleWebClientID))
+}
+
+func newServerWithGoogle(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.ResetMailer, google auth.GoogleVerifier) (*Server, error) {
 	aiClient, err := aiclient.New(c)
 	if err != nil {
 		return nil, err
@@ -103,7 +107,7 @@ func newServer(db *pgxpool.Pool, c config.Config, log *slog.Logger, mailer auth.
 	sysService := system.NewService(sysRepo, c, aiClient)
 
 	authRepo := auth.NewRepository(db, photoStorage)
-	authService := auth.NewService(authRepo, signer, time.Now, dummyHash, mailer)
+	authService := auth.NewService(authRepo, signer, time.Now, dummyHash, mailer, google, limiter)
 
 	logsRepo := logs.NewRepository(db, photoStorage)
 	logsService := logs.NewService(logsRepo, c, time.Now, cursorCodec)

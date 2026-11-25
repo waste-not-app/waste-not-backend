@@ -47,6 +47,11 @@ type AiOperation struct {
 	DeletedAt       *time.Time
 }
 
+type GoogleAuthChallenge struct {
+	NonceHash string
+	ExpiresAt time.Time
+}
+
 type PasswordResetMail struct {
 	UserID         string
 	Version        string
@@ -117,6 +122,7 @@ type User struct {
 	Timezone        string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
+	GoogleSub       string
 }
 
 type UserAchievement struct {

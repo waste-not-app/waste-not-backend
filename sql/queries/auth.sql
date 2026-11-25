@@ -3,9 +3,9 @@ INSERT INTO users (id, name, normalized_email, password_hash, timezone)
 VALUES ($1, $2, $3, $4, $5);
 
 -- name: GetUserByEmail :one
-SELECT id::text AS id, name, normalized_email, timezone, password_hash
+SELECT id::text AS id, COALESCE(password_hash, '')::text AS password_hash
 FROM users
-WHERE normalized_email = $1;
+WHERE normalized_email = $1 AND password_hash IS NOT NULL;
 
 -- name: CreateSession :exec
 INSERT INTO sessions (id, user_id, expires_at)
@@ -16,7 +16,8 @@ INSERT INTO refresh_tokens (token_hash, session_id)
 VALUES ($1, $2);
 
 -- name: GetSessionAndUser :one
-SELECT u.id::text AS id, u.name, u.normalized_email, u.timezone, s.generation, (s.revoked_at IS NOT NULL)::bool AS revoked, s.expires_at
+SELECT u.id::text AS id, u.name, u.normalized_email, u.timezone, (u.password_hash IS NOT NULL)::bool AS has_password,
+       s.generation, (s.revoked_at IS NOT NULL)::bool AS revoked, s.expires_at
 FROM sessions s
 JOIN users u ON u.id = s.user_id
 WHERE s.id = $1 AND s.user_id = $2;

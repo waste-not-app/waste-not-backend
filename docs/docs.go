@@ -390,6 +390,126 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/auth/google": {
+            "post": {
+                "description": "Exchange a verified Google ID token and single-use nonce for a WasteNot session. Linking an existing password account also requires its current password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Sign in with Google",
+                "parameters": [
+                    {
+                        "description": "Google ID token, time zone, and optional WasteNot linking proof",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_modules_auth.GoogleLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_AuthTokensRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/google/challenge": {
+            "post": {
+                "description": "Return a five-minute single-use nonce. Pass it to Google when requesting an ID token for sign-in or account deletion.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Issue a Google sign-in challenge",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_GoogleChallengeRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_waste-not-app_waste-not-backend_internal_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/auth/login": {
             "post": {
                 "description": "Authenticate with email and password to receive access and refresh tokens",
@@ -820,7 +940,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Verify the current password, cascade owned data and remove private photo files. Storage failures return 503 with durable cleanup pending, never a confirmed purge.",
+                "description": "Verify the current password or a fresh token from the linked Google account, cascade owned data and remove private photo files. Storage failures return 503 with durable cleanup pending, never a confirmed purge.",
                 "consumes": [
                     "application/json"
                 ],
@@ -830,7 +950,7 @@ const docTemplate = `{
                 "summary": "Delete current account",
                 "parameters": [
                     {
-                        "description": "Current password",
+                        "description": "Exactly one current password or Google ID token",
                         "name": "req",
                         "in": "body",
                         "required": true,
@@ -2001,6 +2121,20 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_GoogleChallengeRes": {
+            "type": "object",
+            "properties": {
+                "api_version": {
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/internal_modules_auth.GoogleChallengeRes"
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_waste-not-app_waste-not-backend_internal_response.SuccessDataRes-internal_modules_auth_PasswordResetRes": {
             "type": "object",
             "properties": {
@@ -2373,7 +2507,32 @@ const docTemplate = `{
         "internal_modules_auth.DeleteMeReq": {
             "type": "object",
             "properties": {
+                "google_id_token": {
+                    "type": "string"
+                },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.GoogleChallengeRes": {
+            "type": "object",
+            "properties": {
+                "nonce": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_modules_auth.GoogleLoginReq": {
+            "type": "object",
+            "properties": {
+                "current_password": {
+                    "type": "string"
+                },
+                "id_token": {
+                    "type": "string"
+                },
+                "timezone": {
                     "type": "string"
                 }
             }
@@ -2446,6 +2605,9 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string"
+                },
+                "has_password": {
+                    "type": "boolean"
                 },
                 "id": {
                     "type": "string"

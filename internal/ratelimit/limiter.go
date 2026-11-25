@@ -42,19 +42,21 @@ func (l *Limiter) Allow(ctx context.Context, key string, n int, window time.Dura
 	return hits <= n, err
 }
 
-func (l *Limiter) CheckAuthLimit(ctx context.Context, clientIP, email string) (bool, error) {
+func (l *Limiter) CheckAuthIPLimit(ctx context.Context, clientIP string) (bool, error) {
 	host, _, err := net.SplitHostPort(clientIP)
 	if err != nil {
 		host = clientIP
 	}
-	for _, key := range []string{"auth-ip:" + host, "auth-email:" + email} {
-		ok, err := l.Allow(ctx, key, 20, 15*time.Minute)
-		if err != nil {
-			return false, err
-		}
-		if !ok {
-			return false, nil
-		}
+	return l.Allow(ctx, "auth-ip:"+host, 20, 15*time.Minute)
+}
+
+func (l *Limiter) CheckAuthIdentityLimit(ctx context.Context, identity string) (bool, error) {
+	return l.Allow(ctx, "auth-email:"+identity, 20, 15*time.Minute)
+}
+
+func (l *Limiter) CheckAuthLimit(ctx context.Context, clientIP, identity string) (bool, error) {
+	if ok, err := l.CheckAuthIPLimit(ctx, clientIP); err != nil || !ok {
+		return ok, err
 	}
-	return true, nil
+	return l.CheckAuthIdentityLimit(ctx, identity)
 }
